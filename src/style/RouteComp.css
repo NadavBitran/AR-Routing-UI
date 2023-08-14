@@ -1,0 +1,27 @@
+.routeComp {
+    background-color: grey;
+    width: 800px;
+    padding: 0.35rem;
+    border: 2px solid;
+    margin-block-end: 1rem;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .routeComp .stepCompList {
+    max-height: 300px;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+  
+  .routeComp .routeName {
+    width: 100%;
+    margin-block-end: 1rem;
+  }
+  .routeComp label {
+    display: inline-block;
+    margin-right: 1rem;
+  }
