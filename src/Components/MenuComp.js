@@ -1,8 +1,7 @@
 import "../style/MenuComp.css";
 import { v4 as uuid } from 'uuid';
 
-// ---- PROPS ----
-// 1) setRoutesInfo -> The callback to create a new route when the button is clicked
+
 export default function MenuComp({setRouteList}){
 
   // ---- HANDLERS ----

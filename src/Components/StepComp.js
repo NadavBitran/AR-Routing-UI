@@ -1,10 +1,6 @@
 import "../style/StepComp.css";
 
-// --------------------------------------------------------
-// ---- PROPS ----
-// 1) stepIndex -> The id of the current step
-// 2) routeIndex -> The id of the current step's route
-// --------------------------------------------------------
+
 export default function StepComp(props){
 
   // --------------------------------------------------------

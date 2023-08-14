@@ -5,10 +5,7 @@ import { useState } from "react";
 import "../style/Navigation.css";
 
 
-// --------------------------------------------------------
-// ---- PROPS ----
-// 1) mode -> The mod transferred to this component
-// --------------------------------------------------------
+
 export default function Navigation({mode}) {
   
   // --------------------------------------------------------
@@ -16,7 +13,6 @@ export default function Navigation({mode}) {
   // routesList -> To save the array of routes that the user enters
   const [routesList,setRoutesList] = useState([]);
   // --------------------------------------------------------
-
 
   // --------------------------------------------------------
   // --------------------------------------------------------

@@ -1,7 +1,6 @@
 import "../style/StartMenuComp.css";
 
-// ---- PROPS ----
-// 1) setStartMenuButton -> The callback to updated the clicked button accordingly
+
 export default function StartMenuComp({setStartMenuButton}) {
   return (
     <div className="startMenuComp">
