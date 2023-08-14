@@ -26,7 +26,8 @@ export default function RouteComp(props) {
   // --- MAPPING ----
   const steps = props.stepList.map((stepElement) => (
     // The following data is transmitted:
-    // 1) key -> the index in the array of the current step
+    // 1) stepIndex -> The id of the current stepElement
+    // 2) routeIndex -> The id of the current stepElement's route
     // 2) setLength -> Sending a callback to *send the data about the step's length*
     // 3) setDirection -> Sending a callback to *send the data about the step's direction*
   <StepComp key={stepElement.id} 
