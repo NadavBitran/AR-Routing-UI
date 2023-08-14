@@ -2,19 +2,20 @@ import "../style/StepComp.css";
 
 // --------------------------------------------------------
 // ---- PROPS ----
-// 1) stepIndex -> The index in the stepInfo array of the current routeComp
+// 1) stepIndex -> The id of the current step
+// 2) routeIndex -> The id of the current step's route
 // --------------------------------------------------------
 export default function StepComp(props){
 
   // --------------------------------------------------------
   // --------------------------------------------------------
   // ---- HANDLERS ----
-  // DESCRIPTION: Enters the length of the step in the lengthInput state (LOCAL UPDATE)
+  // DESCRIPTION: Enters the length of the step in the step's route accordingly
   const handleLengthInput = (event) => {
     props.addLengthToStep(event.target.value , props.stepIndex , props.routeIndex);
   }
 
-  // DESCRIPTION: Enters the length of the step in the directionInput state (LOCAL UPDATE)
+  // DESCRIPTION: Enters the direction of the step in the step's route accordingly
   const handleDirectionInput = (event) => {
     props.addDirectionToStep(event.target.value , props.stepIndex , props.routeIndex);
   }
