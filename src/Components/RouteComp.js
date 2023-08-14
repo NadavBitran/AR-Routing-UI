@@ -4,12 +4,7 @@ import "../style/RouteComp.css";
 
 import { v4 as uuid } from 'uuid';
 
-// --------------------------------------------------------
-// ---- PROPS ----
-// 1) key -> The index in the routesList array of the current routeComp
-// 2) addRouteName -> The callback to add the routeName
-// 3) addStepList -> the callback to add stepList
-// --------------------------------------------------------
+
 export default function RouteComp(props) {
 
   // --------------------------------------------------------
