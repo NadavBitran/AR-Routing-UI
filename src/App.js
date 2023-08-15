@@ -7,6 +7,9 @@ function App() {
   // ---- USE STATES ----
   // 1) startMenuButton -> To save the name of the button pressed from the StartMenuComp
   const [startMenuButton, setStartMenuButton] = useState("");
+  // routesList -> To save the array of routes that the user enters
+  const [routesList, setRoutesList] = useState([]);
+  // --------------------------------------------------------
 
   // ---- APP COMPONENT ----
   // if "No" -> Move to the next stage in the pipeline
@@ -17,17 +20,18 @@ function App() {
 
     // In the final integration of the entire application we will have to communicate with the files of the next group in the pipeline
     case "No":
-      return( 
-      <div className="appComp">
-         Next Step
+      return (
+        <div className="appComp">
+          Next Step
         </div>);
-    
+
     // The following data is transmitted:
     // 1) mode = "normal" -> for the Navigation component to open in normal mode
     case "Yes - Start Creating":
       return (
         <div className="appComp">
-          <Navigation mode={"normal"}/>
+          <Navigation mode={"normal"} routesList={routesList} setRoutesList={setRoutesList} />
+          <button onClick={() => console.log(routesList)}>log</button> {/* Added a log button To follow the changes of the routesList */}
         </div>
       );
 
@@ -36,7 +40,7 @@ function App() {
     case "Yes - Start Tutorial":
       return (
         <div className="appComp">
-          <Navigation mode={"tutorial"} />
+          <Navigation mode={"tutorial"} routesList={routesList} setRoutesList={setRoutesList} />
         </div>
       );
 

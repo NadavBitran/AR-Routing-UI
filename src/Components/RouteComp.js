@@ -11,11 +11,11 @@ export default function RouteComp(props) {
   // --------------------------------------------------------
   // ---- HANDELERS ----
   const handleRouteNameInput = (event) => {
-    props.addRouteNameToRoute(event.target.value , props.routeIndex)
+    props.addRouteNameToRoute(event.target.value, props.routeIndex)
   }
 
   const handleNewStepInput = () => {
-    props.addStepListToRoute([...props.stepList , {id: uuid() , length: "" , direction: ""}] , props.routeIndex) 
+    props.addStepListToRoute([...props.stepList, { id: uuid(), length: "", direction: "Foward" }], props.routeIndex)
   }
   // --------------------------------------------------------
   // --------------------------------------------------------
@@ -30,14 +30,14 @@ export default function RouteComp(props) {
     // 2) routeIndex -> The id of the current stepElement's route
     // 2) setLength -> Sending a callback to *send the data about the step's length*
     // 3) setDirection -> Sending a callback to *send the data about the step's direction*
-  <StepComp key={stepElement.id} 
-            stepIndex={stepElement.id}
-            routeIndex = {props.routeIndex}
-            addLengthToStep={props.addLengthToStep} 
-            addDirectionToStep={props.addDirectionToStep} />
+    <StepComp key={stepElement.id}
+      stepIndex={stepElement.id}
+      routeIndex={props.routeIndex}
+      addLengthToStep={props.addLengthToStep}
+      addDirectionToStep={props.addDirectionToStep} />
   ));
   // --------------------------------------------------------
-  
+
 
 
   // --- JSX ----
@@ -45,10 +45,10 @@ export default function RouteComp(props) {
     <div className="routeComp">
       <div className="routeName">
         <label>Route Name:</label>
-        <input type="text" onChange = {handleRouteNameInput}></input>
+        <input type="text" onChange={handleRouteNameInput}></input>
       </div>
       <div className="stepCompList">{steps}</div>
-      <button onClick = {() => {handleNewStepInput()}}>Add Step</button>
+      <button onClick={handleNewStepInput}>Add Step</button>
     </div>
   );
 }
