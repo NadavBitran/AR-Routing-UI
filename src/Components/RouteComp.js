@@ -4,6 +4,10 @@ import "../style/RouteComp.css";
 
 import { v4 as uuid } from 'uuid';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import {IconButton} from '@mui/material';
+
 
 export default function RouteComp(props) {
 
@@ -46,6 +50,9 @@ export default function RouteComp(props) {
       <div className="routeName">
         <label>Route Name:</label>
         <input type="text" onChange={handleRouteNameInput}></input>
+        <IconButton >
+          <DeleteIcon className="routeDeleteButton" />
+        </IconButton>
       </div>
       <div className="stepCompList">{steps}</div>
       <button onClick={handleNewStepInput}>Add Step</button>
