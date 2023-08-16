@@ -1,18 +1,11 @@
 import RouteComp from "./RouteComp";
 import MenuComp from "./MenuComp";
-import { useState } from "react";
 
 import "../style/Navigation.css";
 
 
 
-export default function Navigation({mode}) {
-  
-  // --------------------------------------------------------
-  // ---- USE STATES ----
-  // routesList -> To save the array of routes that the user enters
-  const [routesList,setRoutesList] = useState([]);
-  // --------------------------------------------------------
+export default function Navigation({ mode, routesList, setRoutesList }) {
 
   // --------------------------------------------------------
   // --------------------------------------------------------
@@ -21,12 +14,12 @@ export default function Navigation({mode}) {
   // 1) updated name route
   // 2) the id of the route
   // DESCRIPTION: Enters the new name of the route with the appropriate id, and updates the state accordingly 
-  const addRouteNameToRoute = (routeName , routeid) => {
+  const addRouteNameToRoute = (routeName, routeId) => {
     setRoutesList(currRouteList => {
-       return currRouteList.map((route) => {
-        if(route.id === routeid)
-          return {...route , routeName : routeName}
-        else 
+      return currRouteList.map((route) => {
+        if (route.id === routeId)
+          return { ...route, routeName: routeName }
+        else
           return route
       })
     })
@@ -36,13 +29,13 @@ export default function Navigation({mode}) {
   // 1) updated stepList
   // 2) the id of the route
   // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
-  const addStepListToRoute = (stepList , routeid) => {
+  const addStepListToRoute = (stepList, routeId) => {
     setRoutesList(currRouteList => {
       return currRouteList.map((route) => {
-        if(route.id === routeid)
-         return {...route , stepList : stepList}
+        if (route.id === routeId)
+          return { ...route, stepList: stepList }
         else
-         return route
+          return route
       })
     })
   }
@@ -52,18 +45,18 @@ export default function Navigation({mode}) {
   // 2) the id of the step
   // 3) the id of the step's route
   // DESCRIPTION: Enters the updated length of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
-  const addLengthToStep = (length, stepid, routeid) => {
+  const addLengthToStep = (length, stepId, routeId) => {
     setRoutesList(currRouteList => {
       return currRouteList.map(route => {
-        if (route.id === routeid) {
+        if (route.id === routeId) {
           const updatedStepList = route.stepList.map(step => {
-            if (step.id === stepid) {
-              return { ...step, length : length }; 
+            if (step.id === stepId) {
+              return { ...step, length: length };
             }
             return step;
           });
 
-          return { ...route, stepList: updatedStepList }; 
+          return { ...route, stepList: updatedStepList };
         }
         return route;
       });
@@ -75,18 +68,18 @@ export default function Navigation({mode}) {
   // 2) the id of the step
   // 3) the id of the step's route
   // DESCRIPTION: Enters the updated direction of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
-  const addDirectionToStep = (direction, stepid, routeid) => {
+  const addDirectionToStep = (direction, stepId, routeId) => {
     setRoutesList(currRouteList => {
       return currRouteList.map(route => {
-        if (route.id === routeid) {
+        if (route.id === routeId) {
           const updatedStepList = route.stepList.map(step => {
-            if (step.id === stepid) {
-              return { ...step, direction : direction }; 
+            if (step.id === stepId) {
+              return { ...step, direction: direction };
             }
             return step;
           });
 
-          return { ...route, stepList: updatedStepList }; 
+          return { ...route, stepList: updatedStepList };
         }
         return route;
       });
@@ -108,13 +101,13 @@ export default function Navigation({mode}) {
     // 4) addLengthToStep -> Sending a callback to *add data about step's length*
     // 5) addDirectionToStep -> Sending a callback to *add data about step's direction*
     // 6) stepList -> Sending a read-only ref of the current routeElement stepList to map the Step Components
-    <RouteComp key={routeElement.id} 
-               routeIndex ={routeElement.id} 
-               addRouteNameToRoute={addRouteNameToRoute} 
-               addStepListToRoute={addStepListToRoute}
-               addLengthToStep = {addLengthToStep}
-               addDirectionToStep = {addDirectionToStep}
-               stepList={routeElement.stepList}/>
+    <RouteComp key={routeElement.id}
+      routeIndex={routeElement.id}
+      addRouteNameToRoute={addRouteNameToRoute}
+      addStepListToRoute={addStepListToRoute}
+      addLengthToStep={addLengthToStep}
+      addDirectionToStep={addDirectionToStep}
+      stepList={routeElement.stepList} />
   ));
   // --------------------------------------------------------
   // --------------------------------------------------------
