@@ -24,7 +24,7 @@ export default function StepComp(props) {
   return (
     <div className="stepComp">
       <div className="stepComp_left">
-        <label>Step No ?</label>
+        <label>Step No {props.stepIndex + 1}</label>
         <div className="stepComp_buttons">
           <button>Remove Step</button>
           <button>Edit Step</button>
