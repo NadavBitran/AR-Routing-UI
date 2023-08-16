@@ -7,7 +7,7 @@ function App() {
   // ---- USE STATES ----
   // 1) startMenuButton -> To save the name of the button pressed from the StartMenuComp
   const [startMenuButton, setStartMenuButton] = useState("");
-  // routesList -> To save the array of routes that the user enters
+  // 2) routesList -> To save the array of routes that the user enters
   const [routesList, setRoutesList] = useState([]);
   // --------------------------------------------------------
 
