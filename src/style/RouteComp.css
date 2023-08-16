@@ -25,3 +25,10 @@
     display: inline-block;
     margin-right: 1rem;
   }
+
+  .routeDeleteButton{
+    color:red;
+    position: absolute;
+    top: 0px;
+    right: -420px;
+  }
