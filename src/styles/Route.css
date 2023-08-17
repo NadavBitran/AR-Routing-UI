@@ -1,0 +1,77 @@
+.route {
+    background-color: lightgray;
+    width: 100%;
+    min-height: 6rem; /*15%;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 3px solid blue;
+    border-left: 3px solid blue;
+    border-right: 3px solid blue;
+}
+
+.route__bar {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    border-bottom: black 2px solid;
+}
+
+.route__index {
+    display: grid;
+    place-content: center;
+    border-right: black 1px solid;
+}
+
+.route__content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 60% 30%;
+    column-gap: 10%;
+    
+}
+
+.route__name {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    place-items: center;
+}
+
+.route__name > input {
+    width: 100%;
+    height: 80%;
+    
+    font-size: 1.9rem;
+}
+
+.route__editor-buttons {
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    width: 100%;
+    height: 100%;
+}
+
+.route__editor-buttons > button {
+    width: 100%;
+    height: 100%;
+}
+
+.route__button--expand-collapse {
+    display: grid;
+    place-content: center;
+    border-left: black 1px solid;
+}
+
+.route__steps-list {
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: visible;
+    overflow-x: hidden;
+}
