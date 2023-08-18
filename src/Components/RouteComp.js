@@ -2,7 +2,6 @@ import StepComp from "./StepComp";
 
 import "../style/RouteComp.css";
 
-import { v4 as uuid } from 'uuid';
 
 
 export default function RouteComp(props) {
@@ -15,7 +14,7 @@ export default function RouteComp(props) {
   }
 
   const handleNewStepInput = () => {
-    props.addStepListToRoute([...props.stepList, { id: uuid(), length: "", direction: "Foward" }], props.routeIndex)
+    props.addStepListToRoute([...props.stepList, { length: "", direction: "Foward" }], props.routeIndex)
   }
   // --------------------------------------------------------
   // --------------------------------------------------------
@@ -24,14 +23,14 @@ export default function RouteComp(props) {
   // --------------------------------------------------------
   // --------------------------------------------------------
   // --- MAPPING ----
-  const steps = props.stepList.map((stepElement) => (
+  const steps = props.stepList.map((stepElement , stepIndex) => (
     // The following data is transmitted:
-    // 1) stepIndex -> The id of the current stepElement
-    // 2) routeIndex -> The id of the current stepElement's route
+    // 1) stepIndex -> The index of the current stepElement
+    // 2) routeIndex -> The index of the current stepElement's route
     // 2) setLength -> Sending a callback to *send the data about the step's length*
     // 3) setDirection -> Sending a callback to *send the data about the step's direction*
-    <StepComp key={stepElement.id}
-      stepIndex={stepElement.id}
+    <StepComp key={stepIndex}
+      stepIndex={stepIndex}
       routeIndex={props.routeIndex}
       addLengthToStep={props.addLengthToStep}
       addDirectionToStep={props.addDirectionToStep} />
