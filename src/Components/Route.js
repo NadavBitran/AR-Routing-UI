@@ -41,14 +41,13 @@ export default function Route(props) {
     // --- MAPPING ----
     const stepsListJSX = props.routeElement.stepList.map((stepElement, index) => (
         // The following data is transmitted:
-        // 1) stepId -> The id of the current stepElement
-        // 2) stepIndex -> The index of the current stepElement in the stepList of a specific route
-        // 3) routeId -> The id of the current routeElement
-        // 4) routeIndex -> The index of the current routeElement in the routesList
-        // 5) addLengthToStep -> Sending a callback to *add data about step's length*
-        // 6) addDirectionToStep -> Sending a callback to *add data about step's direction*
-        // 7) removeStep -> Sending a callback to *remove the step* from a specific route
-        // 8) updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
+        // 1) stepIndex -> The index of the current stepElement in the stepList of a specific route
+        // 2) routeIndex -> The index of the current routeElement in the routesList
+        // 3) addLengthToStep -> Sending a callback to *add data about step's length*
+        // 4) addDirectionToStep -> Sending a callback to *add data about step's direction*
+        // 5) removeStep -> Sending a callback to *remove the step* from a specific route
+        // 6) stepElement -> Sending a read-only ref of the current stepElement. 
+        // 7) updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
         <Step key={index}
             stepIndex={index}
             routeIndex={props.routeIndex}
