@@ -59,8 +59,8 @@ export default function Route(props) {
                             <input type="text" onChange={handleRouteNameInput}></input>
                         </div>
                         <div className="route__editor-buttons">
-                            <button className="route__button--add-step" onClick={() => handleNewStepInput()}>Add Step</button>
-                            <button className="route__button--remove-route" onClick={() => handleRemoveRoute()}>Remove Route</button>
+                            <button className="route__button--add-step" onClick={handleNewStepInput}>Add Step</button>
+                            <button className="route__button--remove-route" onClick={handleRemoveRoute}>Remove Route</button>
                             <button className="route__button--select-mode">Select Mode</button> {/* TODO: Add functionality to this button */}
                             <button className="route__button--select-all-steps">Select All</button> {/* TODO: Add functionality to this button */}
                         </div>
