@@ -32,6 +32,7 @@ export default function Step(props) {
                 <div className="step__direction">
                     <h3>Direction: </h3>
                     <select onChange={handleDirectionInput} value={props.stepElement.direction}>
+                        <option value="none" hidden>Choose Direction</option>
                         <option>Foward</option>
                         <option>Foward-Left</option>
                         <option>Left</option>

@@ -7,6 +7,15 @@ export default function Route(props) {
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- HANDELERS ----
+
+    const handleRouteCheck = (event) => {
+        if(event.target.checked === true)
+        {
+            props.addCheckedRoute(props.routeIndex)
+        }
+        else props.removeCheckedRoute(props.routeIndex)
+    }
+    
     // DESCRIPTION: Enters the new name of the route with the appropriate id, and updates the state accordingly
     const handleRouteNameInput = (event) => {
         props.addRouteNameToRoute(event.target.value, props.routeIndex)
@@ -14,7 +23,7 @@ export default function Route(props) {
 
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
     const handleNewStepInput = () => {
-        props.addStepListToRoute([...props.routeElement.stepList, { length: "", direction: "Foward" }], props.routeIndex)
+        props.addStepListToRoute([...props.routeElement.stepList, { length: "", direction: "" }], props.routeIndex)
     }
 
     // DESCRIPTION: Removes a route from the routesList
@@ -52,7 +61,7 @@ export default function Route(props) {
         <>
             <div className="route">
                 <div className="route__bar">
-                    <input type="checkbox" className="route__checkbox" />
+                    <input type="checkbox" className="route__checkbox" onChange={handleRouteCheck} checked={props.isChecked}/>
                     <h2 className="route__index">Route #{props.routeIndex + 1}</h2>
                     <div className="route__content">
                         <div className="route__name">

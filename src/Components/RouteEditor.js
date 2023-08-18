@@ -2,10 +2,43 @@ import "../styles/RouteEditor.css";
 
 import Route from "./Route";
 
+import { useState } from "react";
+
 
 export default function RouteEditor({routesList, setRoutesList}) {
+
+    // ---- STATE HOOKS ----
+    // routesChecked -> To save the array of routes that the user checked
+    const [routesChecked,setRoutesChecked] = useState([])
+    
+    console.log(routesChecked)
     // --------------------------------------------------------
     // ----- HELPER CALLBACKS ------
+    
+    // addCheckedRoute -> Adds a route to the routesChecked array, when the user checks it.
+    const addCheckedRoute = (routeIndex) => {
+        setRoutesChecked((currRoutesChecked) => [...currRoutesChecked , routeIndex])
+    }
+    
+    // removeCheckedRoute -> Removes a route from the routesChecked array, when the user unchecks it.
+    const removeCheckedRoute = (routeIndex) => {
+        setRoutesChecked((currRoutesChecked) => currRoutesChecked.filter((currIndex) => currIndex!==routeIndex))
+    }
+
+    // updateCheckedRoute -> 
+    const updateCheckedRoute = (routeIndex) => {
+        setRoutesChecked((currRoutesChecked) => {
+            return currRoutesChecked.map((currRouteIndex) => {
+                if(routeIndex < currRouteIndex) {
+                    return currRouteIndex = currRouteIndex - 1
+                } else {
+                    return currRouteIndex
+                }
+            })
+        })
+    }
+
+
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
         setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] }])
@@ -33,6 +66,10 @@ export default function RouteEditor({routesList, setRoutesList}) {
                     return true
             })
         });
+
+        removeCheckedRoute(routeIndex)
+
+        updateCheckedRoute(routeIndex)   
     }
 
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
@@ -142,7 +179,8 @@ export default function RouteEditor({routesList, setRoutesList}) {
         // 7) removeRoute -> Sending a callback to *remove the route*
         // 8) removeStep -> Sending a callback to *remove the step* from a specific route
         // 9) stepList -> Sending a read-only ref of the current routeElement stepList to map the Step Components
-        // 10) routeName -> Sending a read-only ref of the current routeElement routeName to map the Step Components
+        // 10) routeElement -> Sending a read-only ref of the current routeElement.
+        // 11) addCheckedRoute -> Sending a callback to *add a route to the routesChecked array*
         <Route key={index}
             routeIndex={index}
             addRouteNameToRoute={addRouteNameToRoute}
@@ -151,7 +189,11 @@ export default function RouteEditor({routesList, setRoutesList}) {
             addDirectionToStep={addDirectionToStep}
             removeRoute={removeRoute}
             removeStep={removeStep}
-            routeElement = {routeElement} />
+            routeElement = {routeElement}
+            isChecked = {routesChecked.includes(index)}
+            addCheckedRoute = {addCheckedRoute}
+            removeCheckedRoute = {removeCheckedRoute}
+            updateCheckedRoute = {updateCheckedRoute}/>
     ));
     // --------------------------------------------------------
 
@@ -171,4 +213,5 @@ export default function RouteEditor({routesList, setRoutesList}) {
         </div>
     );
     // --------------------------------------------------------
+    
 }
