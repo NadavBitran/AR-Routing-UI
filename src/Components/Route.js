@@ -2,8 +2,15 @@ import "../styles/Route.css";
 
 import Step from "./Step";
 
+import {useState} from 'react';
 
 export default function Route(props) {
+    // --- USE STATES ----
+    // isExpanded:
+    //           If "true" -> the route__steps-list section is expanded
+    //           If "no"   -> the route__steps-list section is collapsed 
+    const [isExpanded ,setIsExpanded] = useState(true) 
+
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- HANDELERS ----
@@ -20,6 +27,14 @@ export default function Route(props) {
     // DESCRIPTION: Removes a route from the routesList
     const handleRemoveRoute = () => {
         props.removeRoute(props.routeIndex)
+    }
+
+    // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
+    const handleExpandAndCollapse = () => {
+        setIsExpanded((currIsExpanded) => !currIsExpanded)
+
+        const divStepList = document.getElementsByClassName("route__steps-list")[props.routeIndex]
+        divStepList.classList.toggle('hidden')
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -65,7 +80,7 @@ export default function Route(props) {
                             <button className="route__button--remove-selected">Remove Selected</button> {/* TODO: Add functionality to this button */}
                         </div>
                     </div>
-                    <button className="route__button--expand-collapse">Expand/Collapse</button> {/* TODO: Add functionality to this button */}
+                    <button className="route__button--expand-collapse" onClick={handleExpandAndCollapse}>{isExpanded ? <span>Collapse</span> : <span>Expand</span>}</button> 
                 </div>
                 <section className="route__steps-list">
                     {stepsListJSX}
