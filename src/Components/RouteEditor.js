@@ -2,33 +2,32 @@ import "../styles/RouteEditor.css";
 
 import Route from "./Route";
 
-import { v4 as uuid } from 'uuid';
 
 export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // ----- HELPER CALLBACKS ------
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { id: uuid(), routeName: "", stepList: [] }])
+        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] }])
     }
     
     // DESCRIPTION: Enters the new name of the route with the appropriate id, and updates the state accordingly
-    const addRouteNameToRoute = (routeName, routeId) => {
+    const addRouteNameToRoute = (routeName, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((route) => {
-                if (route.id === routeId)
-                    return { ...route, routeName: routeName }
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex)
+                    return { ...currRoute, routeName: routeName }
                 else
-                    return route
+                    return currRoute
             })
         });
     }
 
     // DESCRIPTION: Removes a route from the routesList
-    const removeRoute = (routeId) => {
+    const removeRoute = (routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.filter((route) => {
-                if (route.id === routeId)
+            return currRouteList.filter((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex)
                     return false
                 else
                     return true
@@ -37,70 +36,70 @@ export default function RouteEditor({routesList, setRoutesList}) {
     }
 
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
-    const addStepListToRoute = (stepList, routeId) => {
+    const addStepListToRoute = (stepList, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((route) => {
-                if (route.id === routeId)
-                    return { ...route, stepList: stepList }
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex)
+                    return { ...currRoute, stepList: stepList }
                 else
-                    return route
+                    return currRoute
             })
         });
     }
 
     // DESCRIPTION: Enters the updated length of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
-    const addLengthToStep = (length, stepId, routeId) => {
+    const addLengthToStep = (length, stepIndex , routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map(route => {
-                if (route.id === routeId) {
-                    const updatedStepList = route.stepList.map(step => {
-                        if (step.id === stepId) {
-                            return { ...step, length: length };
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
+                        if (currStepIndex === stepIndex) {
+                            return { ...currStep, length: length };
                         }
-                        return step;
+                        return currStep;
                     });
 
-                    return { ...route, stepList: updatedStepList };
+                    return { ...currRoute, stepList: updatedStepList };
                 }
-                return route;
+                return currRoute;
             });
         });
     }
 
     // DESCRIPTION: Enters the updated direction of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
-    const addDirectionToStep = (direction, stepId, routeId) => {
+    const addDirectionToStep = (direction, stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map(route => {
-                if (route.id === routeId) {
-                    const updatedStepList = route.stepList.map(step => {
-                        if (step.id === stepId) {
-                            return { ...step, direction: direction };
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
+                        if (currStepIndex === stepIndex) {
+                            return { ...currStep, direction: direction };
                         }
-                        return step;
+                        return currStep;
                     });
 
-                    return { ...route, stepList: updatedStepList };
+                    return { ...currRoute, stepList: updatedStepList };
                 }
-                return route;
+                return currRoute;
             });
         });
     }
 
     // DESCRIPTION: Removes a step from the stepList of the route with the appropriate id
-    const removeStep = (stepId, routeId) => {
+    const removeStep = (stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map(route => {
-                if (route.id === routeId) {
-                    const updatedStepList = route.stepList.filter(step => {
-                        if (step.id === stepId)
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.filter((currStep , currStepIndex) => {
+                        if (currStepIndex === stepIndex)
                             return false
                         else
                             return true
                     });
 
-                    return { ...route, stepList: updatedStepList };
+                    return { ...currRoute, stepList: updatedStepList };
                 }
-                return route;
+                return currRoute;
             });
         });
     }
@@ -114,7 +113,6 @@ export default function RouteEditor({routesList, setRoutesList}) {
         console.log("---------------------------routeList------------------------");
         routesList.forEach((route, index) => {
             console.log(`Route #${index+1}: `);
-            console.log(`       Route Id: ${route.id}`);
             console.log(`       Route Name: ${route.routeName}`);
             console.log(`       Step List: `);
             if (route.stepList.length === 0) {
@@ -123,7 +121,6 @@ export default function RouteEditor({routesList, setRoutesList}) {
             }
             route.stepList.forEach((step, index) => {
                 console.log(`           Step #${index+1}: `);
-                console.log(`                   Step Id: ${step.id}`);
                 console.log(`                   Step List Length: ${step.length}`);
                 console.log(`                   Step List Direction: ${step.direction}`);
             });
@@ -145,8 +142,8 @@ export default function RouteEditor({routesList, setRoutesList}) {
         // 7) removeRoute -> Sending a callback to *remove the route*
         // 8) removeStep -> Sending a callback to *remove the step* from a specific route
         // 9) stepList -> Sending a read-only ref of the current routeElement stepList to map the Step Components
-        <Route key={routeElement.id}
-            routeId={routeElement.id}
+        // 10) routeName -> Sending a read-only ref of the current routeElement routeName to map the Step Components
+        <Route key={index}
             routeIndex={index}
             addRouteNameToRoute={addRouteNameToRoute}
             addStepListToRoute={addStepListToRoute}
@@ -154,7 +151,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
             addDirectionToStep={addDirectionToStep}
             removeRoute={removeRoute}
             removeStep={removeStep}
-            stepList={routeElement.stepList} />
+            routeElement = {routeElement} />
     ));
     // --------------------------------------------------------
 
@@ -165,7 +162,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
             <header className="route-editor__buttons">
                 <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
                 <button className="route-editor__button--select-all">Select All</button> {/* TODO: Add functionality to this button */}
-                <button className="route-editor__button--delete">Delete</button> {/* TODO: Add functionality to this button */}
+                <button className="route-editor__button--delete">Remove Selected</button> {/* TODO: Add functionality to this button */}
                 <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button>
             </header>
             <section className="route-editor__routes-list">

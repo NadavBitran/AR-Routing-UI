@@ -1,7 +1,7 @@
 .route {
     background-color: lightgray;
     width: 100%;
-    min-height: 6rem; /*15%;*/
+    /* min-height: 6rem; 15%; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,10 +13,17 @@
 
 .route__bar {
     width: 100%;
-    height: 100%;
+    height: 5rem;
     display: grid;
-    grid-template-columns: 10% 80% 10%;
+    grid-template-columns: 2% 10% 78% 10%;
     border-bottom: black 2px solid;
+}
+
+.route__checkbox {
+    width: 1rem;
+    display: grid;
+    place-content: center;
+    margin-left: .5rem;
 }
 
 .route__index {
@@ -46,15 +53,15 @@
     font-size: 1.9rem;
 }
 
-.route__editor-buttons {
+.route__buttons {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
 
     width: 100%;
     height: 100%;
 }
 
-.route__editor-buttons > button {
+.route__buttons > button {
     width: 100%;
     height: 100%;
 }
