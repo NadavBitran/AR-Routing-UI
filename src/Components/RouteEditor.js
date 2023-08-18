@@ -2,49 +2,73 @@ import "../styles/RouteEditor.css";
 
 import Route from "./Route";
 
-import { useState } from "react";
+import {useState} from 'react';
 
 
 export default function RouteEditor({routesList, setRoutesList}) {
-
-    // ---- STATE HOOKS ----
-    // routesChecked -> To save the array of routes that the user checked
-    const [routesChecked,setRoutesChecked] = useState([])
-    
-    console.log(routesChecked)
     // --------------------------------------------------------
-    // ----- HELPER CALLBACKS ------
-    
-    // addCheckedRoute -> Adds a route to the routesChecked array, when the user checks it.
-    const addCheckedRoute = (routeIndex) => {
-        setRoutesChecked((currRoutesChecked) => [...currRoutesChecked , routeIndex])
-    }
-    
-    // removeCheckedRoute -> Removes a route from the routesChecked array, when the user unchecks it.
-    const removeCheckedRoute = (routeIndex) => {
-        setRoutesChecked((currRoutesChecked) => currRoutesChecked.filter((currIndex) => currIndex!==routeIndex))
-    }
+    // --------------------------------------------------------
+    // ---- USE STATES ----
+    // isSelectedAll:
+    //              If "true"  -> the user wants all the routes to be selected (*even the newly added ones*)
+    //              If "false" -> the user wants to un-do the selection of all the routes 
+    const [isSelectedAll , setIsSelectedAll] = useState(false);
+    // --------------------------------------------------------
+    // --------------------------------------------------------
 
-    // updateCheckedRoute -> 
-    const updateCheckedRoute = (routeIndex) => {
-        setRoutesChecked((currRoutesChecked) => {
-            return currRoutesChecked.map((currRouteIndex) => {
-                if(routeIndex < currRouteIndex) {
-                    return currRouteIndex = currRouteIndex - 1
-                } else {
-                    return currRouteIndex
-                }
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ----- CHECK BOX LOGIC HELPER CALLBACKS ------
+
+    // DESCRIPTION: Enters the updated checked value of the route, and updates the state accordingly
+    const updateCheckedRoute = (checkedValue , routeIndex) => {
+        setRoutesList((currRouteList) => {
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if(currRouteIndex === routeIndex)
+                    return {...currRoute , isChecked : (isSelectedAll || checkedValue)}
+                else return currRoute
             })
         })
     }
 
+    // DESCRIPTION: Enters the updated checked value of all the routes after clicking on "(Un)Select All" button
+    const updateCheckAllRoutes = () => {
+        const updatedSelectedValue = !isSelectedAll
 
-    // DESCRIPTION: Adds a new route to the routesList
-    const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] }])
+        setIsSelectedAll(updatedSelectedValue)
+
+        setRoutesList((currRouteList) => {
+            return currRouteList.map((currRoute) => { return {...currRoute , isChecked : updatedSelectedValue} })
+        })
     }
+
+    // DESCRIPTION: Enters the updated checked value of the step's route, and updates the state accordingly
+    const updateCheckedStep = (checkedValue , stepIndex , routeIndex) => {
+        setRoutesList((currRouteList) => {
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if(currRouteIndex === routeIndex){
+                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
+                        if(currStepIndex === stepIndex)
+                            return {...currStep , isChecked: (isSelectedAll || checkedValue)}
+                        else return currStep
+                    })
+                    return {...currRoute , stepList : updatedStepList}
+                }
+                else return currRoute
+            })
+        })
+    }
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+
+
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ----- UPDATE DATA HELPER CALLBACKS ------
     
-    // DESCRIPTION: Enters the new name of the route with the appropriate id, and updates the state accordingly
+    // DESCRIPTION: Enters the new name of the route with the appropriate index, and updates the state accordingly
     const addRouteNameToRoute = (routeName, routeIndex) => {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute , currRouteIndex) => {
@@ -56,23 +80,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         });
     }
 
-    // DESCRIPTION: Removes a route from the routesList
-    const removeRoute = (routeIndex) => {
-        setRoutesList(currRouteList => {
-            return currRouteList.filter((currRoute , currRouteIndex) => {
-                if (currRouteIndex === routeIndex)
-                    return false
-                else
-                    return true
-            })
-        });
-
-        removeCheckedRoute(routeIndex)
-
-        updateCheckedRoute(routeIndex)   
-    }
-
-    // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
+    // DESCRIPTION: Enters the updated steps array of the route with the appropriate index, and updates the state accordingly
     const addStepListToRoute = (stepList, routeIndex) => {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute , currRouteIndex) => {
@@ -84,7 +92,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         });
     }
 
-    // DESCRIPTION: Enters the updated length of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
+    // DESCRIPTION: Enters the updated length of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
     const addLengthToStep = (length, stepIndex , routeIndex) => {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute , currRouteIndex) => {
@@ -103,7 +111,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         });
     }
 
-    // DESCRIPTION: Enters the updated direction of the step with the appropriate id that inside the route with the appropriate id, and updates the state accordingly
+    // DESCRIPTION: Enters the updated direction of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
     const addDirectionToStep = (direction, stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute , currRouteIndex) => {
@@ -121,8 +129,48 @@ export default function RouteEditor({routesList, setRoutesList}) {
             });
         });
     }
+    // --------------------------------------------------------
+    // --------------------------------------------------------
 
-    // DESCRIPTION: Removes a step from the stepList of the route with the appropriate id
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ----- ADD COMPONENTS HELPER CALLBACKS ------
+
+    // DESCRIPTION: Adds a new route to the routesList
+    const handleNewRouteInput = () => {
+        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] , isChecked : isSelectedAll }])
+    }
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+
+
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ----- REMOVE COMPONENTS HELPER CALLBACKS ------
+
+    // DESCRIPTION: Removes a route from the routesList
+    const removeRoute = (routeIndex) => {
+        setRoutesList(currRouteList => {
+            return currRouteList.filter((currRoute , currRouteIndex) => {
+                if (currRouteIndex === routeIndex)
+                    return false
+                else
+                    return true
+            })
+        });
+    }
+    
+    const removeSelectedRoutes = () => {
+        setIsSelectedAll(false)
+
+        setRoutesList(currRouteList => {
+            return currRouteList.filter((currRoute) => !currRoute.isChecked)
+        })
+    }
+
+    // DESCRIPTION: Removes a step from the stepList of the route with the appropriate index
     const removeStep = (stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute , currRouteIndex) => {
@@ -141,6 +189,28 @@ export default function RouteEditor({routesList, setRoutesList}) {
         });
     }
 
+    // DESCRIPTION: Removes the selected steps from the stepList of the route with the appropriate index
+    const removeSelectedSteps = (routeIndex) => {
+        setRoutesList(currRouteList => {
+            return currRouteList.map((currRoute , currRouteIndex) => {
+                if(currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.filter(currStep => !currStep.isChecked )
+                    return {...currRoute , stepList : updatedStepList}
+                }
+                else return currRoute
+            })
+        })
+    }
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+
+
+
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ----- DEBUGGING HELPER CALLBACKS (temporary section...) ------
+
     // DESCRIPTION: Prints to the console in a organized way each route in the routesList and each of its step in its stepList
     const printRoutesList = () => {
         if (routesList.length === 0) {
@@ -151,36 +221,42 @@ export default function RouteEditor({routesList, setRoutesList}) {
         routesList.forEach((route, index) => {
             console.log(`Route #${index+1}: `);
             console.log(`       Route Name: ${route.routeName}`);
+            console.log(`       Checked Status: ${route.isChecked}`)
             console.log(`       Step List: `);
             if (route.stepList.length === 0) {
                 console.log("           The stepList is empty!!!");
                 return;
             }
+
             route.stepList.forEach((step, index) => {
                 console.log(`           Step #${index+1}: `);
                 console.log(`                   Step List Length: ${step.length}`);
                 console.log(`                   Step List Direction: ${step.direction}`);
+                console.log(`                   Step List Checked Status: ${step.isChecked}`)
             });
         });
         console.log("-------------------------------------------------------------")
     }
     // --------------------------------------------------------
+    // --------------------------------------------------------
+
 
     // --------------------------------------------------------
     // ---- MAPPING ----
     const routesListJSX = routesList.map((routeElement, index) => (
         // The following data is transmitted:
-        // 1) routeId -> The id of the current routeElement
-        // 2) routeIndex -> The index of the current routeElement in the routesList
-        // 3) addRouteNameToRoute -> Sending a callback to *add data about the route name*
-        // 4) addStepListToRoute -> Sending a callback to *add data about the steps*
-        // 5) addLengthToStep -> Sending a callback to *add data about step's length*
-        // 6) addDirectionToStep -> Sending a callback to *add data about step's direction*
-        // 7) removeRoute -> Sending a callback to *remove the route*
-        // 8) removeStep -> Sending a callback to *remove the step* from a specific route
+        // 1) routeIndex -> The index of the current routeElement in the routesList
+        // 2) addRouteNameToRoute -> Sending a callback to *add data about the route name*
+        // 3) addStepListToRoute -> Sending a callback to *add data about the steps*
+        // 4) addLengthToStep -> Sending a callback to *add data about step's length*
+        // 5) addDirectionToStep -> Sending a callback to *add data about step's direction*
+        // 6) removeRoute -> Sending a callback to *remove the route*
+        // 7) removeStep -> Sending a callback to *remove the step* from a specific route
+        // 8) removeSelectedSteps -> Sending a callback to *remove all selected steps* from a specific route
         // 9) stepList -> Sending a read-only ref of the current routeElement stepList to map the Step Components
         // 10) routeElement -> Sending a read-only ref of the current routeElement.
-        // 11) addCheckedRoute -> Sending a callback to *add a route to the routesChecked array*
+        // 11) updateCheckedRoute -> Sending a callback to *update data about route's checkbox status*
+        // 12) updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
         <Route key={index}
             routeIndex={index}
             addRouteNameToRoute={addRouteNameToRoute}
@@ -189,11 +265,10 @@ export default function RouteEditor({routesList, setRoutesList}) {
             addDirectionToStep={addDirectionToStep}
             removeRoute={removeRoute}
             removeStep={removeStep}
+            removeSelectedSteps = {removeSelectedSteps}
             routeElement = {routeElement}
-            isChecked = {routesChecked.includes(index)}
-            addCheckedRoute = {addCheckedRoute}
-            removeCheckedRoute = {removeCheckedRoute}
-            updateCheckedRoute = {updateCheckedRoute}/>
+            updateCheckedRoute = {updateCheckedRoute}
+            updateCheckedStep = {updateCheckedStep}/>
     ));
     // --------------------------------------------------------
 
@@ -203,9 +278,9 @@ export default function RouteEditor({routesList, setRoutesList}) {
         <div className="route-editor">
             <header className="route-editor__buttons">
                 <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
-                <button className="route-editor__button--select-all">Select All</button> {/* TODO: Add functionality to this button */}
-                <button className="route-editor__button--delete">Remove Selected</button> {/* TODO: Add functionality to this button */}
-                <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button>
+                <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll && <span>Un</span>}Select All</button> 
+                <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected</button> 
+                <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button> {/* temporary button... */}
             </header>
             <section className="route-editor__routes-list">
                 {routesListJSX}
