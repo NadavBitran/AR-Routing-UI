@@ -11,6 +11,9 @@ export default function RouteManager() {
     //               "no" -> User wants to **stay** in the **RouteEditor component**.
     const [userDecision, setUserDecision] = useState('');
 
+    // routesList -> To save the array of routes that the user enters
+    const [routesList, setRoutesList] = useState([]);
+
     // ---- COMPONENT STATE ----
     // routeManagerContent: The content of the RouteManager component.
     //                      If userDecision is "yes" -> RouteTutorial component
@@ -25,13 +28,20 @@ export default function RouteManager() {
             break;
 
         case 'no':
-            routeManagerContent = <RouteEditor />;
+            routeManagerContent = (
+                <RouteEditor 
+                routesList={routesList}
+                setRoutesList={setRoutesList} />
+            );
             break;
 
         default:
             routeManagerContent = (
                 <>
-                    <RouteEditor />;
+                    <RouteEditor 
+                        routesList={routesList}
+                        setRoutesList={setRoutesList}
+                    />;
                     <PopupWindow
                         title={"Stage X: Managing Your Business Routes"}
                         mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}

@@ -3,16 +3,8 @@ import "../styles/RouteEditor.css";
 import Route from "./Route";
 
 import { v4 as uuid } from 'uuid';
-import { useState } from "react";
 
-export default function RouteEditor() {
-
-    // --------------------------------------------------------
-    // ---- USE STATES ----
-    // routesList -> To save the array of routes that the user enters
-    const [routesList, setRoutesList] = useState([]);
-    // --------------------------------------------------------
-
+export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // ----- HELPER CALLBACKS ------
     // DESCRIPTION: Adds a new route to the routesList
