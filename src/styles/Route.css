@@ -81,9 +81,10 @@
     overflow: hidden;
 
     max-height: 4000px; /* hard setting the max-heigth to be 4000px -> approx. enough place for 100 steps per route (assuming no-one will ever make it...) */
-    transition: max-height 0.8s ease-in-out; 
+    transition: max-height 0.8s ease-in-out; /* expand animation */
 }
 
 .hidden {
-    max-height: 0;
+    max-height: 0; /* when clicking on expand, the expand animation will start till max-height: 0 */
+    transition: max-height 0.2s ease-in-out; /* collapse animation -> a little faster animation */
 }
