@@ -84,7 +84,6 @@ export default function Route(props) {
                 <IconButton onClick={handleExpandAndCollapse}>
                     {isExpanded ? <ExpandLessIcon className="route__button--expand-collapse"/> : <ExpandMoreIcon className="route__button--expand-collapse"/>}
                 </IconButton>
-
                 <section className="route__steps-list">
                     {stepsListJSX}
                 </section>
