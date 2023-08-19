@@ -4,10 +4,6 @@ import Step from "./Step";
 
 import {useState} from 'react';
 
-import IconButton from '@mui/material/IconButton';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 export default function Route(props) {
     // --- USE STATES ----
     // isExpanded:
@@ -84,10 +80,10 @@ export default function Route(props) {
                             <button className="route__button--remove-selected">Remove Selected</button> {/* TODO: Add functionality to this button */}
                         </div>
                     </div>
-                    <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse">
-                        {isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon"/> : <ExpandMoreIcon className="route__expand-collapse-icon"/>}
-                    </IconButton>
                 </div>
+                <IconButton onClick={handleExpandAndCollapse}>
+                    {isExpanded ? <ExpandLessIcon className="route__button--expand-collapse"/> : <ExpandMoreIcon className="route__button--expand-collapse"/>}
+                </IconButton>
                 <section className="route__steps-list">
                     {stepsListJSX}
                 </section>
