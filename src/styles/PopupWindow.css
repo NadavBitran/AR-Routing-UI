@@ -85,10 +85,15 @@
     padding: 2.5rem;
 }
 
+.popup-window__title-bar > img {
+    margin-right: 20rem;
+}
+
 .popup-window__title {
     font-size: 2rem;
     width: 100%;
     font-weight: bold;
+    margin-left: 1rem;
 }
 
 .popup-window__main-content {

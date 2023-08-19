@@ -9,7 +9,9 @@ export default function RouteManager() {
     // ---- STATE HOOKS ----
     // userDecision: "yes" -> User wants to **go** to the **RouteTutorial component**
     //               "no" -> User wants to **stay** in the **RouteEditor component**.
-    const [userDecision, setUserDecision] = useState('');
+    const [userDecision, setUserDecision] = useState(null);
+
+    const [isOnEditorMode, setIsOnEditorMode] = useState(false);
 
     // routesList -> To save the array of routes that the user enters
     const [routesList, setRoutesList] = useState([]);
@@ -22,36 +24,46 @@ export default function RouteManager() {
     let routeManagerContent;
 
     // ---- COMPONENT LOGIC ----
-    switch (userDecision) {
-        case 'yes':
-            routeManagerContent = undefined; // currently undefined - will be changed when we implement the RouteTutorial component
-            break;
-
-        case 'no':
-            routeManagerContent = (
-                <RouteEditor 
-                routesList={routesList}
-                setRoutesList={setRoutesList} />
-            );
-            break;
-
-        default:
-            routeManagerContent = (
-                <>
+    if (!isOnEditorMode) { 
+        switch (userDecision) {
+            case 'yes':
+                routeManagerContent = null; // currently null - will be changed when we implement the RouteTutorial component
+                break;
+    
+            case 'no':
+                setIsOnEditorMode(true);
+                routeManagerContent = (
                     <RouteEditor 
-                        routesList={routesList}
-                        setRoutesList={setRoutesList}
-                    />;
-                    <PopupWindow
-                        type={"question"}
-                        title={"Stage X: Managing Your Business Routes"}
-                        mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}
-                        buttonsKey={['yes', 'no']}
-                        buttonsContent={['Yes (activate tutorial mode)', 'No (just stay in the editor)']}
-                        setUserDecision={setUserDecision}
-                    />
-                </>
-            );
+                    routesList={routesList}
+                    setRoutesList={setRoutesList} />
+                );
+                break;
+    
+            default:
+                routeManagerContent = (
+                    <>
+                        <RouteEditor 
+                            routesList={routesList}
+                            setRoutesList={setRoutesList}
+                        />;
+                        <PopupWindow
+                            type={"question"}
+                            title={"Stage X: Managing Your Business Routes"}
+                            mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}
+                            buttonsKey={['yes', 'no']}
+                            buttonsContent={['Yes (activate tutorial mode)', 'No (just stay in the editor)']}
+                            setUserDecision={setUserDecision}
+                        />
+                    </>
+                );
+        }
+    } else {
+        routeManagerContent = (
+            <RouteEditor
+                routesList={routesList}
+                setRoutesList={setRoutesList}
+            />
+        );
     }
 
     // ---- COMPONENT RENDER ----
