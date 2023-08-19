@@ -38,6 +38,7 @@ export default function Route(props) {
     // DESCRIPTION: Removes the selected steps from the route with the appropriate index
     const handleRemoveSelectedSteps = () => {
         props.removeSelectedSteps(props.routeIndex)
+    }
       
     // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
     const handleExpandAndCollapse = () => {
