@@ -43,6 +43,7 @@ export default function RouteManager() {
                         setRoutesList={setRoutesList}
                     />;
                     <PopupWindow
+                        type={"question"}
                         title={"Stage X: Managing Your Business Routes"}
                         mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}
                         buttonsKey={['yes', 'no']}
