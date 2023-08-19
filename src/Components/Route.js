@@ -80,8 +80,16 @@ export default function Route(props) {
                             <button className="route__button--remove-selected">Remove Selected</button> {/* TODO: Add functionality to this button */}
                         </div>
                     </div>
-                    <button className="route__button--expand-collapse" onClick={handleExpandAndCollapse}>{isExpanded ? <span>Collapse</span> : <span>Expand</span>}</button> 
                 </div>
+                {isExpanded ? (
+                    <IconButton onClick={handleExpandAndCollapse}>
+                        <ExpandLessIcon className="route__button--expand-collapse"/>
+                    </IconButton>
+                ) : (
+                    <IconButton onClick={handleExpandAndCollapse}>
+                        <ExpandMoreIcon className="route__button--expand-collapse"/>
+                    </IconButton>
+                )}
                 <section className="route__steps-list">
                     {stepsListJSX}
                 </section>
