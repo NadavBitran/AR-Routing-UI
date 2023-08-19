@@ -66,10 +66,9 @@
 }
 
 .route__button--expand-collapse {
-    /*display: grid;
+    display: grid;
     place-content: center;
-    border-left: black 1px solid;*/
-    color:black;
+    border-left: black 1px solid;
 }
 
 .route__steps-list {
