@@ -1,7 +1,6 @@
 .route {
     background-color: lightgray;
     width: 100%;
-    /* min-height: 6rem; 15%; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,11 +73,18 @@
 
 .route__steps-list {
     width: 100%;
-    
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    overflow: visible;
     overflow-x: hidden;
+    overflow: hidden;
+
+    max-height: 4000px; /* hard setting the max-heigth to be 4000px -> approx. enough place for 100 steps per route (assuming no-one will ever make it...) */
+    transition: max-height 0.8s ease-in-out; /* expand animation */
+}
+
+.hidden {
+    max-height: 0; /* when clicking on expand, the expand animation will start till max-height: 0 */
+    transition: max-height 0.2s ease-in-out; /* collapse animation -> a little faster animation */
 }
