@@ -2,7 +2,14 @@ import "../styles/Step.css";
 
 export default function Step(props) {
     // --------------------------------------------------------
+    // --------------------------------------------------------
     // ---- HANDLERS ----
+
+    // DESCRIPTION: Enters the updated route checked value with the appropriate index that inside the route with the appropriate index, and updates the state accordingly 
+    const handleStepCheck = (event) => {
+        props.updateCheckedStep(event.target.checked , props.stepIndex , props.routeIndex)
+    }
+
     // DESCRIPTION: Enters the length of the step in the step's route accordingly
     const handleLengthInput = (event) => {
         props.addLengthToStep(event.target.value, props.stepIndex, props.routeIndex);
@@ -18,11 +25,12 @@ export default function Step(props) {
         props.removeStep(props.stepIndex, props.routeIndex);
     }
     // --------------------------------------------------------
+    // --------------------------------------------------------
 
     // ---- JSX ----
     return (
         <div className="step">
-            <input type="checkbox" className="step__checkbox" />
+            <input type="checkbox" className="step__checkbox" onChange={handleStepCheck} checked={props.stepElement.isChecked}/>
             <h3 className="step__index">Step #{props.stepIndex + 1}</h3>
             <div className="step__content">
                 <div className="step__length">
@@ -32,6 +40,7 @@ export default function Step(props) {
                 <div className="step__direction">
                     <h3>Direction: </h3>
                     <select onChange={handleDirectionInput} value={props.stepElement.direction}>
+                        <option value="none" hidden>Choose Direction</option>
                         <option>Foward</option>
                         <option>Foward-Left</option>
                         <option>Left</option>
