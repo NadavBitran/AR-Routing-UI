@@ -2,19 +2,11 @@ import "../styles/Route.css";
 
 import Step from "./Step";
 
-import {useState} from 'react';
-
 import IconButton from '@mui/material/IconButton';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function Route(props) {
-    // --- USE STATES ----
-    // isExpanded:
-    //           If "true" -> the route__steps-list section is expanded
-    //           If "no"   -> the route__steps-list section is collapsed 
-    const [isExpanded ,setIsExpanded] = useState(true) 
-
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- HANDELERS ----
@@ -35,10 +27,8 @@ export default function Route(props) {
 
     // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
     const handleExpandAndCollapse = () => {
-        setIsExpanded((currIsExpanded) => !currIsExpanded)
-
         const divStepList = document.getElementsByClassName("route__steps-list")[props.routeIndex]
-        divStepList.classList.toggle('hidden')
+        props.expandAndCollapse(props.routeElement, divStepList, props.routeIndex)
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -49,21 +39,22 @@ export default function Route(props) {
     // --- MAPPING ----
     const stepsListJSX = props.routeElement.stepList.map((stepElement, index) => (
         // The following data is transmitted:
-        // 1) stepId -> The id of the current stepElement
-        // 2) stepIndex -> The index of the current stepElement in the stepList of a specific route
-        // 3) routeId -> The id of the current routeElement
-        // 4) routeIndex -> The index of the current routeElement in the routesList
-        // 5) addLengthToStep -> Sending a callback to *add data about step's length*
-        // 6) addDirectionToStep -> Sending a callback to *add data about step's direction*
-        // 7) removeStep -> Sending a callback to *remove the step* from a specific route
+        // 1. stepIndex -> The index of the current stepElement in the stepList of a specific route
+        // 2. routeIndex -> The index of the current routeElement in the routesList
+        // 3. addLengthToStep -> Sending a callback to *add data about step's length*
+        // 4. addDirectionToStep -> Sending a callback to *add data about step's direction*
+        // 5. removeStep -> Sending a callback to *remove the step* from a specific route
+        // 6. stepElement -> Sending a read-only ref of the current stepElement 
+        // 7. updateCheckedStep -> Sending a callback to *update the checked step* from a specific route
         <Step key={index}
             stepIndex={index}
             routeIndex={props.routeIndex}
             addLengthToStep={props.addLengthToStep}
-            addDirectionToStep={props.addDirectionToStep} 
+            addDirectionToStep={props.addDirectionToStep}
             removeStep={props.removeStep}
-            stepElement = {stepElement}
-            />
+            stepElement={stepElement}
+            updateCheckedStep={props.updateCheckedStep}
+        />
     ));
     // --------------------------------------------------------
 
@@ -76,7 +67,7 @@ export default function Route(props) {
                     <div className="route__content">
                         <div className="route__name">
                             <h2>Name: </h2>
-                            <input type="text" onChange={handleRouteNameInput} value={props.routeElement.routeName}/>
+                            <input type="text" onChange={handleRouteNameInput} value={props.routeElement.routeName} />
                         </div>
                         <div className="route__buttons">
                             <button className="route__button--add-step" onClick={handleNewStepInput}>Add Step</button>
@@ -84,11 +75,13 @@ export default function Route(props) {
                             <button className="route__button--remove-selected">Remove Selected</button> {/* TODO: Add functionality to this button */}
                         </div>
                     </div>
-                    <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse">
-                        {isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon"/> : <ExpandMoreIcon className="route__expand-collapse-icon"/>}
-                    </IconButton>
+                    {props.routeElement.stepList.length !== 0 ?
+                        <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse">
+                            {props.isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon" /> : <ExpandMoreIcon className="route__expand-collapse-icon" />}
+                        </IconButton> : null
+                    }
                 </div>
-                <section className="route__steps-list">
+                <section className={props.isExpanded ? "route__steps-list" : "route__steps-list hidden"}>
                     {stepsListJSX}
                 </section>
             </div>
