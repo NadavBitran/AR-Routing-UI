@@ -69,7 +69,10 @@
     /*display: grid;
     place-content: center;
     border-left: black 1px solid;*/
-    color:black;
+}
+
+.route__expand-collapse-icon{
+    color: black;
 }
 
 .route__steps-list {
