@@ -1,30 +1,95 @@
 import "../styles/Route.css";
 
 import Step from "./Step";
+import PopupWindow from "./PopupWindow";
+
 
 import IconButton from '@mui/material/IconButton';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {useState, 
+       } from 'react';
 
 export default function Route(props) {
+    // --- USE STATES ----
+    // userDecision:
+    //              If "Yes, I'm Sure" -> The user confirm that he indeed wants to remove the selected routes/steps
+    //              If "No, I'm Not Sure" -> The user doesn't want to remove the selected routes/steps
+    const [userDecision, setUserDecision] = useState(null);
+
+    // routeIndexToRemove: The index of the route that the user wants to remove
+    const [routeIndexToRemove, setRouteIndexToRemove] = useState(-1);
+
+    // warningMessageJSX: The JSX of the warning message that will be displayed to the user when he tries to remove a route/step
+    const [warningMessageJSX, setWarningMessageJSX] = useState(null);
+
+    // removeButton: the remove button that the user clicked on (route/step)
+    // Options: "Remove Route", "Remove Selected (Steps)", null (didn't click on any remove button)
+    const [removeButton, setRemoveButton] = useState(null);
+  
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- HANDELERS ----
-    // DESCRIPTION: Enters the new name of the route with the appropriate id, and updates the state accordingly
+
+    // DESCRIPTION: Enters the updated route checked value with the appropriate index, and updates the state accordingly 
+    const handleRouteCheck = (event) => {
+        props.updateCheckedRoute(event.target.checked , props.routeIndex)
+    }
+    
+    // DESCRIPTION: Enters the new name of the route with the appropriate index, and updates the state accordingly
     const handleRouteNameInput = (event) => {
         props.addRouteNameToRoute(event.target.value, props.routeIndex)
     }
 
-    // DESCRIPTION: Enters the updated steps array of the route with the appropriate id, and updates the state accordingly
+    // DESCRIPTION: Enters the updated steps array of the route with the appropriate index, and updates the state accordingly
     const handleNewStepInput = () => {
-        props.addStepListToRoute([...props.routeElement.stepList, { length: "", direction: "Foward" }], props.routeIndex)
+        props.addStepListToRoute([...props.routeElement.stepList, {length : "", direction : "" , isChecked : false}], props.routeIndex)
     }
 
     // DESCRIPTION: Removes a route from the routesList
     const handleRemoveRoute = () => {
-        props.removeRoute(props.routeIndex)
+        if (warningMessageJSX === null) { // If the user didn't click on the remove button yet
+            setRouteIndexToRemove(props.routeIndex); // Save the index of the route that the user wants to remove so we can remove it later when the user confirms removal
+            setRemoveButton("Remove Route"); // Save the remove button that the user clicked on
+            setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the route
+                <PopupWindow
+                type={"warning"}
+                title={"Warning: Confirm Removal"}
+                mainContent={"Are you sure you want to remove this route? This action cannot be undone."}
+                buttonsKey={['yes', 'cancel']}
+                buttonsContent={["Yes, I'm Sure.", "Cancel"]}
+                setUserDecision={setUserDecision} />
+            );
+        } else {
+            setWarningMessageJSX(null);
+            setUserDecision(null);
+            setRemoveButton(null);
+            props.removeRoute(routeIndexToRemove);
+        }
     }
 
+    // DESCRIPTION: Removes the selected steps from the route with the appropriate index
+    const handleRemoveSelectedSteps = () => {
+        if (warningMessageJSX === null && props.routeElement.stepList.some((step) => step.isChecked)) { // If the user didn't click on the remove button yet and there is at least one step that is checked
+            setRouteIndexToRemove(props.routeIndex); // Save the index of the route that the user wants to remove steps from so we can remove it later when the user confirms removal
+            setRemoveButton("Remove Selected (Steps)"); // Save the remove button that the user clicked on
+            setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the selected steps
+                <PopupWindow
+                type={"warning"}
+                title={"Warning: Confirm Removal"}
+                mainContent={"Are you sure you want to remove the selected steps? This action cannot be undone."}
+                buttonsKey={['yes', 'cancel']}
+                buttonsContent={["Yes, I'm Sure.", "Cancel"]}
+                setUserDecision={setUserDecision} />
+            );
+        } else {
+            setWarningMessageJSX(null);
+            setUserDecision(null);
+            setRemoveButton(null);
+            props.removeSelectedSteps(props.routeIndex)
+        }
+    }
+    
     // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
     const handleExpandAndCollapse = () => {
         const divStepList = document.getElementsByClassName("route__steps-list")[props.routeIndex]
@@ -33,6 +98,35 @@ export default function Route(props) {
     // --------------------------------------------------------
     // --------------------------------------------------------
 
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ---- POP-UP WINDOW INPUT PROCESS ----
+
+    // DESCRIPTION: Handles the user's decision regarding the removal of a route or selected steps
+    useEffect(() => {
+        switch (userDecision) {
+            case 'yes':
+                switch (removeButton) {
+                    case 'Remove Route':
+                        handleRemoveRoute();
+                        break;
+                    case 'Remove Selected (Steps)':
+                        handleRemoveSelectedSteps();
+                        break;
+                    default:
+                        break;
+                }
+            case 'cancel':
+                setUserDecision(null);
+                setWarningMessageJSX(null);
+                setRouteIndexToRemove(-1);
+                break;
+            default:
+                break;
+        }
+    }, [userDecision, routeIndexToRemove, removeButton]);
+    // --------------------------------------------------------
+    // --------------------------------------------------------
 
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -52,9 +146,9 @@ export default function Route(props) {
             addLengthToStep={props.addLengthToStep}
             addDirectionToStep={props.addDirectionToStep}
             removeStep={props.removeStep}
-            stepElement={stepElement}
-            updateCheckedStep={props.updateCheckedStep}
-        />
+            stepElement = {stepElement}
+            updateCheckedStep = {props.updateCheckedStep}
+            />
     ));
     // --------------------------------------------------------
 
@@ -62,7 +156,7 @@ export default function Route(props) {
         <>
             <div className="route">
                 <div className="route__bar">
-                    <input type="checkbox" className="route__checkbox" />
+                    <input type="checkbox" className="route__checkbox" onChange={handleRouteCheck} checked={props.routeElement.isChecked}/>
                     <h2 className="route__index">Route #{props.routeIndex + 1}</h2>
                     <div className="route__content">
                         <div className="route__name">
@@ -72,7 +166,7 @@ export default function Route(props) {
                         <div className="route__buttons">
                             <button className="route__button--add-step" onClick={handleNewStepInput}>Add Step</button>
                             <button className="route__button--remove-route" onClick={handleRemoveRoute}>Remove Route</button>
-                            <button className="route__button--remove-selected">Remove Selected</button> {/* TODO: Add functionality to this button */}
+                            <button className="route__button--remove-selected" onClick={handleRemoveSelectedSteps}>Remove Selected Steps</button> 
                         </div>
                     </div>
                     {props.routeElement.stepList.length !== 0 ?
@@ -85,6 +179,7 @@ export default function Route(props) {
                     {stepsListJSX}
                 </section>
             </div>
+            {warningMessageJSX}
         </>
     );
 }
