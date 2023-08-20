@@ -8,7 +8,7 @@ Found in a larger AR project: ['Link to AR project'](https://github.com/KapGames
 And sending relevant data to the AR project database
 
 ---
-# How to contribute to the project:
+# How to contribute:
     
 1. Download Node.js [Here](https://nodejs.org/en "Link to nodejs website")
 
@@ -27,7 +27,7 @@ $ npm install --no-save
 $ git branch <new-branch-name>
 $ git checkout <new-branch-name>
 ```
-#### **Make sure there is a corresponding branch in the github repository!**
+- **Make sure there is a corresponding branch in the github repository!**
 
 5. Make your changes and commit them with 'git commit'
 
@@ -39,12 +39,15 @@ $ git push origin <new-branch-name>
 
 ## Running the project:
 
-1. At the location of the project in Command Prompt write:
+
+At the location of the project in Command Prompt:
+
+- If the packages are not installed write:
 ```
 $ npm install --no-save
 ```
 
-2. Then in Command Prompt write:
+- Running the project:
 ```
 $ npm start
 ```
