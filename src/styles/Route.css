@@ -36,7 +36,7 @@
     display: grid;
     grid-template-columns: 60% 30%;
     column-gap: 10%;
-    
+
 }
 
 .route__name {
@@ -45,10 +45,10 @@
     place-items: center;
 }
 
-.route__name > input {
+.route__name>input {
     width: 100%;
     height: 80%;
-    
+
     font-size: 1.9rem;
 }
 
@@ -60,7 +60,7 @@
     height: 100%;
 }
 
-.route__buttons > button {
+.route__buttons>button {
     width: 100%;
     height: 100%;
 }
@@ -71,8 +71,15 @@
     border-left: black 1px solid;*/
 }
 
-.route__expand-collapse-icon{
+.route__button--expand-collapse:disabled>.route__expand-collapse-icon {
+    color: #777777;
+    border: none;
+}
+
+.route__expand-collapse-icon {
     color: black;
+    border: 2px solid #525252;
+    border-radius: 7px;
 }
 
 .route__steps-list {
@@ -84,11 +91,15 @@
     overflow-x: hidden;
     overflow: hidden;
 
-    max-height: 4000px; /* hard setting the max-heigth to be 4000px -> approx. enough place for 100 steps per route (assuming no-one will ever make it...) */
-    transition: max-height 0.8s ease-in-out; /* expand animation */
+    max-height: 4000px;
+    /* hard setting the max-heigth to be 4000px -> approx. enough place for 100 steps per route (assuming no-one will ever make it...) */
+    transition: max-height 0.8s ease-in-out;
+    /* expand animation */
 }
 
 .hidden {
-    max-height: 0; /* when clicking on expand, the expand animation will start till max-height: 0 */
-    transition: max-height 0.2s ease-in-out; /* collapse animation -> a little faster animation */
+    max-height: 0;
+    /* when clicking on expand, the expand animation will start till max-height: 0 */
+    transition: max-height 0.2s ease-in-out;
+    /* collapse animation -> a little faster animation */
 }
