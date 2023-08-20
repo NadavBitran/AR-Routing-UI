@@ -16,12 +16,35 @@ export default function RouteManager() {
     // routesList -> To save the array of routes that the user enters
     const [routesList, setRoutesList] = useState([]);
 
+    //jsonObjectList -> saves routesList as Json object
+    const [jsonObjectList, setJsonObjectList] = useState();
+
     // ---- COMPONENT STATE ----
     // routeManagerContent: The content of the RouteManager component.
     //                      If userDecision is "yes" -> RouteTutorial component
     //                      If userDecision is "no" -> RouteEditor component
     //                      If userDecision is "default" -> RouteEditor component behind PopupWindow component
     let routeManagerContent;
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ---- HANDELERS ----
+
+    // DESCRIPTION: Converts routeList into a Json object
+    const handleRoutesToJson = () =>{
+        const tempList = routesList.map(element =>({
+            routeName: element.routeName, stepList: element.stepList //creates a temp list without the isChecked proprty from routesList
+        }))
+
+        const noIsCheckedList = tempList.map(routeElement =>({
+            ...routeElement,
+            stepList: routeElement.stepList.map(stepElement => ({
+                length: stepElement.length, direction: stepElement.direction //creates a new list that removes the isChecked proprty from stepList
+            }))
+        }))
+
+        setJsonObjectList(JSON.stringify(noIsCheckedList));
+    }
 
     // ---- COMPONENT LOGIC ----
     if (!isOnEditorMode) { 
@@ -75,7 +98,7 @@ export default function RouteManager() {
             {routeManagerContent}
             <footer className="route-manager__footer">
                 <button>Tutorial</button>
-                <button>Continue to the next stage</button>
+                <button onClick={handleRoutesToJson}>Continue to the next stage</button>
             </footer>
         </div>
     );
