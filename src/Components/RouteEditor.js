@@ -2,18 +2,17 @@ import "../styles/RouteEditor.css";
 
 import Route from "./Route";
 import PopupWindow from "./PopupWindow";
+import { useState, useEffect } from 'react';
 
-import {useState, useEffect} from 'react';
 
-
-export default function RouteEditor({routesList, setRoutesList}) {
+export default function RouteEditor({ routesList, setRoutesList }) {
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- USE STATES ----
     // isSelectedAll:
     //              If "true"  -> the user wants all the routes to be selected (*even the newly added ones*)
     //              If "false" -> the user wants to un-do the selection of all the routes 
-    const [isSelectedAll , setIsSelectedAll] = useState(false);
+    const [isSelectedAll, setIsSelectedAll] = useState(false);
 
     // userDecision:
     //              If "Yes, I'm Sure" -> The user confirm that he indeed wants to remove the selected routes
@@ -23,6 +22,10 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // warningMessageJSX: The JSX of the warning message that will be displayed to the user when he tries to remove selected routes
     const [warningMessageJSX, setWarningMessageJSX] = useState(null);
 
+    // expandedIndex:
+    //              Defines the route that will be extended from all the routes
+    //              Only one route will be extended at a time
+    const [expandedIndex, setExpandedIndex] = useState(-1)
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -31,12 +34,23 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // ----- CHECK BOX LOGIC HELPER CALLBACKS ------
 
+
+    // DESCRIPTION: Enters the routeElement, divStepList (the expanded step list element) and routeIndex
+    // Will Expands\Collapses and updates the state accordingly
+    const expandAndCollapse = (routeElement, divStepList, routeIndex) => {
+        setExpandedIndex(-1)
+        if (routeElement.stepList.length !== 0 && routeIndex !== expandedIndex) {
+            setExpandedIndex(routeIndex)
+        }
+    }
+
+
     // DESCRIPTION: Enters the updated checked value of the route, and updates the state accordingly
-    const updateCheckedRoute = (checkedValue , routeIndex) => {
+    const updateCheckedRoute = (checkedValue, routeIndex) => {
         setRoutesList((currRouteList) => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
-                if(currRouteIndex === routeIndex)
-                    return {...currRoute , isChecked: (isSelectedAll || checkedValue)}
+            return currRouteList.map((currRoute, currRouteIndex) => {
+                if (currRouteIndex === routeIndex)
+                    return { ...currRoute, isChecked: (isSelectedAll || checkedValue) }
                 else return currRoute
             })
         })
@@ -49,21 +63,21 @@ export default function RouteEditor({routesList, setRoutesList}) {
         setIsSelectedAll(updatedSelectedValue)
 
         setRoutesList((currRouteList) => {
-            return currRouteList.map((currRoute) => { return {...currRoute , isChecked: updatedSelectedValue} })
+            return currRouteList.map((currRoute) => { return { ...currRoute, isChecked: updatedSelectedValue } })
         })
     }
 
     // DESCRIPTION: Enters the updated checked value of the step's route, and updates the state accordingly
-    const updateCheckedStep = (checkedValue , stepIndex , routeIndex) => {
+    const updateCheckedStep = (checkedValue, stepIndex, routeIndex) => {
         setRoutesList((currRouteList) => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
-                if(currRouteIndex === routeIndex){
-                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
-                        if(currStepIndex === stepIndex)
-                            return {...currStep , isChecked: (isSelectedAll || checkedValue)}
+            return currRouteList.map((currRoute, currRouteIndex) => {
+                if (currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
+                        if (currStepIndex === stepIndex)
+                            return { ...currStep, isChecked: (isSelectedAll || checkedValue) }
                         else return currStep
                     })
-                    return {...currRoute , stepList : updatedStepList}
+                    return { ...currRoute, stepList: updatedStepList }
                 }
                 else return currRoute
             })
@@ -73,15 +87,15 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
 
 
-
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ----- UPDATE DATA HELPER CALLBACKS ------
-    
+
+
     // DESCRIPTION: Enters the new name of the route with the appropriate index, and updates the state accordingly
     const addRouteNameToRoute = (routeName, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex)
                     return { ...currRoute, routeName: routeName }
                 else
@@ -93,21 +107,22 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate index, and updates the state accordingly
     const addStepListToRoute = (stepList, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex)
                     return { ...currRoute, stepList: stepList }
                 else
                     return currRoute
             })
         });
+        setExpandedIndex(routeIndex);
     }
 
     // DESCRIPTION: Enters the updated length of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
-    const addLengthToStep = (length, stepIndex , routeIndex) => {
+    const addLengthToStep = (length, stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex) {
-                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
+                    const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex) {
                             return { ...currStep, length: length };
                         }
@@ -124,9 +139,9 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // DESCRIPTION: Enters the updated direction of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
     const addDirectionToStep = (direction, stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex) {
-                    const updatedStepList = currRoute.stepList.map((currStep , currStepIndex) => {
+                    const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex) {
                             return { ...currStep, direction: direction };
                         }
@@ -147,13 +162,13 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // ----- ADD COMPONENTS HELPER CALLBACKS ------
 
+
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] , isChecked: isSelectedAll }])
+        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [], isChecked: isSelectedAll }])
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
-
 
 
     // --------------------------------------------------------
@@ -162,27 +177,32 @@ export default function RouteEditor({routesList, setRoutesList}) {
 
     // DESCRIPTION: Removes a route from the routesList
     const removeRoute = (routeIndex) => {
-        console.log('From removeRoute(): routeIndex = ' + routeIndex);
         setRoutesList(currRouteList => {
-            return currRouteList.filter((currRoute , currRouteIndex) => {
+            return currRouteList.filter((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex)
                     return false
                 else
                     return true
             })
         });
+        if (routeIndex < expandedIndex) {
+            setExpandedIndex(expandedIndex - 1);
+        }
+        else if (routeIndex === expandedIndex) {
+            setExpandedIndex(-1);
+        }
     }
-    
+
     const removeSelectedRoutes = () => {
         if (warningMessageJSX === null && routesList.some(currRoute => currRoute.isChecked)) { // if the warning message is not displayed and there is at least one route that is selected
             setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the selected routes
-            <PopupWindow
-            type={"warning"}
-            title={"Warning: Confirm Removal"}
-            mainContent={"Are you sure you want to remove the selected routes? This action cannot be undone."}
-            buttonsKey={['yes', 'cancel']}
-            buttonsContent={["Yes, I'm Sure.", "Cancel"]}
-            setUserDecision={setUserDecision} />
+                <PopupWindow
+                    type={"warning"}
+                    title={"Warning: Confirm Removal"}
+                    mainContent={"Are you sure you want to remove the selected routes? This action cannot be undone."}
+                    buttonsKey={['yes', 'cancel']}
+                    buttonsContent={["Yes, I'm Sure.", "Cancel"]}
+                    setUserDecision={setUserDecision} />
             );
         } else {
             setWarningMessageJSX(null);
@@ -194,13 +214,13 @@ export default function RouteEditor({routesList, setRoutesList}) {
         }
     }
 
+
     // DESCRIPTION: Removes a step from the stepList of the route with the appropriate index
     const removeStep = (stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
-            console.log("From removeStep(): routeIndex = " + routeIndex + ", stepIndex = " + stepIndex);
-            return currRouteList.map((currRoute , currRouteIndex) => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex) {
-                    const updatedStepList = currRoute.stepList.filter((currStep , currStepIndex) => {
+                    const updatedStepList = currRoute.stepList.filter((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex)
                             return false
                         else
@@ -209,18 +229,24 @@ export default function RouteEditor({routesList, setRoutesList}) {
 
                     return { ...currRoute, stepList: updatedStepList };
                 }
+
                 return currRoute;
             });
         });
+        routesList.forEach((currRoute, currRouteIndex) => {
+            if (currRoute.stepList.length === 0 && currRouteIndex === routeIndex) {
+                setExpandedIndex(-1);
+            }
+        })
     }
 
     // DESCRIPTION: Removes the selected steps from the stepList of the route with the appropriate index
     const removeSelectedSteps = (routeIndex) => {
         setRoutesList(currRouteList => {
-            return currRouteList.map((currRoute , currRouteIndex) => {
-                if(currRouteIndex === routeIndex) {
-                    const updatedStepList = currRoute.stepList.filter(currStep => !currStep.isChecked )
-                    return {...currRoute , stepList : updatedStepList}
+            return currRouteList.map((currRoute, currRouteIndex) => {
+                if (currRouteIndex === routeIndex) {
+                    const updatedStepList = currRoute.stepList.filter(currStep => !currStep.isChecked)
+                    return { ...currRoute, stepList: updatedStepList }
                 }
                 else return currRoute
             })
@@ -228,8 +254,6 @@ export default function RouteEditor({routesList, setRoutesList}) {
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
-
-
 
 
     // --------------------------------------------------------
@@ -244,7 +268,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         }
         console.log("---------------------------routeList------------------------");
         routesList.forEach((route, index) => {
-            console.log(`Route #${index+1}: `);
+            console.log(`Route #${index + 1}: `);
             console.log(`       Route Name: ${route.routeName}`);
             console.log(`       Checked Status: ${route.isChecked}`)
             console.log(`       Step List: `);
@@ -254,7 +278,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
             }
 
             route.stepList.forEach((step, index) => {
-                console.log(`           Step #${index+1}: `);
+                console.log(`           Step #${index + 1}: `);
                 console.log(`                   Step List Length: ${step.length}`);
                 console.log(`                   Step List Direction: ${step.direction}`);
                 console.log(`                   Step List Checked Status: ${step.isChecked}`)
@@ -264,6 +288,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
+
 
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -286,22 +311,25 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // --------------------------------------------------------
 
+
     // --------------------------------------------------------
     // ---- MAPPING ----
     const routesListJSX = routesList.map((routeElement, index) => (
         // The following data is transmitted:
-        // 1) routeIndex -> The index of the current routeElement in the routesList
-        // 2) addRouteNameToRoute -> Sending a callback to *add data about the route name*
-        // 3) addStepListToRoute -> Sending a callback to *add data about the steps*
-        // 4) addLengthToStep -> Sending a callback to *add data about step's length*
-        // 5) addDirectionToStep -> Sending a callback to *add data about step's direction*
-        // 6) removeRoute -> Sending a callback to *remove the route*
-        // 7) removeStep -> Sending a callback to *remove the step* from a specific route
-        // 8) removeSelectedSteps -> Sending a callback to *remove all selected steps* from a specific route
-        // 9) stepList -> Sending a read-only ref of the current routeElement stepList to map the Step Components
-        // 10) routeElement -> Sending a read-only ref of the current routeElement.
-        // 11) updateCheckedRoute -> Sending a callback to *update data about route's checkbox status*
-        // 12) updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
+        // 1. routeIndex -> The index of the current routeElement in the routesList
+        // 2. addRouteNameToRoute -> Sending a callback to *add data about the route name*
+        // 3. addStepListToRoute -> Sending a callback to *add data about the steps*
+        // 4. addLengthToStep -> Sending a callback to *add data about step's length*
+        // 5. addDirectionToStep -> Sending a callback to *add data about step's direction*
+        // 6. removeRoute -> Sending a callback to *remove the route*
+        // 7. removeStep -> Sending a callback to *remove the step* from a specific route
+        // 8. removeSelectedSteps -> Sending a callback to *remove all selected steps* from a specific route
+        // 9. routeElement -> Sending a read-only ref of the current routeElement.
+        // 10. updateCheckedRoute -> Sending a callback to *update data about route's checkbox status*
+        // 11. updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
+        // 12. isExpanded -> Sending a read-only ref of the current expandedIndex.
+        // 13. expandAndCollapse -> Sending a callback to *set the expanded route via the Index*
+
         <Route key={index}
             routeIndex={index}
             addRouteNameToRoute={addRouteNameToRoute}
@@ -310,10 +338,12 @@ export default function RouteEditor({routesList, setRoutesList}) {
             addDirectionToStep={addDirectionToStep}
             removeRoute={removeRoute}
             removeStep={removeStep}
-            removeSelectedSteps = {removeSelectedSteps}
-            routeElement = {routeElement}
-            updateCheckedRoute = {updateCheckedRoute}
-            updateCheckedStep = {updateCheckedStep}/>
+            removeSelectedSteps={removeSelectedSteps}
+            routeElement={routeElement}
+            updateCheckedRoute={updateCheckedRoute}
+            updateCheckedStep={updateCheckedStep}
+            isExpanded={expandedIndex === index}
+            expandAndCollapse={expandAndCollapse} />
     ));
     // --------------------------------------------------------
 
@@ -324,8 +354,8 @@ export default function RouteEditor({routesList, setRoutesList}) {
             <div className="route-editor">
                 <header className="route-editor__buttons">
                     <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
-                    <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll && <span>Un</span>}Select All</button> 
-                    <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected Routes</button> 
+                    <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll ? <span>Unselect All</span> : <span>Select All</span>}</button>
+                    <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected Routes</button>
                     <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button> {/* temporary button... */}
                 </header>
                 <section className="route-editor__routes-list">
@@ -336,5 +366,4 @@ export default function RouteEditor({routesList, setRoutesList}) {
         </>
     );
     // --------------------------------------------------------
-    
 }
