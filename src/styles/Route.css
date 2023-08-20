@@ -12,7 +12,7 @@
 
 .route__bar {
     width: 100%;
-    height: 5rem;
+    height: 7rem;
     display: grid;
     grid-template-columns: 2% 10% 78% 10%;
     border-bottom: black 2px solid;
@@ -47,7 +47,7 @@
 
 .route__name > input {
     width: 100%;
-    height: 80%;
+    height: 60%;
     
     font-size: 1.9rem;
 }
