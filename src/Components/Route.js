@@ -131,7 +131,7 @@ export default function Route(props) {
             default:
                 break;
         }
-    }, [userDecision, routeIndexToRemove, removeButton, props]);
+    }, [userDecision, routeIndexToRemove, removeButton]);
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -173,7 +173,7 @@ export default function Route(props) {
                         <div className="route__buttons">
                             <button className="route__button--add-step" onClick={handleNewStepInput}>Add Step</button>
                             <button className="route__button--remove-route" onClick={handleRemoveRoute}>Remove Route</button>
-                            <button className="route__button--remove-selected" onClick={handleRemoveSelectedSteps}>Remove Selected</button> 
+                            <button className="route__button--remove-selected" onClick={handleRemoveSelectedSteps}>Remove Selected Steps</button> 
                         </div>
                     </div>
                     <button className="route__button--expand-collapse" onClick={handleExpandAndCollapse}>{isExpanded ? <span>Collapse</span> : <span>Expand</span>}</button> 

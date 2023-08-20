@@ -325,7 +325,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
                 <header className="route-editor__buttons">
                     <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
                     <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll && <span>Un</span>}Select All</button> 
-                    <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected</button> 
+                    <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected Routes</button> 
                     <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button> {/* temporary button... */}
                 </header>
                 <section className="route-editor__routes-list">

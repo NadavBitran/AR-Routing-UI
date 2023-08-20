@@ -89,7 +89,7 @@ export default function Step(props) {
             default:
                 break;
         }
-    }, [userDecision, routeIndexToRemove, stepIndexToRemove, props]);
+    }, [userDecision, routeIndexToRemove, stepIndexToRemove]);
 
     // --------------------------------------------------------
     // --------------------------------------------------------
