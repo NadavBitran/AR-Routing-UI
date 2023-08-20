@@ -1,8 +1,9 @@
 import "../styles/RouteEditor.css";
 
 import Route from "./Route";
+import PopupWindow from "./PopupWindow";
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 
 export default function RouteEditor({routesList, setRoutesList}) {
@@ -13,6 +14,15 @@ export default function RouteEditor({routesList, setRoutesList}) {
     //              If "true"  -> the user wants all the routes to be selected (*even the newly added ones*)
     //              If "false" -> the user wants to un-do the selection of all the routes 
     const [isSelectedAll , setIsSelectedAll] = useState(false);
+
+    // userDecision:
+    //              If "Yes, I'm Sure" -> The user confirm that he indeed wants to remove the selected routes
+    //              If "No, I'm Not Sure" -> The user doesn't want to remove the selected routes
+    const [userDecision, setUserDecision] = useState(null);
+
+    // warningMessageJSX: The JSX of the warning message that will be displayed to the user when he tries to remove selected routes
+    const [warningMessageJSX, setWarningMessageJSX] = useState(null);
+
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -26,7 +36,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         setRoutesList((currRouteList) => {
             return currRouteList.map((currRoute , currRouteIndex) => {
                 if(currRouteIndex === routeIndex)
-                    return {...currRoute , isChecked : (isSelectedAll || checkedValue)}
+                    return {...currRoute , isChecked: (isSelectedAll || checkedValue)}
                 else return currRoute
             })
         })
@@ -39,7 +49,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
         setIsSelectedAll(updatedSelectedValue)
 
         setRoutesList((currRouteList) => {
-            return currRouteList.map((currRoute) => { return {...currRoute , isChecked : updatedSelectedValue} })
+            return currRouteList.map((currRoute) => { return {...currRoute , isChecked: updatedSelectedValue} })
         })
     }
 
@@ -139,7 +149,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
 
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] , isChecked : isSelectedAll }])
+        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [] , isChecked: isSelectedAll }])
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -152,6 +162,7 @@ export default function RouteEditor({routesList, setRoutesList}) {
 
     // DESCRIPTION: Removes a route from the routesList
     const removeRoute = (routeIndex) => {
+        console.log('From removeRoute(): routeIndex = ' + routeIndex);
         setRoutesList(currRouteList => {
             return currRouteList.filter((currRoute , currRouteIndex) => {
                 if (currRouteIndex === routeIndex)
@@ -163,16 +174,30 @@ export default function RouteEditor({routesList, setRoutesList}) {
     }
     
     const removeSelectedRoutes = () => {
-        setIsSelectedAll(false)
-
-        setRoutesList(currRouteList => {
-            return currRouteList.filter((currRoute) => !currRoute.isChecked)
-        })
+        if (warningMessageJSX === null && routesList.some(currRoute => currRoute.isChecked)) { // if the warning message is not displayed and there is at least one route that is selected
+            setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the selected routes
+            <PopupWindow
+            type={"warning"}
+            title={"Warning: Confirm Removal"}
+            mainContent={"Are you sure you want to remove the selected routes? This action cannot be undone."}
+            buttonsKey={['yes', 'cancel']}
+            buttonsContent={["Yes, I'm Sure.", "Cancel"]}
+            setUserDecision={setUserDecision} />
+            );
+        } else {
+            setWarningMessageJSX(null);
+            setUserDecision(null);
+            setIsSelectedAll(false)
+            setRoutesList(currRouteList => {
+                return currRouteList.filter((currRoute) => !currRoute.isChecked)
+            });
+        }
     }
 
     // DESCRIPTION: Removes a step from the stepList of the route with the appropriate index
     const removeStep = (stepIndex, routeIndex) => {
         setRoutesList(currRouteList => {
+            console.log("From removeStep(): routeIndex = " + routeIndex + ", stepIndex = " + stepIndex);
             return currRouteList.map((currRoute , currRouteIndex) => {
                 if (currRouteIndex === routeIndex) {
                     const updatedStepList = currRoute.stepList.filter((currStep , currStepIndex) => {
@@ -240,6 +265,26 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // --------------------------------------------------------
 
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+    // ---- POP-UP WINDOW INPUT PROCESS ----
+
+    // DESCRIPTION: handles the user's decision regarding the removal of the selected routes
+    useEffect(() => {
+        switch (userDecision) {
+            case 'yes':
+                removeSelectedRoutes();
+                break;
+            case 'cancel':
+                setUserDecision(null);
+                setWarningMessageJSX(null);
+                break;
+            default:
+                break;
+        }
+    }, [userDecision, routesList]);
+    // --------------------------------------------------------
+    // --------------------------------------------------------
 
     // --------------------------------------------------------
     // ---- MAPPING ----
@@ -275,17 +320,20 @@ export default function RouteEditor({routesList, setRoutesList}) {
     // --------------------------------------------------------
     // ---- JSX ----
     return (
-        <div className="route-editor">
-            <header className="route-editor__buttons">
-                <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
-                <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll && <span>Un</span>}Select All</button> 
-                <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected</button> 
-                <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button> {/* temporary button... */}
-            </header>
-            <section className="route-editor__routes-list">
-                {routesListJSX}
-            </section>
-        </div>
+        <>
+            <div className="route-editor">
+                <header className="route-editor__buttons">
+                    <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
+                    <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll && <span>Un</span>}Select All</button> 
+                    <button className="route-editor__button--delete" onClick={removeSelectedRoutes}>Remove Selected Routes</button> 
+                    <button className="route-editor__button--console-log" onClick={printRoutesList}>Print RouteList</button> {/* temporary button... */}
+                </header>
+                <section className="route-editor__routes-list">
+                    {routesListJSX}
+                </section>
+            </div>
+            {warningMessageJSX}
+        </>
     );
     // --------------------------------------------------------
     

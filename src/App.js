@@ -46,6 +46,7 @@ export default function App() {
     default:
       appContent = (
         <PopupWindow
+          type={"question"}
           title={"Stage X: Managing Your Business Routes"}
           mainContent={"Would you like to start creating your routes?"}
           buttonsKey={['yes', 'no']}
