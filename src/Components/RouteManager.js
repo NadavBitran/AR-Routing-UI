@@ -33,17 +33,17 @@ export default function RouteManager() {
     // DESCRIPTION: Converts routeList into a Json object
     const handleRoutesToJson = () =>{
         const tempList = routesList.map(element =>({
-            routeName: element.routeName, stepList: element.stepList //creates a temp list without the isChecked proprty from routesList
+            routeName: element.routeName, stepList: element.stepList //creates a temp list without the isChecked and isExpanded properties from routesList
         }))
 
-        const noIsCheckedList = tempList.map(routeElement =>({
+        const dataList = tempList.map(routeElement =>({
             ...routeElement,
             stepList: routeElement.stepList.map(stepElement => ({
-                length: stepElement.length, direction: stepElement.direction //creates a new list that removes the isChecked proprty from stepList
+                length: stepElement.length, direction: stepElement.direction //creates a new list that removes the isChecked property from stepList
             }))
         }))
 
-        setJsonObjectList(JSON.stringify(noIsCheckedList));
+        setJsonObjectList(JSON.stringify(dataList));
     }
 
     // ---- COMPONENT LOGIC ----
