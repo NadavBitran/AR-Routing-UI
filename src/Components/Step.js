@@ -1,10 +1,16 @@
+import { useCallback } from "react";
 import "../styles/Step.css";
 
 import PopupWindow from "./PopupWindow";
 
 import { useState, useEffect } from "react";
+import ToolTip from "./ToolTip";
 
-export default function Step(props) {
+export default function Step({
+    stepIndex,routeIndex ,
+    addLengthToStep ,addDirectionToStep ,
+    removeStep , stepElement, updateCheckedStep
+}) {
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- USE STATES ----
@@ -12,13 +18,8 @@ export default function Step(props) {
     // userDecision:
     //              If "Yes, I'm Sure" -> The user confirm that he indeed wants to remove the selected routes/steps
     //              If "No, I'm Not Sure" -> The user doesn't want to remove the selected routes/steps
-    const [userDecision, setUserDecision] = useState(null);
-    
-    // routeIndexToRemove: The index of the route that the user wants to remove
-    const [routeIndexToRemove, setRouteIndexToRemove] = useState(-1);
-    
-    // stepIndexToRemove: The index of the step that the user wants to remove
-    const [stepIndexToRemove, setStepIndexToRemove] = useState(-1);
+    const [userDecision, setUserDecision] = useState(false);
+
 
     // warningMessageJSX: The JSX of the warning message that will be displayed to the user when he tries to remove a route/step
     const [warningMessageJSX, setWarningMessageJSX] = useState(null);
@@ -32,41 +33,24 @@ export default function Step(props) {
 
     // DESCRIPTION: Enters the updated route checked value with the appropriate index that inside the route with the appropriate index, and updates the state accordingly 
     const handleStepCheck = (event) => {
-        props.updateCheckedStep(event.target.checked , props.stepIndex , props.routeIndex)
+        updateCheckedStep(event.target.checked , stepIndex , routeIndex)
     }
 
     // DESCRIPTION: Enters the length of the step in the step's route accordingly
     const handleLengthInput = (event) => {
-        props.addLengthToStep(event.target.value, props.stepIndex, props.routeIndex);
+        addLengthToStep(event.target.value, stepIndex, routeIndex);
     }
 
     // DESCRIPTION: Enters the direction of the step in the step's route accordingly
     const handleDirectionInput = (event) => {
-        props.addDirectionToStep(event.target.value, props.stepIndex, props.routeIndex);
+        addDirectionToStep(event.target.value, stepIndex, routeIndex);
     }
 
     // DESCRIPTION: Removes the step from the step's route accordingly
-    const handleRemoveStep = () => {
-        if (warningMessageJSX === null) { // if the warning message is not displayed to the user, display it
-            setRouteIndexToRemove(props.routeIndex); // save the index of the route which contain the step that the user wants to remove
-            setStepIndexToRemove(props.stepIndex); // save the index of the step that the user wants to remove
-            setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the selected steps
-                <PopupWindow
-                type={"warning"}
-                title={"Warning: Confirm Removal"}
-                mainContent={"Are you sure you want to remove this step? This action cannot be undone."}
-                buttonsKey={['yes', 'cancel']}
-                buttonsContent={["Yes, I'm Sure.", "Cancel"]}
-                setUserDecision={setUserDecision} />
-            );
-        } else {
-            props.removeStep(props.stepIndex, props.routeIndex);
-            setUserDecision(null);
-            setWarningMessageJSX(null);
-            setRouteIndexToRemove(-1);
-            setStepIndexToRemove(-1);
-        }
-    }
+    const handleRemoveStep = useCallback(() => {
+            removeStep(stepIndex, routeIndex);
+        } , [removeStep , stepIndex , routeIndex] )
+    
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -74,22 +58,24 @@ export default function Step(props) {
     // --------------------------------------------------------
     // ---- POP-UP WINDOW INPUT PROCESS ----
 
+    const createStepPopUpMSG = () => {
+        setWarningMessageJSX( // display a warning message to the user, asking him to confirm the removal of the selected steps
+                <PopupWindow
+                type={"warning"}
+                title={"Warning: Confirm Removal"}
+                mainContent={"Are you sure you want to remove this step? This action cannot be undone."}
+                buttonsKey={['yes', 'cancel']}
+                buttonsContent={["Yes, I'm Sure.", "Cancel"]}
+                setUserDecision={setUserDecision} />
+        )
+    }
+
     // DESCRIPTION: handles the user's decision regarding the removal of the selected routes
     useEffect(() => {
-        switch (userDecision) {
-            case 'yes':
-                handleRemoveStep();
-                break;
-            case 'cancel':
-                setUserDecision(null);
-                setWarningMessageJSX(null);
-                setRouteIndexToRemove(-1);
-                setStepIndexToRemove(-1);
-                break;
-            default:
-                break;
-        }
-    }, [userDecision, routeIndexToRemove, stepIndexToRemove]);
+        if(userDecision === 'yes') handleRemoveStep()
+        setUserDecision(false);
+        setWarningMessageJSX(null);
+    }, [userDecision , handleRemoveStep , setUserDecision , setWarningMessageJSX]);
 
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -97,16 +83,17 @@ export default function Step(props) {
     return (
         <>
             <div className="step">
-                <input type="checkbox" className="step__checkbox" onChange={handleStepCheck} checked={props.stepElement.isChecked}/>
-                <h3 className="step__index">Step #{props.stepIndex + 1}</h3>
+                <input type="checkbox" className="step__checkbox" onChange={handleStepCheck} checked={stepElement.isChecked}/>
+                <h3 className="step__index">Step #{stepIndex + 1}</h3>
                 <div className="step__content">
                     <div className="step__length">
                         <h3>Length: </h3>
-                        <input type="text" onChange={handleLengthInput} placeholder={"Length in meters..."} value={props.stepElement.length}></input>
+                        <input type="text" onChange={handleLengthInput} placeholder={"Length in meters..."} value={stepElement.length}></input>
+                                
                     </div>
                     <div className="step__direction">
                         <h3>Direction: </h3>
-                        <select onChange={handleDirectionInput} value={props.stepElement.direction}>
+                        <select onChange={handleDirectionInput} value={stepElement.direction}>
                             <option value="none" hidden>Choose Direction</option>
                             <option>Foward</option>
                             <option>Foward-Left</option>
@@ -119,7 +106,7 @@ export default function Step(props) {
                         </select>
                     </div>
                 </div>
-                <button className="step__button--remove" onClick={handleRemoveStep}>Remove Step</button>
+                <button className="step__button--remove" onClick={createStepPopUpMSG}>Remove Step</button>
             </div>
             {warningMessageJSX}
         </>

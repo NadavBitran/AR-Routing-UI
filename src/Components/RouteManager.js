@@ -16,6 +16,7 @@ export default function RouteManager() {
     // routesList -> To save the array of routes that the user enters
     const [routesList, setRoutesList] = useState([]);
 
+
     // ---- COMPONENT STATE ----
     // routeManagerContent: The content of the RouteManager component.
     //                      If userDecision is "yes" -> RouteTutorial component
@@ -27,7 +28,7 @@ export default function RouteManager() {
     if (!isOnEditorMode) { 
         switch (userDecision) {
             case 'yes':
-                routeManagerContent = null; // currently null - will be changed when we implement the RouteTutorial component
+                routeManagerContent = null // will be changed when we implement the RouteTutorial component
                 break;
     
             case 'no':
@@ -68,6 +69,7 @@ export default function RouteManager() {
 
     // ---- COMPONENT RENDER ----
     return (
+        <>
         <div className="route-manager">
             <header className="route-manager__header">
                 <h1>Route Manager</h1>
@@ -78,5 +80,6 @@ export default function RouteManager() {
                 <button>Continue to the next stage</button>
             </footer>
         </div>
+        </>
     );
 }
