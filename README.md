@@ -1,53 +1,53 @@
-# Description:
 
-The project is React based and Node.js based
+# AR Routing UI
 
-Came to handle the UI of the Routing feature
-Found in a larger AR project: ['Link to AR project'](https://github.com/KapGames/AR-Team "Link to AR project")
+Welcome to the AR Routing UI project! This project is a React-based user interface that allows the user to manage his/her **Routes and Steps**, while communicates relevant data to the larger AR project. It is designed to work alongside the [AR project](https://github.com/KapGames/AR-Team "Link to AR project"), which is being collaboratively developed by multiple teams, including us.
 
-And sending relevant data to the AR project database
+## Built So Far Using
+[![](https://skillicons.dev/icons?i=html,css,javascript,react)](https://skillicons.dev)
 
----
-# How to contribute:
-    
-1. Download Node.js [Here](https://nodejs.org/en "Link to nodejs website")
+## Running the Project
 
-2. Make a clone to your local computer 
-```
-$ git clone https://github.com/NadavBitran/AR-Routing-UI.git
-```
+To run the project locally, follow these steps:
 
-3. At the location of the project in Command Prompt write:
-```
-$ npm install --no-save
-```
+1. **Install Dependencies**: If the project dependencies are not yet installed, navigate to the project directory in your Command Prompt or terminal and run:
+	```
+	$ npm install --no-save
+	```
+2. **Start the Project**: Run the following command to start the project:
+	```
+	$ npm start
+	```
+	This will launch the project in your default web browser.
 
-4. Create a new branch and do a checkout
-```
-$ git branch <new-branch-name>
-$ git checkout <new-branch-name>
-```
-- **Make sure there is a corresponding branch in the github repository!**
+## How to Contribute
 
-5. Make your changes and commit them with 'git commit'
+1. **Install Node.js**: If you don't have Node.js installed, you can download it from the official [Node.js website](https://nodejs.org/en).
 
-6. Push to the corresponding branch in the github repository
-```
-$ git push origin <new-branch-name>
-```
+2. **Clone the Repository**: Use the following command to clone the repository to your local computer:
+	```
+	$ git clone https://github.com/NadavBitran/AR-Routing-UI.git
+	```
+	
+3. **Install Dependencies**: Navigate to the project directory in your Command Prompt or terminal and install the required packages:
+	```
+	$ npm install --no-save
+	```
 
+4. **Create a New Branch**: Before making changes, create a new branch for your work and switch to it:
+	```
+	$ git branch <new-branch-name>
+	$ git checkout <new-branch-name>
+	```
+	It can also be done with one line of command, like this:
+	```
+	$ git checkout -b <new-branch-name>
+	```
 
-## Running the project:
+5. **Make Changes and Commit**: Make the necessary changes to the code and use `git commit` to commit your work. 
 
-
-At the location of the project in Command Prompt:
-
-- If the packages are not installed write:
-```
-$ npm install --no-save
-```
-
-- Running the project:
-```
-$ npm start
-```
+6.  **Push Changes**: Push your changes to the corresponding branch in the GitHub repository:
+	```
+	$ git push origin <branch-name>
+	```
+7. **Create a Pull Request**: When you're ready to merge your changes into the main project, create a pull request from your feature branch to the master branch. Describe the changes and purpose of the pull request clearly.
