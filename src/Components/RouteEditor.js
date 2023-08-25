@@ -22,28 +22,9 @@ export default function RouteEditor({ routesList, setRoutesList }) {
     // warningMessageJSX: The JSX of the warning message that will be displayed to the user when he tries to remove selected routes
     const [warningMessageJSX, setWarningMessageJSX] = useState(null);
 
-    // expandedIndex:
-    //              Defines the route that will be extended from all the routes
-    //              Only one route will be extended at a time
-    const [expandedIndex, setExpandedIndex] = useState(-1)
-    // --------------------------------------------------------
-    // --------------------------------------------------------
-
-
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ----- CHECK BOX LOGIC HELPER CALLBACKS ------
-
-
-    // DESCRIPTION: Enters the routeElement, divStepList (the expanded step list element) and routeIndex
-    // Will Expands\Collapses and updates the state accordingly
-    const expandAndCollapse = (routeElement, divStepList, routeIndex) => {
-        setExpandedIndex(-1)
-        if (routeElement.stepList.length !== 0 && routeIndex !== expandedIndex) {
-            setExpandedIndex(routeIndex)
-        }
-    }
-
 
     // DESCRIPTION: Enters the updated checked value of the route, and updates the state accordingly
     const updateCheckedRoute = (checkedValue, routeIndex) => {
@@ -92,6 +73,33 @@ export default function RouteEditor({ routesList, setRoutesList }) {
     // ----- UPDATE DATA HELPER CALLBACKS ------
 
 
+    // DESCRIPTION: Set the 'IsExpanded' value of the route with the appropriate index to true
+    // To determine that the route is in extended mode
+    const setIsExpandedTrue = (routeIndex) => {
+        setRoutesList(currRouteList => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
+                if (currRouteIndex === routeIndex && currRoute.stepList.length !== 0)
+                    return { ...currRoute, isExpanded: true }
+                else
+                    return currRoute
+            })
+        });
+    }
+
+    // DESCRIPTION: Set the 'IsExpanded' value of the route with the appropriate index to false
+    // To determine that the route is not in extended mode
+    // When routeIndex = -1, Go through all routes, the route with an empty stepList will be UnExpanded
+    const setIsExpandedFalse = (routeIndex = -1) => {
+        setRoutesList(currRouteList => {
+            return currRouteList.map((currRoute, currRouteIndex) => {
+                if (currRouteIndex === routeIndex || currRoute.stepList.length === 0)
+                    return { ...currRoute, isExpanded: false }
+                else
+                    return currRoute
+            })
+        });
+    }
+
     // DESCRIPTION: Enters the new name of the route with the appropriate index, and updates the state accordingly
     const addRouteNameToRoute = (routeName, routeIndex) => {
         setRoutesList(currRouteList => {
@@ -114,7 +122,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                     return currRoute
             })
         });
-        setExpandedIndex(routeIndex);
+        setIsExpandedTrue(routeIndex);
     }
 
     // DESCRIPTION: Enters the updated length of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
@@ -165,7 +173,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
 
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [], isChecked: isSelectedAll }])
+        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [], isChecked: isSelectedAll, isExpanded: false }])
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -185,12 +193,6 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                     return true
             })
         });
-        if (routeIndex < expandedIndex) {
-            setExpandedIndex(expandedIndex - 1);
-        }
-        else if (routeIndex === expandedIndex) {
-            setExpandedIndex(-1);
-        }
     }
 
     const removeSelectedRoutes = () => {
@@ -233,11 +235,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 return currRoute;
             });
         });
-        routesList.forEach((currRoute, currRouteIndex) => {
-            if (currRoute.stepList.length === 0 && currRouteIndex === routeIndex) {
-                setExpandedIndex(-1);
-            }
-        })
+        setIsExpandedFalse();
     }
 
     // DESCRIPTION: Removes the selected steps from the stepList of the route with the appropriate index
@@ -251,6 +249,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 else return currRoute
             })
         })
+        setIsExpandedFalse();
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -270,7 +269,8 @@ export default function RouteEditor({ routesList, setRoutesList }) {
         routesList.forEach((route, index) => {
             console.log(`Route #${index + 1}: `);
             console.log(`       Route Name: ${route.routeName}`);
-            console.log(`       Checked Status: ${route.isChecked}`)
+            console.log(`       Checked Status: ${route.isChecked}`);
+            console.log(`       Checked IsExpanded: ${route.isExpanded}`);
             console.log(`       Step List: `);
             if (route.stepList.length === 0) {
                 console.log("           The stepList is empty!!!");
@@ -281,10 +281,10 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 console.log(`           Step #${index + 1}: `);
                 console.log(`                   Step List Length: ${step.length}`);
                 console.log(`                   Step List Direction: ${step.direction}`);
-                console.log(`                   Step List Checked Status: ${step.isChecked}`)
+                console.log(`                   Step List Checked Status: ${step.isChecked}`);
             });
         });
-        console.log("-------------------------------------------------------------")
+        console.log("-------------------------------------------------------------");
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -327,8 +327,8 @@ export default function RouteEditor({ routesList, setRoutesList }) {
         // 9. routeElement -> Sending a read-only ref of the current routeElement.
         // 10. updateCheckedRoute -> Sending a callback to *update data about route's checkbox status*
         // 11. updateCheckedStep -> Sending a callback to *update data about step's checkbox status* from specific route
-        // 12. isExpanded -> Sending a read-only ref of the current expandedIndex.
-        // 13. expandAndCollapse -> Sending a callback to *set the expanded route via the Index*
+        // 12. setIsExpandedTrue -> Sending a callback to *set the 'isExpanded' value to true*
+        // 13. setIsExpandedFalse -> Sending a callback to *set the 'isExpanded' value to false*
 
         <Route key={index}
             routeIndex={index}
@@ -342,8 +342,9 @@ export default function RouteEditor({ routesList, setRoutesList }) {
             routeElement={routeElement}
             updateCheckedRoute={updateCheckedRoute}
             updateCheckedStep={updateCheckedStep}
-            isExpanded={expandedIndex === index}
-            expandAndCollapse={expandAndCollapse} />
+            setIsExpandedTrue={setIsExpandedTrue}
+            setIsExpandedFalse={setIsExpandedFalse}
+        />
     ));
     // --------------------------------------------------------
 

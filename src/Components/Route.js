@@ -92,7 +92,12 @@ export default function Route(props) {
     // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
     const handleExpandAndCollapse = () => {
         const divStepList = document.getElementsByClassName("route__steps-list")[props.routeIndex]
-        props.expandAndCollapse(props.routeElement, divStepList, props.routeIndex)
+        if (props.routeElement.isExpanded) {
+            props.setIsExpandedFalse(props.routeIndex)
+        }
+        else {
+            props.setIsExpandedTrue(props.routeIndex)
+        }
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -169,13 +174,13 @@ export default function Route(props) {
                             <button className="route__button--remove-selected" onClick={handleRemoveSelectedSteps}>Remove Selected Steps</button>
                         </div>
                     </div>
-                    {props.routeElement.stepList.length !== 0 ?
-                        <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse">
-                            {props.isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon" /> : <ExpandMoreIcon className="route__expand-collapse-icon" />}
-                        </IconButton> : null
-                    }
+
+                    <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse" disabled={props.routeElement.stepList.length == 0}>
+                        {props.routeElement.isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon" /> : <ExpandMoreIcon className="route__expand-collapse-icon" />}
+                    </IconButton>
+
                 </div>
-                <section className={props.isExpanded ? "route__steps-list" : "route__steps-list hidden"}>
+                <section className={props.routeElement.isExpanded ? "route__steps-list" : "route__steps-list hidden"}>
                     {stepsListJSX}
                 </section>
             </div>
