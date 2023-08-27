@@ -50,7 +50,7 @@ export default function RouteManager() {
     if (!isOnEditorMode) { 
         switch (userDecision) {
             case 'yes':
-                routeManagerContent = null; // currently null - will be changed when we implement the RouteTutorial component
+                routeManagerContent = null // will be changed when we implement the RouteTutorial component
                 break;
     
             case 'no':
@@ -91,6 +91,7 @@ export default function RouteManager() {
 
     // ---- COMPONENT RENDER ----
     return (
+        <>
         <div className="route-manager">
             <header className="route-manager__header">
                 <h1>Route Manager</h1>
@@ -101,5 +102,6 @@ export default function RouteManager() {
                 <button onClick={handleRoutesToJson}>Continue to the next stage</button>
             </footer>
         </div>
+        </>
     );
 }
