@@ -98,6 +98,17 @@ export default function Route({
         setRemoveButton("Remove Selected (Steps)")
     }
 
+    // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
+    const handleExpandAndCollapse = () => {
+        const divStepList = document.getElementsByClassName("route__steps-list")[routeIndex]
+        if (routeElement.isExpanded) {
+            setIsExpandedFalse(routeIndex)
+        }
+        else {
+            setIsExpandedTrue(routeIndex)
+        }
+    }
+
     // DESCRIPTION: Handles the user's decision regarding the removal of a route or selected steps
     useEffect(() => {
         if(userDecision === 'yes')
@@ -163,13 +174,13 @@ export default function Route({
                             <button className="route__button--remove-selected" onClick={createSelectedStepsPopUpMSG}>Remove Selected Steps</button>
                         </div>
                     </div>
-                    {routeElement.stepList.length !== 0 ?
-                        <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse">
-                            {isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon" /> : <ExpandMoreIcon className="route__expand-collapse-icon" />}
-                        </IconButton> : null
-                    }
+
+                    <IconButton onClick={handleExpandAndCollapse} className="route__button--expand-collapse" disabled={routeElement.stepList.length == 0}>
+                        {routeElement.isExpanded ? <ExpandLessIcon className="route__expand-collapse-icon" /> : <ExpandMoreIcon className="route__expand-collapse-icon" />}
+                    </IconButton>
+
                 </div>
-                <section className={isExpanded ? "route__steps-list" : "route__steps-list hidden"}>
+                <section className={routeElement.isExpanded ? "route__steps-list" : "route__steps-list hidden"}>
                     {stepsListJSX}
                 </section>
             </div>

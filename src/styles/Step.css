@@ -1,10 +1,11 @@
 .step {
     background-color: lightpink ;
     width: 100%;
-    /* min-height: 15%; */
+    height: 7rem;
     display: grid;
     grid-template-columns: 2% 10% 78% 10%;
     border-bottom: 3px solid gold;
+    padding: .01rem;
 }
 
 .step__checkbox {
@@ -18,6 +19,7 @@
     display: grid;
     place-content: center;
     border-right: black 1px solid;
+    padding-right: 2rem;
 }
 
 .step__content {
@@ -28,22 +30,45 @@
     
 }
 
-.step__length, .step__direction {
+.step__length {
+    display: flex;
+    flex-direction: column;
+}
+
+.step__length-input {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    place-items: center;
+    margin-top: 2rem;
+    
+}
+
+.step__length-input > input{
+    width: 100%;
+    height: 100%;
+    font-size: 1.9rem;
+    suffix: "m";
+}
+
+.step__length-error {
+    position: relative;
+    display: flex;
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 600;
+    right: -30%;
+}
+
+.step__direction {
     display: grid;
     grid-template-columns: 30% 70%;
     place-items: center;
 }
 
-.step__length > input{
-    width: 100%;
-    height: 100%;
-    font-size: 1.9rem;
-    
-}
 
 .step__direction > select {
     width: 100%;
-    height: 80%;
+    height: 40%;
     text-align: center;
     font-size: 1rem;
 }
@@ -52,4 +77,9 @@
     display: grid;
     place-content: center;
     border-left: black 1px solid;
+}
+
+.error {
+    outline: solid !important;
+    outline-color: red !important;
 }
