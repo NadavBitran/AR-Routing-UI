@@ -131,7 +131,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
             })
         });
         setIsExpandedTrue(routeIndex);
-    }
+    } , [setRoutesList , setIsExpandedTrue] )
 
     // DESCRIPTION: Enters the updated length of the step with the appropriate index that inside the route with the appropriate index, and updates the state accordingly
     const addLengthToStep = useCallback((length, stepIndex, routeIndex) => {

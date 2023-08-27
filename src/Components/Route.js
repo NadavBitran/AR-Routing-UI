@@ -15,8 +15,8 @@ export default function Route({
     addDirectionToStep , removeRoute ,
     removeStep , removeSelectedSteps ,
     routeElement ,updateCheckedRoute ,
-    updateCheckedStep ,isExpanded ,
-    expandAndCollapse
+    updateCheckedStep ,setIsExpandedTrue ,
+    setIsExpandedFalse
 }) {
     // --- USE STATES ----
     const [userDecision, setUserDecision] = useState('');
@@ -60,11 +60,16 @@ export default function Route({
             removeSelectedSteps(routeIndex)
     } , [routeIndex , removeSelectedSteps] )
     
-
     // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
     const handleExpandAndCollapse = () => {
-        expandAndCollapse(routeElement, routeIndex)
+        if (routeElement.isExpanded) {
+            setIsExpandedFalse(routeIndex)
+        }
+        else {
+            setIsExpandedTrue(routeIndex)
+        }
     }
+
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -98,16 +103,6 @@ export default function Route({
         setRemoveButton("Remove Selected (Steps)")
     }
 
-    // DESCRIPTION: Expands\Collapses the route__steps-list section, and updates the state accordingly
-    const handleExpandAndCollapse = () => {
-        const divStepList = document.getElementsByClassName("route__steps-list")[routeIndex]
-        if (routeElement.isExpanded) {
-            setIsExpandedFalse(routeIndex)
-        }
-        else {
-            setIsExpandedTrue(routeIndex)
-        }
-    }
 
     // DESCRIPTION: Handles the user's decision regarding the removal of a route or selected steps
     useEffect(() => {
@@ -187,4 +182,4 @@ export default function Route({
             {warningMessageJSX}
         </>
     );
-                }
+}
