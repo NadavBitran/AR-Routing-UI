@@ -2,16 +2,16 @@ import "../styles/RouteManager.css";
 
 import PopupWindow from "./PopupWindow";
 import RouteEditor from "./RouteEditor";
+import RouteTutorial from "./RouteTutorial";
 
 import { useState } from "react";
 
 export default function RouteManager() {
     // ---- STATE HOOKS ----
-    // userDecision: "yes" -> User wants to **go** to the **RouteTutorial component**
-    //               "no" -> User wants to **stay** in the **RouteEditor component**.
-    const [userDecision, setUserDecision] = useState(null);
-
-    const [isOnEditorMode, setIsOnEditorMode] = useState(false);
+    // currentMode: 'normal' -> User is at normal mode (RouteEditor component)
+    //              'tutorial'-> User is at tutorial mode (RouteTutorial component)
+    //                  null  -> User is in neither of them (popupWindow appears)
+    const [currentMode , setCurrentMode] = useState(null);
 
     // routesList -> To save the array of routes that the user enters
     const [routesList, setRoutesList] = useState([]);
@@ -47,46 +47,33 @@ export default function RouteManager() {
     }
 
     // ---- COMPONENT LOGIC ----
-    if (!isOnEditorMode) { 
-        switch (userDecision) {
-            case 'yes':
-                routeManagerContent = null // will be changed when we implement the RouteTutorial component
-                break;
-    
-            case 'no':
-                setIsOnEditorMode(true);
-                routeManagerContent = (
-                    <RouteEditor 
-                    routesList={routesList}
-                    setRoutesList={setRoutesList} />
-                );
-                break;
-    
-            default:
-                routeManagerContent = (
-                    <>
-                        <RouteEditor 
-                            routesList={routesList}
-                            setRoutesList={setRoutesList}
-                        />;
-                        <PopupWindow
-                            type={"question"}
-                            title={"Stage X: Managing Your Business Routes"}
-                            mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}
-                            buttonsKey={['yes', 'no']}
-                            buttonsContent={['Yes (activate tutorial mode)', 'No (just stay in the editor)']}
-                            setUserDecision={setUserDecision}
-                        />
-                    </>
-                );
-        }
-    } else {
-        routeManagerContent = (
-            <RouteEditor
+    switch(currentMode){
+        case 'normal':
+            routeManagerContent = <RouteEditor
                 routesList={routesList}
-                setRoutesList={setRoutesList}
-            />
-        );
+                setRoutesList={setRoutesList} />
+            break;
+        case 'tutorial':
+            routeManagerContent = <RouteTutorial 
+                setCurrentMode={setCurrentMode}/>
+            break;
+        default:
+            routeManagerContent = (
+            <>
+            <RouteEditor 
+            routesList={[]}
+            setRoutesList={null} />
+
+            <PopupWindow
+            type={"question"}
+            title={"Stage X: Managing Your Business Routes"}
+            mainContent={"Would you like first to receive a tutorial on how to use the Route Editor?"}
+            buttonsKey={['tutorial', 'normal']}
+            buttonsContent={['Yes (activate tutorial mode)', 'No (just stay in the editor)']}
+            setUserDecision={setCurrentMode}/>
+            </>
+            );
+            break;
     }
 
     // ---- COMPONENT RENDER ----
@@ -98,8 +85,8 @@ export default function RouteManager() {
             </header>
             {routeManagerContent}
             <footer className="route-manager__footer">
-                <button>Tutorial</button>
-                <button onClick={handleRoutesToJson}>Continue to the next stage</button>
+                <button className="route-manager__button--tutorial" onClick={() => setCurrentMode('tutorial')}>Tutorial</button>
+                <button className="route-manager__button--continue" onClick={handleRoutesToJson}>Continue to the next stage</button>
             </footer>
         </div>
         </>

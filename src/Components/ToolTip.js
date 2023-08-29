@@ -19,7 +19,7 @@ import ReactDOM from "react-dom";
 // 3) buttonsContent -> The content that will be displayed in the toolTip
 // 4) elementClassName -> The *className* of the Element which the toolTip is pointing at
 // 5) elementClassNameIndex -> (If the element displays in the form of mapping) its index in the array 
-export default function ToolTip({content , position , buttonsContent , elementClassName , elementClassNameIndex }) {
+export default function ToolTip({content , position , buttonsContent , elementClassName , elementClassNameIndex , setUserDecision  }) {
     // --------------------------------------------------------
     // --------------------------------------------------------
     // ---- USE STATES ---- 
@@ -85,6 +85,9 @@ export default function ToolTip({content , position , buttonsContent , elementCl
     // --------------------------------------------------------
     // --------------------------------------------------------
 
+    const handleButtonClick = (button) => {
+        setUserDecision(button)
+    }
     // --------------------------------------------------------
     // --------------------------------------------------------
     // -- JSX ---
@@ -100,7 +103,7 @@ export default function ToolTip({content , position , buttonsContent , elementCl
                             </div>
                             <div className="tooltip-buttons">
                                 {buttonsContent.map((currbuttonContent, index) => (
-                                <button key={index}>{currbuttonContent}</button>))}
+                                <button key={index} onClick={() => handleButtonClick(currbuttonContent)}>{currbuttonContent}</button>))}
                             </div>
                     </div> 
                 </div>,document.body)

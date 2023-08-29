@@ -31,7 +31,7 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     position: fixed;
     width: 43rem;
-    height: 23.25rem;
+    height: 32rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -40,6 +40,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 2rem;
 
     padding: 0rem;
     z-index: 1000;  
@@ -82,7 +83,8 @@
     display: grid;
     grid-template-columns: 5% 90%;
     place-content: space-between;
-    padding: 2.5rem;
+    padding-inline: 2.5rem 2.5rem;
+    padding-block: 2.5rem 0rem;
 }
 
 .popup-window__title-bar > img {
