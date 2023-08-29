@@ -54,8 +54,6 @@ export default function RouteEditor({ routesList, setRoutesList }) {
     // --------------------------------------------------------
 
 
-
-
     // --------------------------------------------------------
     // --------------------------------------------------------
 
@@ -101,7 +99,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 if (currRouteIndex === routeIndex) {
                     const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex)
-                            return { ...currStep, isChecked: (isSelectedAll || checkedValue) }
+                            return { ...currStep, isChecked: (isSelectedAll || currRoute.isChecked || checkedValue) }
                         else return currStep
                     })
                     return { ...currRoute, stepList: updatedStepList }

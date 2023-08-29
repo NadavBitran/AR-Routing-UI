@@ -40,7 +40,7 @@ export default function Route({
 
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate index, and updates the state accordingly
     const handleNewStepInput = () => {
-        addStepListToRoute([...routeElement.stepList, { length: "", direction: "", isChecked: false }], routeIndex);
+        addStepListToRoute([...routeElement.stepList, { length: "", direction: "", isChecked: routeElement.isChecked }], routeIndex);
     }
 
     // DESCRIPTION: Removes a route from the routesList
