@@ -45,7 +45,6 @@
 
 .step__length-input > input{
     width: 100%;
-    height: 100%;
     font-size: 1.9rem;
     suffix: "m";
 }
@@ -60,17 +59,34 @@
 }
 
 .step__direction {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.step__direction-input {
     display: grid;
     grid-template-columns: 30% 70%;
     place-items: center;
 }
 
 
-.step__direction > select {
+.step__direction-input > select {
     width: 100%;
-    height: 40%;
+    height: 2rem;
     text-align: center;
     font-size: 1rem;
+}
+
+.step__direction-error {
+    height: 1.3rem;
+    position: relative;
+    display: flex;
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 600;
+    right: -30%;
 }
 
 .step > button {

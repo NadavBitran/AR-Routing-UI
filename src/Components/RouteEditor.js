@@ -113,7 +113,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
         setRoutesList(currRouteList => {
             return currRouteList.map((currRoute, currRouteIndex) => {
                 if (currRouteIndex === routeIndex)
-                    return { ...currRoute, routeName: routeName }
+                    return { ...currRoute, routeName: routeName, isNameInputValid: true, nameInputErrorMessage: '' }
                 else
                     return currRoute
             })
@@ -140,7 +140,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 if (currRouteIndex === routeIndex) {
                     const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex) {
-                            return { ...currStep, length: length };
+                            return { ...currStep, length: length, isLengthInputValid: true, lengthInputErrorMessage: '' };
                         }
                         return currStep;
                     });
@@ -159,7 +159,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 if (currRouteIndex === routeIndex) {
                     const updatedStepList = currRoute.stepList.map((currStep, currStepIndex) => {
                         if (currStepIndex === stepIndex) {
-                            return { ...currStep, direction: direction };
+                            return { ...currStep, direction: direction, isDirectionInputValid: true, directionInputErrorMessage: '' };
                         }
                         return currStep;
                     });
@@ -181,7 +181,16 @@ export default function RouteEditor({ routesList, setRoutesList }) {
 
     // DESCRIPTION: Adds a new route to the routesList
     const handleNewRouteInput = () => {
-        setRoutesList((currRouteList) => [...currRouteList, { routeName: "", stepList: [], isChecked: isSelectedAll, isExpanded: false }])
+        setRoutesList((currRouteList) => [
+            ...currRouteList, { 
+                routeName: '', 
+                stepList: [], 
+                isChecked: isSelectedAll, 
+                isExpanded: false, 
+                isNameInputValid: true, 
+                nameInputErrorMessage: '' 
+            }
+        ])
     }
     // --------------------------------------------------------
     // --------------------------------------------------------
@@ -358,7 +367,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
     // ---- JSX ----
     return (
         <>
-            <div className="route-editor">
+            <main className="route-editor">
                 <header className="route-editor__buttons">
                     <button className="route-editor__button--add" onClick={handleNewRouteInput}>Add New Route</button>
                     <button className="route-editor__button--select-all" onClick={updateCheckAllRoutes}>{isSelectedAll ? <span>Unselect All</span> : <span>Select All</span>}</button>
@@ -368,7 +377,7 @@ export default function RouteEditor({ routesList, setRoutesList }) {
                 <section className="route-editor__routes-list">
                     {routesListJSX}
                 </section>
-            </div>
+            </main>
             {warningMessageJSX}
         </>
     );
