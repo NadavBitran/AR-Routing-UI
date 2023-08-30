@@ -40,7 +40,16 @@ export default function Route({
 
     // DESCRIPTION: Enters the updated steps array of the route with the appropriate index, and updates the state accordingly
     const handleNewStepInput = () => {
-        addStepListToRoute([...routeElement.stepList, { length: "", direction: "", isChecked: routeElement.isChecked }], routeIndex);
+        addStepListToRoute([...routeElement.stepList, { 
+            length: '', 
+            direction: '', 
+            isChecked: routeElement.isChecked,
+            isLengthInputValid: true, 
+            isDirectionInputValid: true, 
+            lengthInputErrorMessage: '', 
+            directionInputErrorMessage: ''
+          
+        }], routeIndex)
     }
 
     // DESCRIPTION: Removes a route from the routesList
@@ -123,8 +132,11 @@ export default function Route({
                     <h2 className="route__index">Route #{routeIndex + 1}</h2>
                     <div className="route__content">
                         <div className="route__name">
-                            <h2>Name: </h2>
-                            <input type="text" onChange={handleRouteNameInput} value={routeElement.routeName} />
+                            <section className="route__name-input">
+                                <h2>Name: </h2>
+                                <input className={(routeElement.isNameInputValid ? '' : 'error')} type="text" onChange={handleRouteNameInput} value={routeElement.routeName} />
+                            </section>
+                            <p className="route__name-error">{routeElement.nameInputErrorMessage}</p>
                         </div>
                         <div className="route__buttons">
                             <button className="route__button--add-step" onClick={handleNewStepInput}>Add Step</button>

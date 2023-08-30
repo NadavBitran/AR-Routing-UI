@@ -40,15 +40,32 @@
 }
 
 .route__name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1.3rem;
+}
+
+.route__name-input {
     display: grid;
     grid-template-columns: 30% 70%;
     place-items: center;
 }
 
-.route__name>input {
+.route__name-input>input {
     width: 100%;
-    height: 60%;
+    height: 3rem;
     font-size: 1.9rem;
+}
+
+.route__name-error {
+    height: 1.3rem;
+    position: relative;
+    display: flex;
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 600;
+    right: -30%;
 }
 
 .route__buttons {
@@ -101,4 +118,9 @@
     /* when clicking on expand, the expand animation will start till max-height: 0 */
     transition: max-height 0.2s ease-in-out;
     /* collapse animation -> a little faster animation */
+}
+
+.error {
+    outline: solid !important;
+    outline-color: red !important;
 }
