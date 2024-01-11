@@ -2,6 +2,11 @@ import "./App.css";
 
 import PopupWindow from "./Components/PopupWindow";
 import RouteManager from "./Components/RouteManager";
+import Map from "./pages/map";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { AppContextProvider } from "./common/contexts/AppContext";
 
 import { useState } from "react";
 
@@ -19,12 +24,19 @@ App
 PopupWindow - A general component that opens a popup window with a title, main content and buttons.
 */
 
+/*
+App
+└──
+  Route --> Map
+  Route --> RouteManager
+
+*/
 
 export default function App() {
   // ---- USE STATES ----
   // userDecision: "yes" -> The user wants to stay in the RouteManager
   //               "no" -> The user wants to move to the next stage in the pipeline
-  const [userDecision, setUserDecision] = useState('');
+  const [userDecision, setUserDecision] = useState("");
 
   // ---- COMPONENT STATE ----
   // appContent: The content of the App component
@@ -35,11 +47,11 @@ export default function App() {
 
   // ---- COMPONENT LOGIC ----
   switch (userDecision) {
-    case 'yes':
+    case "yes":
       appContent = <RouteManager />;
       break;
 
-    case 'no':
+    case "no":
       appContent = undefined; // currently undefined - will be changed to the next stage in the pipeline
       break;
 
@@ -49,17 +61,23 @@ export default function App() {
           type={"question"}
           title={"Stage X: Managing Your Business Routes"}
           mainContent={"Would you like to start creating your routes?"}
-          buttonsKey={['yes', 'no']}
-          buttonsContent={['Yes', 'No (continue to the next stage)']}
+          buttonsKey={["yes", "no"]}
+          buttonsContent={["Yes", "No (continue to the next stage)"]}
           setUserDecision={setUserDecision}
         />
       );
   }
 
   // ---- JSX ----
+
   return (
-    <div className="app">
-      {appContent}
-    </div>
+    <AppContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/map" element={<Map />} />
+          <Route path="/route-manager" element={<RouteManager />} />
+        </Routes>
+      </BrowserRouter>
+    </AppContextProvider>
   );
 }
