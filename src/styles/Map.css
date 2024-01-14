@@ -1,4 +1,28 @@
+
+.mapOuter-container{
+  width: 100%;
+  padding-inline: .25rem;
+  margin-top: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+
+}
+.geocoder-container{
+  width: 300px;
+}
+
 .leaflet-container {
-    height: 600px;
+    height: calc(100vh - 15.6rem);
     width: 100%;
   }
+
+
+  .autocomplete-container {
+      position: relative;
+      width: max(25% , 265px);
+      z-index: 9999;
+  }
+

@@ -1,5 +1,4 @@
 import { useState, Dispatch, SetStateAction } from "react";
-
 /**
  * Custom hook that manages the location of a marker on the map.
  * @param {{lat: number, lng: number}} initialPosition - The initial position of the marker.
@@ -7,12 +6,14 @@ import { useState, Dispatch, SetStateAction } from "react";
  */
 const useMarkerLocation = (initialPosition) => {
   const [markerLocation, setMarkerLocation] = useState(initialPosition);
+  const [latestMarkerUpdateOperation , setLatestMarketUpdateOperation] = useState(null);
 
-  const updateMarkerLocation = (lat, lng) => {
-    setMarkerLocation({ lat, lng });
+  const updateMarkerLocation = (lat, lng , updatedFrom) => {
+    setMarkerLocation([ lat, lng ]);
+    setLatestMarketUpdateOperation(updatedFrom);
   };
 
-  return [markerLocation, updateMarkerLocation];
+  return {markerLocation, latestMarkerUpdateOperation , updateMarkerLocation };
 };
 
 export default useMarkerLocation;
