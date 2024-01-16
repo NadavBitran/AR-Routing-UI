@@ -47,7 +47,7 @@ export default function Tooltip({
                     <button onClick={() => signalToEndTooltipsSequence()}>
                         Exit
                     </button>
-                    {!signalToDisplayNextTooltip && (
+                    {!!signalToDisplayNextTooltip && (
                         <button onClick={() => signalToDisplayNextTooltip()}>
                             Next
                         </button>
