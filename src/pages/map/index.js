@@ -19,6 +19,7 @@ import {
     MAP_HEADER_TITLE,
     MAP_TILES_PROPETIES,
 } from './constants/mapConstants';
+
 import '../../styles/Map.css';
 
 /**
