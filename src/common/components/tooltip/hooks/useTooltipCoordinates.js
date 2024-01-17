@@ -1,38 +1,27 @@
 import { useState, useEffect } from 'react';
 
-/**
- * @typedef {`${number}px`} Pixels - A string representing a number of pixels.
- *
- * @typedef {object} TooltipPosition
- * @property {Pixels} height - The height of the element.
- * @property {Pixels} width - The width of the element.
- * @property {Pixels} middleX - The middle X coordinate of the element.
- * @property {Pixels} middleY - The middle Y coordinate of the element.
- */
+import * as DataTypes from '../../../types/data.types';
 
 /**
- * A custom hook which returns the position of the tooltip and adjust to the element it is pointing to (even on window resize event).
+ * A custom hook which manages the coordinates of a tooltip relative to its target element.
  *
  * @param {number} targetId - The id of the element the tooltip is pointing to. Comes from the `data-tooltip-target-id` attribute.
- * @returns {TooltipPosition} The position of the tooltip.
+ * @returns {DataTypes.TooltipCoordinates} The coordinates of the tooltip.
  *
  * @author Nadav Bitran
  */
-export default function useTooltipPosition(targetId) {
-    /** @type {TooltipPosition} */
-    const initialPosition = {
+export default function useTooltipCoordinates(targetId) {
+    /** @type {DataTypes.TooltipCoordinates} */
+    const initialCoordinates = {
         height: '0px',
         width: '0px',
         middleX: '0px',
         middleY: '0px',
     };
-    const [position, setPosition] = useState(initialPosition);
+    const [coordinates, setCoordinates] = useState(initialCoordinates);
 
     useEffect(() => {
         const handleResize = () => {
-            // const element = document.querySelectorAll(`.${elementClassName}`)[
-            //     !elementClassNameIndex ? 0 : elementClassNameIndex
-            // ];
             const element = document.querySelector(
                 `[data-tooltip-target-id="${targetId}"]`
             );
@@ -41,7 +30,7 @@ export default function useTooltipPosition(targetId) {
             const middleX = left + width / 2;
             const middleY = top + height / 2;
 
-            setPosition({
+            setCoordinates({
                 height: `${height}px`,
                 width: `${width}px`,
                 middleX: `${middleX}px`,
@@ -53,5 +42,5 @@ export default function useTooltipPosition(targetId) {
         return () => window.removeEventListener('resize', handleResize);
     }, [targetId]);
 
-    return position;
+    return coordinates;
 }

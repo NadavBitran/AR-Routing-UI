@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
-/**
- * @typedef {import("leaflet").LatLngExpression} LatLngExpression
- * @typedef {(latlng: LatLngExpression, updatedFrom: string) => void} UpdateLatLngExpression
- * @typedef {{markerLocation: LatLngExpression, latestMarkerUpdateOperation: string, updateMarkerLocation: UpdateLatLngExpression}} UseMarkerLocationResults
- */
+import * as DataTypes from '../../../common/types/data.types';
+import * as HookTypes from '../../../common/types/hooks-related.types';
 
 /**
  * Custom hook that manages the location of a marker on the map.
- * @param {LatLngExpression} initialPosition - The initial position of the marker.
- * @returns {UseMarkerLocationResults} The marker location hook. TODO: improve docs!!!!
+ * @param {DataTypes.LatLngExpression} initialPosition - The initial position of the marker.
+ * @returns {HookTypes.UseMarkerLocationResults} The marker location hook.
  */
 const useMarkerLocation = (initialPosition) => {
     const [markerLocation, setMarkerLocation] = useState(initialPosition);
@@ -19,9 +16,8 @@ const useMarkerLocation = (initialPosition) => {
     /**
      * Updates the location of the marker on the map.
      *
-     * @param {LatLngExpression} latlng - The new latitude and longitude of the marker.
+     * @param {DataTypes.LatLngExpression} latlng - The new latitude and longitude of the marker.
      * @param {string} updatedFrom - The source of the update. // TODO: make this an enum
-     * @returns {void}
      */
     const updateMarkerLocation = (latlng, updatedFrom) => {
         setMarkerLocation(latlng);

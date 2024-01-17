@@ -3,16 +3,15 @@ import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 
 import useAutoCompleteSearch from '../hooks/useAutoCompleteSearch';
 
-/**
- * @typedef {import("../../../common/types").LatLngExpression} LatLngExpression
- * @typedef {(latlng: LatLngExpression, updatedFrom: string) => void} UpdateLatLngExpression
- */
+import * as DataTypes from '../../../common/types/data.types';
+import * as HookTypes from '../../../common/types/hooks-related.types';
 
 /**
  * Represents the MapSearchBar component.
+ *
  * @param {object} props - The component props.
- * @param {UpdateLatLngExpression} props.updateMarkerLocation - The function to update the marker location.
- * @returns {JSX.Element} The rendered MapSearchBar component.
+ * @param {HookTypes.UseMarkerLocationResults['updateMarkerLocation']} props.updateMarkerLocation - The function to update the marker location.
+ * @returns {React.JSX.Element} The rendered MapSearchBar component.
  *
  * @author Nadav Bitran
  */

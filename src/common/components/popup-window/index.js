@@ -1,20 +1,12 @@
 import { createPortal } from 'react-dom';
 import { useFlag } from '../../hooks';
 
-import './popup-window.css';
+import './styles.css';
 import questionIcon from '../../assets/question-circle.svg';
 import infoIcon from '../../assets/info-circle.svg';
 import warningIcon from '../../assets/warning-circle.svg';
 
-/**
- * @typedef {object} Image
- * @property {string} src - The image source.
- * @property {string} alt - The alternative text for the image.
- *
- * @typedef {object} Button
- * @property {string} name - The name of the button.
- * @property {() => void} func - The function to be executed when the button is clicked.
- */
+import * as DataTypes from '../../types/data.types';
 
 /**
  * Represents a popup window component.
@@ -23,9 +15,9 @@ import warningIcon from '../../assets/warning-circle.svg';
  * @param {'question' | 'info' | 'warning'} props.type - The type of the popup window ('question', 'info', 'warning').
  * @param {string} props.title - The title of the popup window.
  * @param {string} props.bodyContent - The content of the popup window body.
- * @param {Image | undefined} props.bodyImage - The image to be displayed in the popup window body. Optional.
- * @param {Button[]} props.buttons - The buttons to be displayed in the popup window.
- * @returns {JSX.Element} The rendered popup window component.
+ * @param {DataTypes.Image | undefined} props.bodyImage - The image to be displayed in the popup window body. Optional.
+ * @param {DataTypes.Button[]} props.buttons - The buttons to be displayed in the popup window.
+ * @returns {React.JSX.Element} The rendered popup window component.
  *
  * @author Maor Bezalel
  */
@@ -43,7 +35,7 @@ export default function PopupWindow({
      * Returns the icon for the popup window.
      *
      * @param {'question' | 'info' | 'warning'} type - The type of the popup window.
-     * @returns {Image} The icon for the popup window.
+     * @returns {DataTypes.Image} The icon for the popup window.
      */
     const popupWindowIcon = (type) => {
         switch (type) {
@@ -73,11 +65,11 @@ export default function PopupWindow({
     /**
      * Executes the action of the button and closes the popup window.
      *
-     * @param {() => void} func - The function to be executed when the button is clicked.
+     * @param {() => void} action - The function to be executed when the button is clicked.
      * @returns {void}
      */
-    const handleButtonClick = (func) => {
-        func(); // execute the action of the button
+    const handleButtonClick = (action) => {
+        action(); // execute the action of the button
         closePopupWindow();
     };
 
@@ -98,13 +90,13 @@ export default function PopupWindow({
                             <img src={bodyImage.src} alt={bodyImage.alt} />
                         )}
                         <div className={'popup-window__buttons'}>
-                            {buttons.map(({ name, func }, index) => (
+                            {buttons.map(({ text, action }, index) => (
                                 <button
                                     className={'popup-window__button--' + type}
-                                    onClick={() => handleButtonClick(func)}
+                                    onClick={() => handleButtonClick(action)}
                                     key={index}
                                 >
-                                    {name}
+                                    {text}
                                 </button>
                             ))}
                         </div>

@@ -3,18 +3,15 @@ import { useEffect } from 'react';
 
 import { MARKER_UPDATE_OPERATION } from '../constants/mapConstants';
 
-/**
- * @typedef {import("../../../common/types").LatLngExpression} LatLngExpression
- * @typedef {(latlng: LatLngExpression, updatedFrom: string) => void} UpdateLatLngExpression
- */
+import * as DataTypes from '../../../common/types/data.types';
+import * as HookTypes from '../../../common/types/hooks-related.types';
 
 /**
  * Represents a component for handling map events.
  * @param {object} props - The component props.
- * @param {LatLngExpression} props.markerLocation - The location of the marker on the map.
+ * @param {DataTypes.LatLngExpression} props.markerLocation - The location of the marker on the map.
  * @param {string} props.latestMarkerUpdateOperation - The latest operation that updated the marker location.
- * @param {UpdateLatLngExpression} props.updateMarkerLocation - A function to update the location of the marker on the map.
- * @returns {null} - Returns null.
+ * @param {HookTypes.UseMarkerLocationResults['updateMarkerLocation']} props.updateMarkerLocation - A function to update the location of the marker on the map.
  */
 export default function MapEvent({
     markerLocation,
@@ -38,7 +35,6 @@ export default function MapEvent({
         if (!map) {
             return;
         }
-
         map.locate();
     }, [map]);
 

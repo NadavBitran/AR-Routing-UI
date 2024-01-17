@@ -20,7 +20,7 @@ import {
     MAP_TILES_PROPETIES,
 } from './constants/mapConstants';
 
-import '../../styles/Map.css';
+import './styles.css';
 
 /**
  * Represents a Map component.

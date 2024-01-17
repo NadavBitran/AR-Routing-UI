@@ -3,16 +3,14 @@ import { GeocoderAutocomplete } from '@geoapify/geocoder-autocomplete';
 
 import { MARKER_UPDATE_OPERATION } from '../constants/mapConstants';
 
+import * as DataTypes from '../../../common/types/data.types';
+import * as HookTypes from '../../../common/types/hooks-related.types';
+
 const API_KEY = '8bdca5a571fb4c72b521c19c62bf5e9c';
 
 /**
- * @typedef {import("../../../common/types").LatLngExpression} LatLngExpression
- * @typedef {(latlng: LatLngExpression, updatedFrom: string) => void} UpdateLatLngExpression
- */
-
-/**
  * Custom hook for handling auto-complete search functionality.
- * @param {UpdateLatLngExpression} updateMarkerLocation - Function to update the marker location.
+ * @param {HookTypes.UseMarkerLocationResults['updateMarkerLocation']} updateMarkerLocation - Function to update the marker location.
  * @returns {React.MutableRefObject<any>} - Object containing the autoCompleteRef.
  *
  * @author Nadav Bitran
@@ -23,7 +21,6 @@ export default function useAutoCompleteSearch(updateMarkerLocation) {
 
     useEffect(() => {
         createAutoCompleteGeocoderInstance();
-
         addAutoCompleteEvents();
     }, [autoCompleteRef]);
 
@@ -41,7 +38,7 @@ export default function useAutoCompleteSearch(updateMarkerLocation) {
             if (!event || !event.geometry || !event.geometry.coordinates)
                 return;
 
-            /**@type  {LatLngExpression}*/
+            /**@type {DataTypes.LatLngExpression}*/
             const coordinatesResult = {
                 lat: event.geometry.coordinates[1],
                 lng: event.geometry.coordinates[0],
