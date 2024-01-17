@@ -1,164 +1,147 @@
 import useList from '../../../common/hooks/useList';
-import useCheckedItems from './useCheckedItems';
-import useExpandedRoutes from './useExpandedRoutes';
 
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- *
- * @typedef {object} Route - An object representing a route.
- * @property {string} id - The id of the route.
- * @property {string} name - The name of the route.
- * @property {Array<Step>} steps - The steps of the route.
- *
- * @typedef {object} Step - An object representing a step.
- * @property {string} id - The id of the step.
- * @property {number} length - The length of the step.
- * @property {Direction} direction - The direction of the step.
- *
- * @typedef {"Foward"|"Forward-Left"|"Forward-Right"|"Left"|"Right"|"Backward"|"Backward-Left"|"Backward-Right"} Direction
- *
- * @typedef {object} Actions - An object containing utility functions.
- *
- * @property {(name: string) => void} addRoute - Adds a route to the route list.
- * @property {(routeIndex: number) => void} addStep - Adds a step to a route.
- *
- * @property {(index: number) => void} removeRoute - Removes a route from the route list. Also removes the route from the checked items and expanded routes maps if it exists there.
- * @property {(routeIndex: number, stepIndex: number) => void} removeStep - Removes a step from a route. Also removes the step from the checked items map if it exists there.
- *
- * @property {(routeIndex: number, name: string) => void} updateRouteName - Updates the name of a route.
- * @property {(routeIndex: number, stepIndex: number, length: number) => void} updateStepLength - Updates the length of a step.
- * @property {(routeIndex: number, stepIndex: number, direction: Direction) => void} updateStepDirection - Updates the direction of a step.
- *
- * @property {(routeId: string) => void} checkRoute - Checks a route.
- * @property {(routeId: string, stepId: string) => void} checkStep - Checks a step.
- * @property {(routeId: string) => void} checkAllSteps - Checks all steps of a specified route.
- * @property {(routeId: string) => void} uncheckRoute - Unchecks a route.
- * @property {(routeId: string, stepId: string) => void} uncheckStep - Unchecks a step.
- * @property {(routeId: string) => void} uncheckAllSteps - Unchecks all steps of a specified route.
- *
- * @property {(routeId: string) => void} expandRoute - Expands a route.
- * @property {(routeId: string) => void} collapseRoute - Collapses a route.
- * @property {(routeId: string) => void} toggleRouteExpansion - Toggles a route expansion state.
- *
- */
+import * as HookTypes from '../../../common/types/hooks-related.types';
+import * as DataTypes from '../../../common/types/data.types';
 
 /**
  * Custom hook for handling routes.
  *
- * @param {Array<Route>} initialRouteList - The initial route list.
+ * @param {DataTypes.Route[]} [initialRouteList=[]] - The initial route list.
+ * @return {[DataTypes.Route[], HookTypes.RouteListActions]} - A tuple containing the route list and an object with utility functions for handling the route list.
+ *
+ * @author Maor Bezalel & Nadav Bitran
  */
 export default function useRouteList(initialRouteList) {
     const [routeList, routeListActions] = useList(initialRouteList);
-    const [checkedItems, checkedItemsActions] = useCheckedItems({});
-    const [expandedRoutes, expandedRoutesActions] = useExpandedRoutes({});
 
-    /** @type {Actions} */
+    /** @type {HookTypes.RouteListActions}*/
     const actions = {
-        addRoute: (name) => {
-            /** @type {Route} */
-            const route = {
-                id: uuidv4(),
-                name,
-                steps: [],
-            };
-            routeListActions.push(route);
-            expandedRoutesActions.add(route.id);
+        set: (newRouteList) => {
+            routeListActions.set(newRouteList);
         },
-        addStep: (routeIndex) => {
+
+        addRoutes: (amount) => {
+            /** @type {DataTypes.Route[]} */
+            const routes = Array.from({ length: amount }, () => ({
+                id: uuidv4(),
+                name: '',
+                isChecked: false,
+                isExpanded: false,
+                steps: [],
+            }));
+            routeListActions.add(...routes);
+        },
+        addRoutesAt: (index, amount) => {
+            /** @type {DataTypes.Route[]} */
+            const routes = Array.from({ length: amount }, () => ({
+                id: uuidv4(),
+                name: '',
+                isChecked: false,
+                isExpanded: false,
+                steps: [],
+            }));
+            routeListActions.addAt(index, ...routes);
+        },
+        addStepsToRouteAt: (routeIndex, amount) => {
+            /** @type {DataTypes.Route} */
             const route = routeList[routeIndex];
-            /** @type {Step} */
-            const step = {
+            /** @type {DataTypes.Step[]} */
+            const steps = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 length: 0,
                 direction: 'Foward',
-            };
-            routeListActions.updateAt(routeIndex, {
-                ...route,
-                steps: [...route.steps, step],
+                isChecked: false,
+            }));
+            routeListActions.updatePropAt(
+                'steps',
+                [...route.steps, ...steps],
+                routeIndex
+            );
+        },
+
+        updateRouteNameAt: (routeIndex, name) => {
+            routeListActions.updatePropAt('name', name, routeIndex);
+        },
+        updateRoutesCheckStatusAt: (checkStatus, ...routeIndices) => {
+            routeListActions.updatePropAt(
+                'isChecked',
+                checkStatus,
+                ...routeIndices
+            );
+        },
+        updateRouteExpansionStatusAt: (routeIndex, expansionStatus) => {
+            routeListActions.updatePropAt(
+                'isExpanded',
+                expansionStatus,
+                routeIndex
+            );
+        },
+        updateStepDirectionAt: (routeIndex, stepIndex, direction) => {
+            const newRouteList = [...routeList];
+            newRouteList[routeIndex].steps[stepIndex].direction = direction;
+        },
+        updateStepLengthAt: (routeIndex, stepIndex, length) => {
+            const newRouteList = [...routeList];
+            newRouteList[routeIndex].steps[stepIndex].length = length;
+        },
+        updateStepsCheckStatusAt: (checkStatus, routeIndex, ...stepIndices) => {
+            const newRouteList = [...routeList];
+            stepIndices.forEach((stepIndex) => {
+                newRouteList[routeIndex].steps[stepIndex].isChecked =
+                    checkStatus;
             });
+            routeListActions.set(newRouteList);
         },
 
-        removeRoute: (routeIndex) => {
-            const route = routeList[routeIndex];
-            routeListActions.removeAt(routeIndex);
-            checkedItemsActions.removeRoute(route.id);
-            expandedRoutesActions.remove(route.id);
-        },
-
-        removeStep: (routeIndex, stepIndex) => {
-            const route = routeList[routeIndex];
-            const step = route.steps[stepIndex];
-            routeListActions.updateAt(routeIndex, {
-                ...route,
-                steps: route.steps.filter((_, index) => index !== stepIndex),
+        checkAllRoutes: () => {
+            const newRouteList = [...routeList];
+            newRouteList.forEach((route) => {
+                route.isChecked = true;
+                route.steps = route.steps.map((step) => ({
+                    ...step,
+                    isChecked: true,
+                })); // checking a route checks all of its steps
             });
-            checkedItemsActions.removeStep(route.id, step.id);
+            routeListActions.set(newRouteList);
         },
-
-        updateRouteName: (routeIndex, name) => {
-            const route = routeList[routeIndex];
-            routeListActions.updateAt(routeIndex, { ...route, name });
-        },
-
-        updateStepLength: (routeIndex, stepIndex, length) => {
-            const route = routeList[routeIndex];
-            const step = route.steps[stepIndex];
-            routeListActions.updateAt(routeIndex, {
-                ...route,
-                steps: route.steps.map((step, index) =>
-                    index === stepIndex ? { ...step, length } : step
-                ),
+        uncheckAllRoutes: () => {
+            const newRouteList = [...routeList];
+            newRouteList.forEach((route) => {
+                route.isChecked = false;
+                route.steps = route.steps.map((step) => ({
+                    ...step,
+                    isChecked: false,
+                })); // unchecking a route unchecks all of its steps
             });
+            routeListActions.set(newRouteList);
         },
 
-        updateStepDirection: (routeIndex, stepIndex, direction) => {
-            const route = routeList[routeIndex];
-            const step = route.steps[stepIndex];
-            routeListActions.updateAt(routeIndex, {
-                ...route,
-                steps: route.steps.map((step, index) =>
-                    index === stepIndex ? { ...step, direction } : step
-                ),
+        removeRoutesAt: (...routeIndices) => {
+            routeListActions.removeAt(...routeIndices);
+        },
+        removeStepsFromRouteAt: (routeIndex, ...stepIndices) => {
+            const newRouteList = [...routeList];
+            stepIndices.forEach((stepIndex) => {
+                newRouteList[routeIndex].steps.splice(stepIndex, 1);
             });
+            routeListActions.set(newRouteList);
         },
-
-        checkRoute: (routeId) => {
-            checkedItemsActions.checkRoute(routeId);
-            checkedItemsActions.checkAllSteps(routeId);
+        removeAllCheckedRoutesAndSteps: () => {
+            const uncheckedRoutes = routeList.filter(
+                (route) => !route.isChecked
+            );
+            const uncheckedRoutesWithUncheckedSteps = uncheckedRoutes.map(
+                (route) => ({
+                    ...route,
+                    steps: route.steps.filter((step) => !step.isChecked),
+                })
+            );
+            routeListActions.set(uncheckedRoutesWithUncheckedSteps);
         },
-
-        checkStep: (routeId, stepId) => {
-            checkedItemsActions.checkStep(routeId, stepId);
-        },
-
-        checkAllSteps: (routeId) => {
-            checkedItemsActions.checkAllSteps(routeId);
-        },
-
-        uncheckRoute: (routeId) => {
-            checkedItemsActions.uncheckRoute(routeId);
-            checkedItemsActions.uncheckAllSteps(routeId);
-        },
-
-        uncheckStep: (routeId, stepId) => {
-            checkedItemsActions.uncheckStep(routeId, stepId);
-        },
-
-        uncheckAllSteps: (routeId) => {
-            checkedItemsActions.uncheckAllSteps(routeId);
-        },
-
-        expandRoute: (routeId) => {
-            expandedRoutesActions.add(routeId);
-        },
-
-        collapseRoute: (routeId) => {
-            expandedRoutesActions.remove(routeId);
-        },
-
-        toggleRouteExpansion: (routeId) => {
-            expandedRoutesActions.toggle(routeId);
+        clear: () => {
+            routeListActions.clear();
         },
     };
 
