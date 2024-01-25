@@ -1,3 +1,5 @@
+import './styles.css';
+
 /**
  * Renders the header component.
  *
@@ -8,7 +10,9 @@
 export default function Header({ title }) {
     return (
         <header className={'app__header'}>
-            <h1>{title}</h1>
+            <div className={"container"}>
+                <h1>{title}</h1>
+            </div>
         </header>
     );
 }

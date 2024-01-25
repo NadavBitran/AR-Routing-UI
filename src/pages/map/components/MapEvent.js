@@ -27,7 +27,7 @@ export default function MapEvent({
                 e.latlng,
                 MARKER_UPDATE_OPERATION.USER_LOCATION
             );
-            map.flyTo(e.latlng, map.getZoom());
+            map.flyTo(e.latlng, 13);
         },
     });
 

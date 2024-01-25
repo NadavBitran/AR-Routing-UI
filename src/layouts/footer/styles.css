@@ -1,0 +1,25 @@
+.app__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    padding-block: 0.4rem;
+    margin-top: auto;
+    position: relative;
+}
+
+.footer--button--container{
+    display: flex;
+    flex-direction: row-reverse;
+    
+}
+
+.app__footer--btn{
+    background-color: var(--clr-blue);
+    color: var(--clr-white);
+    border-radius: 15px;
+
+    height: 2.5rem;
+    width: 7rem;
+}

@@ -6,6 +6,8 @@ import useAutoCompleteSearch from '../hooks/useAutoCompleteSearch';
 import * as DataTypes from '../../../common/types/data.types';
 import * as HookTypes from '../../../common/types/hooks-related.types';
 
+import SearchIcon from "../../../Assets/images/search-bar-icon.svg";
+
 /**
  * Represents the MapSearchBar component.
  *
@@ -19,10 +21,16 @@ export default function MapSearchBar({ updateMarkerLocation }) {
     const autoCompleteRef = useAutoCompleteSearch(updateMarkerLocation);
 
     return (
-        <div
-            id="autocomplete"
-            className="autocomplete-container"
-            ref={autoCompleteRef}
-        ></div>
+        <>
+            <div
+                id="autocomplete"
+                className="autocomplete-container"
+                ref={autoCompleteRef}>
+
+                    
+                <img className={"search-icon"} src={SearchIcon}/>
+            </div>
+
+        </>
     );
 }

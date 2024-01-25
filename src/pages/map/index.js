@@ -2,25 +2,28 @@ import React from 'react';
 
 import { AppContext } from '../../common/contexts/AppContext';
 
-import Header from '../../layouts/header';
-import Footer from '../../layouts/footer';
 
-import useAppContext from '../../common/hooks/useAppContext';
+
 import { useNavigate } from 'react-router-dom';
 import useMarkerLocation from './hooks/useMarkerLocation';
+import { useAppContext } from '../../common/hooks';
+
+import Footer from '../../layouts/footer';
 
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MapEvent from './components/MapEvent';
 import MapSearchBar from './components/MapSearchBar';
+import MapTutorialBar from './components/MapTutorialBar';
 
 import {
     MAP_INITIAL_VALUES,
-    MAP_PAGE_FOOTER_BUTTON_TEXT,
-    MAP_HEADER_TITLE,
+    MAP_PAGE_TEXT,
     MAP_TILES_PROPETIES,
 } from './constants/mapConstants';
 
+
 import './styles.css';
+import '../../common/styles/global.css';
 
 /**
  * Represents a Map component.
@@ -43,23 +46,17 @@ export default function Map() {
     const startMapTutorial = () => {
         // starting tutorial
     };
-    const handleFooterButtonClick = (buttonIndex) => {
-        switch (buttonIndex) {
-            case MAP_PAGE_FOOTER_BUTTON_TEXT.TUTORIAL:
-                startMapTutorial();
-                break;
-            case MAP_PAGE_FOOTER_BUTTON_TEXT.CONTINUE:
-                continueToRouteManager();
-                break;
-            default:
-                break;
-        }
+    const handleContinueToRouteManager = () => {
+        continueToRouteManager();
     };
 
     return (
-        <div className={'map'}>
-            <Header title={MAP_HEADER_TITLE} />
-            <div className={'mapOuter-container'}>
+        <>
+        <main className={'mapContainer'}>
+            
+            <MapTutorialBar />
+
+            <section className={'mapOuter-container'}>
                 <MapSearchBar updateMarkerLocation={updateMarkerLocation} />
                 <MapContainer
                     center={MAP_INITIAL_VALUES.INITIAL_POSITION}
@@ -81,18 +78,12 @@ export default function Map() {
                         }
                     />
                 </MapContainer>
-            </div>
-            <Footer
-                buttonsKey={[
-                    MAP_PAGE_FOOTER_BUTTON_TEXT.TUTORIAL,
-                    MAP_PAGE_FOOTER_BUTTON_TEXT.CONTINUE,
-                ]}
-                buttonsContent={[
-                    MAP_PAGE_FOOTER_BUTTON_TEXT.TUTORIAL,
-                    MAP_PAGE_FOOTER_BUTTON_TEXT.CONTINUE,
-                ]}
-                buttonOnClickIndicator={handleFooterButtonClick}
-            />
-        </div>
+            </section>
+        </main>
+
+        <Footer buttonText={MAP_PAGE_TEXT.CONTINUE}
+                buttonOnClickAction={handleContinueToRouteManager}/>
+
+        </>
     );
 }

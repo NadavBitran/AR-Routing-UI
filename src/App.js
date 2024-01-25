@@ -1,8 +1,9 @@
-import "./App.css";
-
 import PopupWindow from "./Components/PopupWindow";
 import RouteManager from "./Components/RouteManager";
 import Map from "./pages/map";
+
+import Header from "./layouts/header";
+import Footer from "./layouts/footer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -10,27 +11,6 @@ import { AppContextProvider } from "./common/contexts/AppContext";
 
 import { useState } from "react";
 
-/*
-
-Current Hierarchical Structure of the App:
-------------------------------------------
-
-App
-└── RouteManager - Contains the Route Editor and Tutorial components (2 separate modes).
-    └── RouteEditor - The main component where the user is able to  manages the his routes and steps.
-        └── Route - A component which represent a route.
-            └── Step - A component which represent a step.
-    └── RouteTutorial - A component that explains the user how to use the RouteEditor
-PopupWindow - A general component that opens a popup window with a title, main content and buttons.
-*/
-
-/*
-App
-└──
-  Route --> Map
-  Route --> RouteManager
-
-*/
 
 export default function App() {
   // ---- USE STATES ----
@@ -72,6 +52,7 @@ export default function App() {
 
   return (
     <AppContextProvider>
+      <Header title={""} />
       <BrowserRouter>
         <Routes>
           <Route path="/map" element={<Map />} />
