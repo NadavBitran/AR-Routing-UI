@@ -2,13 +2,8 @@ import React from 'react';
 
 import { AppContext } from '../../common/contexts/AppContext';
 
-
-
-import { useNavigate } from 'react-router-dom';
 import useMarkerLocation from './hooks/useMarkerLocation';
 import { useAppContext } from '../../common/hooks';
-
-import Footer from '../../layouts/footer';
 
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MapEvent from './components/MapEvent';
@@ -17,10 +12,8 @@ import MapTutorialBar from './components/MapTutorialBar';
 
 import {
     MAP_INITIAL_VALUES,
-    MAP_PAGE_TEXT,
     MAP_TILES_PROPETIES,
 } from './constants/mapConstants';
-
 
 import './styles.css';
 import '../../common/styles/global.css';
@@ -36,24 +29,14 @@ export default function Map() {
         updateMarkerLocation,
     } = useMarkerLocation(MAP_INITIAL_VALUES.INITIAL_POSITION);
     const appData = useAppContext();
-    const navigate = useNavigate();
 
     // TEMPOREY FUNCTIONS:
-    const continueToRouteManager = () => {
-        // update the app context with the marker location
-        navigate('/route-manager');
-    };
     const startMapTutorial = () => {
         // starting tutorial
     };
-    const handleContinueToRouteManager = () => {
-        continueToRouteManager();
-    };
 
     return (
-        <>
         <main className={'mapContainer'}>
-            
             <MapTutorialBar />
 
             <section className={'mapOuter-container'}>
@@ -80,10 +63,5 @@ export default function Map() {
                 </MapContainer>
             </section>
         </main>
-
-        <Footer buttonText={MAP_PAGE_TEXT.CONTINUE}
-                buttonOnClickAction={handleContinueToRouteManager}/>
-
-        </>
     );
 }

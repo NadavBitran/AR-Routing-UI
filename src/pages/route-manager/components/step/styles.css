@@ -1,0 +1,201 @@
+.step {
+    background-color: var(--clr-light-blue-80);
+
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+
+    outline: 2px solid var(--clr-blue);
+
+    margin-bottom: 0.35rem;
+}
+
+.step__text {
+    margin-left: 0.4rem;
+    margin-right: 0.3rem;
+
+    font-size: 1rem;
+    color: var(--clr-white);
+}
+
+.step__inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 0.1rem;
+
+    /* Creates a vertical line between .step__text and .step__inputs. */
+    /* Also, it's a hack to make .step__inputs ignore the padding of its parent. */
+    border-left: 1px solid var(--clr-white);
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+
+.step__inputs-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.1rem;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+.step__inputs-group-label {
+    font-size: 0.9rem;
+    color: var(--clr-white);
+
+    min-width: 62.88px; /* to keep the inputs aligned */
+}
+
+.step__inputs-group-input {
+    width: 5rem;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    padding: 0.25rem;
+
+    background-color: var(--clr-gray);
+    color: var(--clr-black);
+
+    font-size: 0.6rem;
+}
+
+.step__remove-button {
+    background-color: transparent;
+}
+
+.step__remove-button-icon {
+    width: 1.7rem;
+}
+
+/* mobile-md */
+@media (min-width: 375px) {
+    .step__text {
+        margin-left: auto;
+        margin-right: 0.2rem;
+        font-size: 1.125rem;
+    }
+
+    .step__inputs-group {
+        padding-left: 0.3rem;
+        padding-right: 0.5rem;
+    }
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .step__text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .step__inputs-group {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .step__inputs-group-label {
+        font-size: 0.95rem;
+        min-width: 66.36px; /* to keep the inputs aligned */
+    }
+
+    .step__inputs-group-input {
+        width: 6rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .step__text {
+        font-size: 1.5rem;
+    }
+
+    .step__inputs {
+        height: 4.5rem;
+        padding-top: 0.2rem;
+        margin-top: -18px;
+        margin-bottom: -18px;
+    }
+
+    .step__inputs-group {
+        padding-left: 0.5rem;
+        padding-right: 1rem;
+    }
+
+    .step__inputs-group-label {
+        font-size: 1rem;
+        min-width: 69.86px; /* to keep the inputs aligned */
+    }
+
+    .step__inputs-group-input {
+        width: 9rem;
+        height: 2rem;
+        font-size: 1rem;
+    }
+
+    .step__remove-button-icon {
+        width: 2.5rem;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    .step__inputs-group-label {
+        font-size: 1.1rem;
+        min-width: 76.84px; /* to keep the inputs aligned */
+    }
+
+    .step__inputs-group-input {
+        width: 12rem;
+        font-size: 1.1rem;
+    }
+
+    .step__remove-button-icon {
+        width: 3rem;
+    }
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .step__text {
+        font-size: 1.75rem;
+    }
+
+    .step__inputs {
+        height: 5.5rem;
+        padding-top: 0.6rem;
+        margin-top: -24px;
+        margin-bottom: -24px;
+    }
+
+    .step__inputs-group-label {
+        font-size: 1.25rem;
+        min-width: 87.33px; /* to keep the inputs aligned */
+    }
+
+    .step__remove-button-icon {
+        width: 3.5rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+    .step__inputs-group-label {
+        font-size: 1.4rem;
+        min-width: 97.8px; /* to keep the inputs aligned */
+    }
+
+    .step__inputs-group-input {
+        width: 15rem;
+        font-size: 1.4rem;
+    }
+}
+
+/* pc-md */
+@media (min-width: 1440px) {
+    /* nothing... */
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+    /* nothing... */
+}

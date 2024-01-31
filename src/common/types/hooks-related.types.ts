@@ -210,3 +210,27 @@ export type RouteListActions = {
     /** @description Removes all routes and steps from the list. */
     clear: () => void;
 };
+
+/**
+ * @description Represents a set of actions related to a single route that  will be given to the `Route` component.
+ * @see {@link Route}
+ */
+export type RouteActions = Pick<
+    RouteListActions,
+    | 'updateRouteNameAt'
+    | 'updateRouteExpansionStatusAt'
+    | 'updateRoutesCheckStatusAt'
+    | 'removeRoutesAt'
+>;
+
+/**
+ * @description Represents a set of actions related to a single step that will be given to the `Step` component.
+ * @see {@link Step}
+ */
+export type StepActions = Pick<
+    RouteListActions,
+    | 'updateStepDirectionAt'
+    | 'updateStepLengthAt'
+    | 'updateStepsCheckStatusAt'
+    | 'removeStepsFromRouteAt'
+>;

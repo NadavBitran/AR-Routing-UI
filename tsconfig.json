@@ -2,6 +2,7 @@
     "compilerOptions": {
         "allowJs": true,
         "checkJs": true,
+        "skipLibCheck": true,
         "outDir": "./dist",
         "esModuleInterop": true,
         "jsx": "react-jsx"

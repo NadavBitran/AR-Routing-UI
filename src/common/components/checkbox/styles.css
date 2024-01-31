@@ -1,0 +1,140 @@
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkbox-container .checkbox-mark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    background-color: var(--clr-white); /* #eee */
+    border: 1px solid var(--clr-gray); /* #ccc */
+}
+
+/* On mouse-over, add a background color */
+.checkbox-container:hover .checkbox-button ~ .checkbox-mark {
+    background-color: var(--clr-gray); /* #ccc */
+}
+
+/* When the checkbox is checked, add a background color */
+.checkbox-container .checkbox-button:checked ~ .checkbox-mark {
+    background-color: var(--clr-green); /* #2196F3 */
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox-container .checkbox-mark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container .checkbox-button:checked ~ .checkbox-mark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator like a white dot */
+.checkbox-container .checkbox-mark:after {
+    /* left: 2.5px;
+    top: 3px; */
+
+    left: 23%;
+    top: 23%;
+
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--clr-white); /* #fff */
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .checkbox-container {
+        padding-left: 24px;
+        margin-bottom: 1.2rem;
+    }
+
+    .checkbox-container .checkbox-mark {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    .checkbox-container .checkbox-mark:after {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .checkbox-container {
+        margin-bottom: 1.6rem;
+        padding-left: 32px;
+    }
+
+    .checkbox-container .checkbox-mark {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    .checkbox-container .checkbox-mark:after {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    /* nothing... */
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .checkbox-container {
+        margin-bottom: 2rem;
+        padding-left: 40px;
+    }
+
+    .checkbox-container .checkbox-mark {
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+
+    .checkbox-container .checkbox-mark:after {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+}
+
+/* pc-md */
+@media (min-width: 1440px) {
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+}

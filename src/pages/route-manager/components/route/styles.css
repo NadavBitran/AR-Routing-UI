@@ -1,0 +1,163 @@
+.route {
+    margin-top: 1rem;
+    background-color: var(--clr-light-blue);
+}
+
+.route__text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.1rem;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    font-size: 1.125rem;
+    color: var(--clr-white);
+}
+
+.route__text > label {
+    display: block;
+    width: 5rem;
+}
+
+.route__text > input {
+    display: block;
+    width: 6rem;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    padding: 0.25rem;
+
+    background-color: var(--clr-gray);
+    color: var(--clr-black);
+}
+
+.route__menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.route__menu-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: transparent;
+}
+
+.route__menu-button-icon {
+    width: 2rem;
+}
+
+/* mobile-md */
+@media (min-width: 375px) {
+    .route__menu {
+        gap: 0.5rem;
+    }
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .route__text {
+        font-size: 1.25rem;
+    }
+
+    .route__text > label {
+        width: 6rem;
+    }
+
+    .route__text > input {
+        width: 7rem;
+    }
+
+    .route__menu-button-icon {
+        width: 2.5rem;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .route {
+        min-height: 64px;
+    }
+
+    .route__text {
+        font-size: 1.5rem;
+    }
+
+    .route__text > label {
+        width: 7rem;
+    }
+
+    .route__text > input {
+        width: 15rem;
+        height: 3rem;
+
+        font-size: 1.2rem;
+    }
+
+    .route__menu {
+        gap: 1rem;
+    }
+
+    .route__menu-button-icon {
+        width: 3rem;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    .route {
+        min-height: 85px;
+    }
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .route {
+        min-height: 95px;
+    }
+
+    .route__text {
+        font-size: 1.75rem;
+    }
+
+    .route__text > label {
+        width: 8rem;
+    }
+
+    .route__text > input {
+        width: 20rem;
+        height: 3.5rem;
+
+        font-size: 1.5rem;
+    }
+
+    .route__menu {
+        gap: 1.5rem;
+    }
+
+    .route__menu-button-icon {
+        width: 3.5rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+    .route__text > input {
+        width: 25rem;
+    }
+}
+
+/* pc-md */
+@media (min-width: 1440px) {
+    .route__text > input {
+        width: 30rem;
+    }
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+    /* nothing... */
+}
