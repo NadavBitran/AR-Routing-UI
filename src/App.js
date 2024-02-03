@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
 
 import Header from './layouts/header';
-import Footer from './layouts/footer';
 
 //import PopupWindow from './Components/PopupWindow';
 //import RouteManager from './Components/RouteManager';
@@ -17,11 +16,10 @@ export default function App() {
             <BrowserRouter>
                 <Header title={''} />
                 <Routes>
-                    <Route path="/map" element={<Map />} />
+                    <Route path="/"              element={<Navigate to="/map" replace />}/>
+                    <Route path="/map"           element={<Map />} />
                     <Route path="/route-manager" element={<RouteManager />} />
                 </Routes>
-                {/* TODO: create a function for `action` that saves the lat and lng */}
-                <Footer text="Continue" action={() => {}} />
             </BrowserRouter>
         </AppContextProvider>
     );

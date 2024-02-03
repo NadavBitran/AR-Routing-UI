@@ -5,7 +5,7 @@
  * @author Maor Bezalel
  */
 
-import { LatLngExpression, Direction, Route } from './data.types';
+import { LatLngExpression, Direction, Route , RouteValidation , StepValidation } from './data.types';
 
 /**
  * @description the type of the function that sets state returned by React's `useState` hook.
@@ -28,7 +28,7 @@ export type UseMarkerLocationResults = {
         updatedFrom: string
     ) => void;
 
-    /** @description a function that resets the location of the marker to its default value. */
+    /** @description a value which saves the user's latest marker update operation. */
     latestMarkerUpdateOperation: string;
 };
 
@@ -166,6 +166,21 @@ export type RouteListActions = {
     ) => void;
 
     /**
+     * 
+     * @description updates the validation status of a route at the specified index
+     * @param routeIndex      - The index of the route.
+     * @param validationProp  - The property of the validation object to update.
+     * @param validationStatus- The new validation status.
+     * @param errorMessage    - The new error message.
+     */
+    updateRouteValidationStatusAt: (
+        routeIndex: number,
+        validationProp: keyof RouteValidation,
+        validationStatus: boolean,
+        errorMessage: string | undefined
+    ) => void;
+
+    /**
      * @description updates the direction of a step in a route.
      * @param routeIndex - The index of the route.
      * @param stepIndex - The index of the step.
@@ -201,6 +216,23 @@ export type RouteListActions = {
         ...stepIndices: number[]
     ) => void;
 
+    /**
+     * 
+     * @description updates the validation status of a step in a route.
+     * @param routeIndex - The index of the route   
+     * @param stepIndex  - The index of the step
+     * @param validationProp  - The property of the validation object to update.
+     * @param validationStatus - The new validation status.
+     * @param errorMessage - The new error message.
+     */
+    updateStepValidationStatusAt: (
+        routeIndex: number,
+        stepIndex: number,
+        validationProp: keyof StepValidation,
+        validationStatus: boolean,
+        errorMessage: string | undefined
+    ) => void;
+
     /** @description checks all routes. */
     checkAllRoutes: () => void;
 
@@ -233,4 +265,19 @@ export type StepActions = Pick<
     | 'updateStepLengthAt'
     | 'updateStepsCheckStatusAt'
     | 'removeStepsFromRouteAt'
+>;
+
+
+export type ControllerActions = Pick<
+    RouteListActions,
+    | 'checkAllRoutes'
+    | 'removeAllCheckedRoutesAndSteps'
+>;
+
+
+export type RouteListValidationActions = Pick<
+    RouteListActions,
+    | 'updateRouteValidationStatusAt'
+    | 'updateStepValidationStatusAt'
+    | 'updateRouteExpansionStatusAt'
 >;

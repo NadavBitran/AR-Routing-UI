@@ -1,14 +1,17 @@
-.app__footer {
+.navigate__bar {
     display: flex;
     padding-block: 0.4rem;
+
+    position: relative;
 }
 
-.footer--button--container {
+.navigate--button--container {
     display: flex;
     flex-direction: row-reverse;
+
 }
 
-.app__footer--btn {
+.navigate--btn {
     display: flex;
     justify-content: center;
     align-items: center;

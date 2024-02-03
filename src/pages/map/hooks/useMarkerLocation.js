@@ -24,6 +24,7 @@ const useMarkerLocation = (initialPosition) => {
         setLatestMarketUpdateOperation(updatedFrom);
     };
 
+
     return {
         markerLocation,
         latestMarkerUpdateOperation,

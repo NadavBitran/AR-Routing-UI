@@ -27,6 +27,7 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
+                isValid: {isNameValid : true, errorMessage: undefined},
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
@@ -38,6 +39,7 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
+                isValid: {isNameValid : true, errorMessage: undefined},
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
@@ -52,6 +54,7 @@ export default function useRouteList(initialRouteList) {
                 id: uuidv4(),
                 length: 0,
                 direction: 'Foward',
+                isValid: {isLengthValid : true, isDirectionValid : true, errorMessage: undefined},
                 isChecked: false,
             }));
             routeListActions.updatePropAt(
@@ -78,6 +81,13 @@ export default function useRouteList(initialRouteList) {
                 routeIndex
             );
         },
+        updateRouteValidationStatusAt: (routeIndex, validationProp  , validationStatus , errorMessage) => {
+            routeListActions.updatePropAt(
+                'isValid', 
+                {...routeList[routeIndex].isValid, [validationProp]: validationStatus , errorMessage : errorMessage}, 
+                routeIndex
+            );
+        },
         updateStepDirectionAt: (routeIndex, stepIndex, direction) => {
             const newRouteList = [...routeList];
             newRouteList[routeIndex].steps[stepIndex].direction = direction;
@@ -94,7 +104,10 @@ export default function useRouteList(initialRouteList) {
             });
             routeListActions.set(newRouteList);
         },
-
+        updateStepValidationStatusAt: (routeIndex, stepIndex, validationProp  , validationStatus , errorMessage) => {
+            const newRouteList = [...routeList];
+            newRouteList[routeIndex].steps[stepIndex].isValid = {...routeList[routeIndex].steps[stepIndex].isValid, [validationProp]: validationStatus , errorMessage : errorMessage};
+        },
         checkAllRoutes: () => {
             const newRouteList = [...routeList];
             newRouteList.forEach((route) => {

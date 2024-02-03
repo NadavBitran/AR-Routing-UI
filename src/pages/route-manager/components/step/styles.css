@@ -28,6 +28,8 @@
     border-left: 1px solid var(--clr-white);
     margin-top: -10px;
     margin-bottom: -10px;
+
+
 }
 
 .step__inputs-group {
@@ -58,6 +60,10 @@
     font-size: 0.6rem;
 }
 
+.step__inputs-group-input--error{
+    border: 2px solid var(--clr-red);
+}
+
 .step__remove-button {
     background-color: transparent;
 }
@@ -65,6 +71,8 @@
 .step__remove-button-icon {
     width: 1.7rem;
 }
+
+
 
 /* mobile-md */
 @media (min-width: 375px) {
@@ -110,7 +118,6 @@
     }
 
     .step__inputs {
-        height: 4.5rem;
         padding-top: 0.2rem;
         margin-top: -18px;
         margin-bottom: -18px;
@@ -161,7 +168,6 @@
     }
 
     .step__inputs {
-        height: 5.5rem;
         padding-top: 0.6rem;
         margin-top: -24px;
         margin-bottom: -24px;

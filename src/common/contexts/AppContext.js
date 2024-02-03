@@ -1,12 +1,14 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext , useState} from 'react';
+
 
 export const AppContext = createContext(undefined);
 
 export const AppContextProvider = ({ children }) => {
-    const [globalData, setGlobalData] = useState({});
+    
+    const [appData , setAppData] = useState({});
 
     return (
-        <AppContext.Provider value={{ globalData, setGlobalData }}>
+        <AppContext.Provider value={{ appData , setAppData}}>
             {children}
         </AppContext.Provider>
     );

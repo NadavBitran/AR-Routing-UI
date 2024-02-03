@@ -1,4 +1,4 @@
-import { Children } from 'react';
+import { Children} from 'react';
 
 import Checkbox from '../../../../common/components/checkbox';
 
@@ -34,15 +34,19 @@ export default function Route({ route, index, actions, children }) {
     return (
         <>
             <div className="route-manager__full-bar route">
-                <Checkbox />
+                <Checkbox onButtonClick={() => actions.updateRoutesCheckStatusAt(!route.isChecked , index)}
+                          isChecked={route.isChecked}
+                />
                 <span className="route__text">
                     <label htmlFor="route-1-name">Route #{index}: </label>
                     <input
                         id={`route-${index}-name`}
                         name={`route #${index} name`}
+                        className={`route-input ${route.isValid.isNameValid ? '' : 'route-input--error'}`}
                         type="text"
                         placeholder="e.g. Restroom"
                         required
+                        onChange={(event) =>  actions.updateRouteNameAt(index, event.target.value)}
                     />
                 </span>
                 <menu className="route__menu">

@@ -1,3 +1,7 @@
+import { useRef } from "react";
+
+import {validationHelpers} from "../../../../common/utils/validationHelpers";
+
 import Checkbox from '../../../../common/components/checkbox';
 
 import trashBinPNG from '../../assets/remove-selected-trash-bin.png';
@@ -23,9 +27,31 @@ import './styles.css';
  * @author Maor Bezalel
  */
 export default function Step({ step, stepIndex, routeIndex, actions }) {
+    const stepLengthInput = useRef(null);
+
+    /**
+     * 
+     * @param {number} length - The length of the step. 
+     */
+    const handleLengthUpdate = (length) => {
+        if(!validationHelpers.isInputPositiveNumber(length)) stepLengthInput.current.value = stepLengthInput.current.value.slice(0,-1);
+        else actions.updateStepLengthAt(routeIndex, stepIndex, length);
+    }
+
+    /**
+     * 
+     * @param {any} direction 
+     */
+    const handleDirectionUpdate = (direction) => {
+
+        actions.updateStepDirectionAt(routeIndex, stepIndex, direction);
+    }
+    
     return (
         <div className="route-manager__half-bar step">
-            <Checkbox />
+            <Checkbox onButtonClick={() => actions.updateStepsCheckStatusAt(!step.isChecked , routeIndex , stepIndex)}
+                      isChecked={step.isChecked}
+            />
             <p className="step__text">Step #{stepIndex}</p>
             <div className="step__inputs">
                 <span className="step__inputs-group">
@@ -38,13 +64,16 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                     </label>
                     <input
                         id={`step-${stepIndex}-length`}
-                        className="step__inputs-group-input"
+                        className={`step__inputs-group-input ${step.isValid.isLengthValid ? '' : 'step__inputs-group-input--error'}`}
                         name={`step #${stepIndex} length`}
-                        type="text"
+                        ref={stepLengthInput}
+                        defaultValue={step.length === 0 ? null : step.length}
+                        type="number"
                         inputMode="numeric"
                         pattern="[0-9]*"
                         placeholder='e.g. "10"'
                         required
+                        onChange={(event) => handleLengthUpdate(Number(event.target.value))}
                     />
                 </span>
                 <span className="step__inputs-group">
@@ -59,6 +88,8 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         className="step__inputs-group-input"
                         name={`step #${stepIndex} direction`}
                         required
+                        defaultValue={step.direction}
+                        onChange={(event) => handleDirectionUpdate(event.target.value)}
                     >
                         <option value="Foward">Foward</option>
                         <option value="Forward-Left">Forward-Left</option>

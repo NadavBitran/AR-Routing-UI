@@ -50,6 +50,10 @@
     width: 2rem;
 }
 
+.route-input--error{
+    border: 2px solid var(--clr-red);
+}
+
 /* mobile-md */
 @media (min-width: 375px) {
     .route__menu {
