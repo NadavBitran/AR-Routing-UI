@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { useEffect } from 'react';
 import { AppContext } from '../../common/contexts/AppContext';
@@ -24,6 +24,7 @@ import './styles.css';
 import '../../common/styles/global.css';
 import { ENDPOINT } from '../../common/constants/endpoints';
 
+
 /**
  * Represents a Map component.
  * @returns {React.JSX.Element} The Map component.
@@ -34,10 +35,10 @@ export default function Map() {
 
     const appOptions = useAppContext();
 
-    const saveAndContinue = () => {
-        appOptions.setAppData({...appOptions.appData , markerLocation : markerLocation});
+    const saveAndContinue = useCallback(() => {
+        appOptions.setAppData({...appOptions.appData , latlng : markerLocation});
         return true;
-    }
+    } , []);
 
 
     return (

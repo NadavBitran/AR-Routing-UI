@@ -148,3 +148,13 @@ export type TooltipCoordinates = {
     /** @description the middle y coordinate of the tooltip in pixels. */
     middleY: Pixels;
 };
+
+
+export type AppData = {
+
+    /** @description the saved route list of the user */
+    routeList : Route[];
+
+    /** @description the saved latlng of the user */
+    latlng : LatLngExpression;
+}

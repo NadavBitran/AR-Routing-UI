@@ -10,7 +10,8 @@ import Step from './components/step';
 import NavigateBar from '../../common/components/navigate-bar/navigate-bar';
 
 import { ENDPOINT } from '../../common/constants/endpoints';
-import { useAppContext } from '../../common/hooks';
+import { useAppContext  } from '../../common/hooks';
+import { useCallback } from 'react';
 
 
 import * as HookTypes from '../../common/types/hooks-related.types';
@@ -54,13 +55,13 @@ export default function RouteManager() {
 
     const validateRouteList = useRouteListValidation(routeList , routeListValidationActions);
 
-    const saveAndContinue = () => {
+    const saveAndContinue = useCallback(() => {
         if(!validateRouteList()) return false;
         else{
             appOptions.setAppData({...appOptions.appData , routeList : routeList});
             return true;
         }
-    }
+    } , []);
 
 
     return (
