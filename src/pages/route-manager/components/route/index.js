@@ -1,5 +1,3 @@
-import { Children} from 'react';
-
 import Checkbox from '../../../../common/components/checkbox';
 
 import trashBinPNG from '../../assets/remove-selected-trash-bin.png';
@@ -29,13 +27,17 @@ import './styles.css';
  * @author Maor Bezalel
  */
 export default function Route({ route, index, actions, children }) {
-    const childrenCount = Children.count(children);
-
     return (
         <>
             <div className="route-manager__full-bar route">
-                <Checkbox onButtonClick={() => actions.updateRoutesCheckStatusAt(!route.isChecked , index)}
-                          isChecked={route.isChecked}
+                <Checkbox
+                    onButtonClick={() =>
+                        actions.updateRoutesCheckStatusAt(
+                            !route.isChecked,
+                            index
+                        )
+                    }
+                    isChecked={route.isChecked}
                 />
                 <span className="route__text">
                     <label htmlFor="route-1-name">Route #{index}: </label>
@@ -46,7 +48,9 @@ export default function Route({ route, index, actions, children }) {
                         type="text"
                         placeholder="e.g. Restroom"
                         required
-                        onChange={(event) =>  actions.updateRouteNameAt(index, event.target.value)}
+                        onChange={(event) =>
+                            actions.updateRouteNameAt(index, event.target.value)
+                        }
                     />
                 </span>
                 <menu className="route__menu">
@@ -62,6 +66,7 @@ export default function Route({ route, index, actions, children }) {
                     </button>
                     <button
                         className="route__menu-button"
+                        disabled={route.steps.length === 0}
                         onClick={() =>
                             actions.updateRouteExpansionStatusAt(
                                 index,
@@ -70,9 +75,9 @@ export default function Route({ route, index, actions, children }) {
                         }
                     >
                         <img
-                            className="route__menu-button-icon"
+                            className={`route__menu-button-icon ${route.steps.length > 0 && route.isExpanded ? 'route__menu-button-icon--active' : ''}`}
                             src={
-                                childrenCount > 0
+                                route.steps.length > 0
                                     ? expandArrowActiveSVG
                                     : expandArrowInactiveSVG
                             }

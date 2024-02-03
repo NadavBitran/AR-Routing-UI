@@ -48,9 +48,14 @@
 
 .route__menu-button-icon {
     width: 2rem;
+    transition: rotate 0.3s;
 }
 
-.route-input--error{
+.route__menu-button-icon--active {
+    rotate: 180deg;
+}
+
+.route-input--error {
     border: 2px solid var(--clr-red);
 }
 
