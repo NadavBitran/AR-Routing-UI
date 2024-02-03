@@ -16,7 +16,6 @@ import * as DataTypes from '../../../common/types/data.types';
 export default function useRouteList(initialRouteList) {
     const [routeList, routeListActions] = useList(initialRouteList);
 
-
     /** @type {HookTypes.RouteListActions}*/
     const actions = {
         set: (newRouteList) => {
@@ -28,7 +27,7 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
-                isValid: {isNameValid : true, errorMessage: undefined},
+                isValid: { isNameValid: true, errorMessage: undefined },
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
@@ -40,7 +39,7 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
-                isValid: {isNameValid : true, errorMessage: undefined},
+                isValid: { isNameValid: true, errorMessage: undefined },
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
@@ -54,8 +53,12 @@ export default function useRouteList(initialRouteList) {
             const steps = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 length: 0,
-                direction: 'Foward',
-                isValid: {isLengthValid : true, isDirectionValid : true, errorMessage: undefined},
+                direction: 'Forward',
+                isValid: {
+                    isLengthValid: true,
+                    isDirectionValid: true,
+                    errorMessage: undefined,
+                },
                 isChecked: false,
             }));
             routeListActions.updatePropAt(
@@ -82,10 +85,19 @@ export default function useRouteList(initialRouteList) {
                 routeIndex
             );
         },
-        updateRouteValidationStatusAt: (routeIndex, validationProp  , validationStatus , errorMessage) => {
+        updateRouteValidationStatusAt: (
+            routeIndex,
+            validationProp,
+            validationStatus,
+            errorMessage
+        ) => {
             routeListActions.updatePropAt(
-                'isValid', 
-                {...routeList[routeIndex].isValid, [validationProp]: validationStatus , errorMessage : errorMessage}, 
+                'isValid',
+                {
+                    ...routeList[routeIndex].isValid,
+                    [validationProp]: validationStatus,
+                    errorMessage: errorMessage,
+                },
                 routeIndex
             );
         },
@@ -105,9 +117,19 @@ export default function useRouteList(initialRouteList) {
             });
             routeListActions.set(newRouteList);
         },
-        updateStepValidationStatusAt: (routeIndex, stepIndex, validationProp  , validationStatus , errorMessage) => {
+        updateStepValidationStatusAt: (
+            routeIndex,
+            stepIndex,
+            validationProp,
+            validationStatus,
+            errorMessage
+        ) => {
             const newRouteList = [...routeList];
-            newRouteList[routeIndex].steps[stepIndex].isValid = {...routeList[routeIndex].steps[stepIndex].isValid, [validationProp]: validationStatus , errorMessage : errorMessage};
+            newRouteList[routeIndex].steps[stepIndex].isValid = {
+                ...routeList[routeIndex].steps[stepIndex].isValid,
+                [validationProp]: validationStatus,
+                errorMessage: errorMessage,
+            };
         },
         checkAllRoutes: () => {
             const newRouteList = [...routeList];

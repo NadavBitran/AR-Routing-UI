@@ -59,6 +59,10 @@
     border: 2px solid var(--clr-red);
 }
 
+.route-input:invalid {
+    outline: 2px solid var(--clr-red);
+}
+
 /* mobile-md */
 @media (min-width: 375px) {
     .route__menu {

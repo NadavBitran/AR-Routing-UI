@@ -40,13 +40,16 @@ export default function Route({ route, index, actions, children }) {
                     isChecked={route.isChecked}
                 />
                 <span className="route__text">
-                    <label htmlFor="route-1-name">Route #{index}: </label>
+                    <label htmlFor={`route-${index + 1}-name`}>
+                        Route #{index + 1}:{' '}
+                    </label>
                     <input
-                        id={`route-${index}-name`}
-                        name={`route #${index} name`}
+                        id={`route-${index + 1}-name`}
+                        name={`route #${index + 1} name`}
                         className={`route-input ${route.isValid.isNameValid ? '' : 'route-input--error'}`}
                         type="text"
                         placeholder="e.g. Restroom"
+                        pattern="^[a-zA-Z\s]+(?:-[a-zA-Z\s]+)*$"
                         required
                         onChange={(event) =>
                             actions.updateRouteNameAt(index, event.target.value)

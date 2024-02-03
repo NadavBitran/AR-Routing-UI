@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
-import {validationHelpers} from "../../../../common/utils/validationHelpers";
+import { validationHelpers } from '../../../../common/utils/validationHelpers';
 
 import Checkbox from '../../../../common/components/checkbox';
 
@@ -30,27 +30,37 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
     const stepLengthInput = useRef(null);
 
     /**
-     * 
-     * @param {number} length - The length of the step. 
+     *
+     * @param {number} length - The length of the step.
      */
     const handleLengthUpdate = (length) => {
-        if(!validationHelpers.isInputPositiveNumber(length)) stepLengthInput.current.value = stepLengthInput.current.value.slice(0,-1);
+        if (!validationHelpers.isInputPositiveNumber(length))
+            stepLengthInput.current.value = stepLengthInput.current.value.slice(
+                0,
+                -1
+            );
         else actions.updateStepLengthAt(routeIndex, stepIndex, length);
-    }
+    };
 
     /**
-     * 
-     * @param {any} direction 
+     *
+     * @param {any} direction
      */
     const handleDirectionUpdate = (direction) => {
-
         actions.updateStepDirectionAt(routeIndex, stepIndex, direction);
-    }
-    
+    };
+
     return (
         <div className="route-manager__half-bar step">
-            <Checkbox onButtonClick={() => actions.updateStepsCheckStatusAt(!step.isChecked , routeIndex , stepIndex)}
-                      isChecked={step.isChecked}
+            <Checkbox
+                onButtonClick={() =>
+                    actions.updateStepsCheckStatusAt(
+                        !step.isChecked,
+                        routeIndex,
+                        stepIndex
+                    )
+                }
+                isChecked={step.isChecked}
             />
             <p className="step__text">Step #{stepIndex}</p>
             <div className="step__inputs">
@@ -73,7 +83,9 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         pattern="[0-9]*"
                         placeholder='e.g. "10"'
                         required
-                        onChange={(event) => handleLengthUpdate(Number(event.target.value))}
+                        onChange={(event) =>
+                            handleLengthUpdate(Number(event.target.value))
+                        }
                     />
                 </span>
                 <span className="step__inputs-group">
@@ -89,9 +101,11 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         name={`step #${stepIndex} direction`}
                         required
                         defaultValue={step.direction}
-                        onChange={(event) => handleDirectionUpdate(event.target.value)}
+                        onChange={(event) =>
+                            handleDirectionUpdate(event.target.value)
+                        }
                     >
-                        <option value="Foward">Foward</option>
+                        <option value="Forward">Forward</option>
                         <option value="Forward-Left">Forward-Left</option>
                         <option value="Forward-Right">Forward-Right</option>
                         <option value="Left">Left</option>

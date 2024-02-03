@@ -16,7 +16,6 @@
  */
 export type LatLngExpression = import('leaflet').LatLngExpression;
 
-
 /**
  * @description represents a pixel value in a string format with a `px` suffix.
  * @example
@@ -38,7 +37,7 @@ export type Route = {
     name: string;
 
     /** @description whether the route is currently valid. */
-    isValid : RouteValidation,
+    isValid: RouteValidation;
 
     /** @description whether the route is currently selected (via a checkbox). */
     isChecked: boolean;
@@ -72,10 +71,10 @@ export type Step = {
 export type RouteValidation = {
     /** @description whether the route name is currently valid. */
     isNameValid: boolean;
-    
+
     /** @description error message indicating what went wrong */
     errorMessage: string;
-}
+};
 
 /** @description an object representing the validation status of specific step*/
 export type StepValidation = {
@@ -87,13 +86,13 @@ export type StepValidation = {
 
     /** @description error message indicating what went wrong */
     errorMessage: string;
-}
+};
 
-/** 
- *  @description the different directions a step can have. 
-*/
+/**
+ *  @description the different directions a step can have.
+ */
 export type Direction =
-    | 'Foward'
+    | 'Forward'
     | 'Forward-Left'
     | 'Forward-Right'
     | 'Left'
@@ -149,12 +148,10 @@ export type TooltipCoordinates = {
     middleY: Pixels;
 };
 
-
 export type AppData = {
-
     /** @description the saved route list of the user */
-    routeList : Route[];
+    routeList: Route[];
 
     /** @description the saved latlng of the user */
-    latlng : LatLngExpression;
-}
+    latlng: LatLngExpression;
+};
