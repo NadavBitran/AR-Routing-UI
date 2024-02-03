@@ -16,6 +16,7 @@ import * as DataTypes from '../../../common/types/data.types';
 export default function useRouteList(initialRouteList) {
     const [routeList, routeListActions] = useList(initialRouteList);
 
+
     /** @type {HookTypes.RouteListActions}*/
     const actions = {
         set: (newRouteList) => {

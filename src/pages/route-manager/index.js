@@ -61,7 +61,7 @@ export default function RouteManager() {
             appOptions.setAppData({...appOptions.appData , routeList : routeList});
             return true;
         }
-    } , []);
+    } , [appOptions , routeList]);
 
 
     return (

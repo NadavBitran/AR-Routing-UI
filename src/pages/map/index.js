@@ -38,7 +38,7 @@ export default function Map() {
     const saveAndContinue = useCallback(() => {
         appOptions.setAppData({...appOptions.appData , latlng : markerLocation});
         return true;
-    } , []);
+    } , [appOptions , markerLocation]);
 
 
     return (
