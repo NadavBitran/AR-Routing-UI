@@ -65,6 +65,9 @@ export type Step = {
 
     /** @description whether the step is currently selected (via a checkbox). */
     isChecked: boolean;
+
+    /** @description whether the step is currently dirty (has been modified). */
+    isDirty: boolean;
 };
 
 /** @description an object representing the validation status of specific route*/

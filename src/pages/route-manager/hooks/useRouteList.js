@@ -60,6 +60,7 @@ export default function useRouteList(initialRouteList) {
                     errorMessage: undefined,
                 },
                 isChecked: false,
+                isDirty: false,
             }));
             routeListActions.updatePropAt(
                 'steps',
@@ -72,18 +73,10 @@ export default function useRouteList(initialRouteList) {
             routeListActions.updatePropAt('name', name, routeIndex);
         },
         updateRoutesCheckStatusAt: (checkStatus, ...routeIndices) => {
-            routeListActions.updatePropAt(
-                'isChecked',
-                checkStatus,
-                ...routeIndices
-            );
+            routeListActions.updatePropAt('isChecked', checkStatus, ...routeIndices);
         },
         updateRouteExpansionStatusAt: (routeIndex, expansionStatus) => {
-            routeListActions.updatePropAt(
-                'isExpanded',
-                expansionStatus,
-                routeIndex
-            );
+            routeListActions.updatePropAt('isExpanded', expansionStatus, routeIndex);
         },
         updateRouteValidationStatusAt: (
             routeIndex,
@@ -104,16 +97,26 @@ export default function useRouteList(initialRouteList) {
         updateStepDirectionAt: (routeIndex, stepIndex, direction) => {
             const newRouteList = [...routeList];
             newRouteList[routeIndex].steps[stepIndex].direction = direction;
+            routeListActions.updatePropAt(
+                'steps',
+                newRouteList[routeIndex].steps,
+                routeIndex
+            );
         },
         updateStepLengthAt: (routeIndex, stepIndex, length) => {
             const newRouteList = [...routeList];
             newRouteList[routeIndex].steps[stepIndex].length = length;
+            newRouteList[routeIndex].steps[stepIndex].isDirty = true;
+            routeListActions.updatePropAt(
+                'steps',
+                newRouteList[routeIndex].steps,
+                routeIndex
+            );
         },
         updateStepsCheckStatusAt: (checkStatus, routeIndex, ...stepIndices) => {
             const newRouteList = [...routeList];
             stepIndices.forEach((stepIndex) => {
-                newRouteList[routeIndex].steps[stepIndex].isChecked =
-                    checkStatus;
+                newRouteList[routeIndex].steps[stepIndex].isChecked = checkStatus;
             });
             routeListActions.set(newRouteList);
         },
@@ -131,6 +134,16 @@ export default function useRouteList(initialRouteList) {
                 errorMessage: errorMessage,
             };
         },
+        makeStepDirty: (routeIndex, stepIndex) => {
+            const newRouteList = [...routeList];
+            newRouteList[routeIndex].steps[stepIndex].isDirty = true;
+            routeListActions.updatePropAt(
+                'steps',
+                newRouteList[routeIndex].steps,
+                routeIndex
+            );
+        },
+
         checkAllRoutes: () => {
             const newRouteList = [...routeList];
             newRouteList.forEach((route) => {
@@ -165,9 +178,7 @@ export default function useRouteList(initialRouteList) {
             routeListActions.set(newRouteList);
         },
         removeAllCheckedRoutesAndSteps: () => {
-            const uncheckedRoutes = routeList.filter(
-                (route) => !route.isChecked
-            );
+            const uncheckedRoutes = routeList.filter((route) => !route.isChecked);
             const uncheckedRoutesWithUncheckedSteps = uncheckedRoutes.map(
                 (route) => ({
                     ...route,

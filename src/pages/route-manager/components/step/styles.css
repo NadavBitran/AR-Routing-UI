@@ -28,8 +28,6 @@
     border-left: 1px solid var(--clr-white);
     margin-top: -10px;
     margin-bottom: -10px;
-
-
 }
 
 .step__inputs-group {
@@ -39,6 +37,7 @@
     gap: 0.1rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
+    position: relative;
 }
 
 .step__inputs-group-label {
@@ -60,8 +59,9 @@
     font-size: 0.6rem;
 }
 
-.step__inputs-group-input--error{
+.step__inputs-group-input--error {
     border: 2px solid var(--clr-red);
+    background-color: var(--clr-light-red);
 }
 
 .step__remove-button {
@@ -72,7 +72,32 @@
     width: 1.7rem;
 }
 
+.step__inputs-group-input__error-message {
+    /* visibility: hidden; */
+    background-color: var(--clr-red);
+    color: var(--clr-white);
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 83%;
+    margin-left: -60px;
+    font-size: 0.7rem;
+}
 
+/* error message arrow */
+.step__inputs-group-input__error-message::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--clr-red) transparent transparent transparent;
+}
 
 /* mobile-md */
 @media (min-width: 375px) {
@@ -109,6 +134,12 @@
         width: 6rem;
         font-size: 0.7rem;
     }
+
+    .step__inputs-group-input__error-message {
+        /* visibility: hidden; */
+        margin-left: -70px;
+        font-size: 0.75rem;
+    }
 }
 
 /* tablet-sm */
@@ -142,6 +173,18 @@
     .step__remove-button-icon {
         width: 2.5rem;
     }
+
+    .step__inputs-group-input__error-message {
+        /* visibility: hidden; */
+        margin-left: -110px;
+        font-size: 1rem;
+    }
+
+    /* error message arrow */
+    .step__inputs-group-input__error-message::after {
+        margin-left: -8px;
+        border-width: 10px;
+    }
 }
 
 /* tablet-md */
@@ -158,6 +201,12 @@
 
     .step__remove-button-icon {
         width: 3rem;
+    }
+
+    .step__inputs-group-input__error-message {
+        /* visibility: hidden; */
+        margin-left: -120px;
+        font-size: 1rem;
     }
 }
 
@@ -181,6 +230,12 @@
     .step__remove-button-icon {
         width: 3.5rem;
     }
+
+    .step__inputs-group-input__error-message {
+        /* visibility: hidden; */
+        margin-left: -130px;
+        font-size: 1.2rem;
+    }
 }
 
 /* pc-sm */
@@ -193,6 +248,11 @@
     .step__inputs-group-input {
         width: 15rem;
         font-size: 1.4rem;
+    }
+
+    .step__inputs-group-input__error-message {
+        /* visibility: hidden; */
+        margin-left: -140px;
     }
 }
 

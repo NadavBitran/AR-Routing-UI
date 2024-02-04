@@ -1,5 +1,6 @@
 import useRouteList from './hooks/useRouteList';
 import useRouteListValidation from './hooks/useRouteListValidation';
+import useIsRouteListValid from './hooks/useIsRouteListValid';
 
 import ControllerMenu from './components/controller-menu';
 import AddButton from './components/add-button';
@@ -10,25 +11,23 @@ import Step from './components/step';
 import NavigateBar from '../../common/components/navigate-bar/navigate-bar';
 
 import { ENDPOINT } from '../../common/constants/endpoints';
-import { useAppContext  } from '../../common/hooks';
-import { useCallback } from 'react';
-
+import { useAppContext } from '../../common/hooks';
+import { useCallback, useRef } from 'react';
 
 import * as HookTypes from '../../common/types/hooks-related.types';
 
 import './styles.css';
 
 export default function RouteManager() {
-
     const [routeList, routeListActions] = useRouteList([]);
     const appOptions = useAppContext();
+    const routeListRef = useRef(null);
 
     /** @type {HookTypes.RouteActions} */
     const routeActions = {
         updateRouteNameAt: routeListActions.updateRouteNameAt,
         updateRoutesCheckStatusAt: routeListActions.updateRoutesCheckStatusAt,
-        updateRouteExpansionStatusAt:
-            routeListActions.updateRouteExpansionStatusAt,
+        updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
         removeRoutesAt: routeListActions.removeRoutesAt,
     };
 
@@ -38,60 +37,82 @@ export default function RouteManager() {
         updateStepDirectionAt: routeListActions.updateStepDirectionAt,
         updateStepsCheckStatusAt: routeListActions.updateStepsCheckStatusAt,
         removeStepsFromRouteAt: routeListActions.removeStepsFromRouteAt,
+        makeStepDirty: routeListActions.makeStepDirty,
     };
 
     /** @type {HookTypes.ControllerActions} */
     const controllerMenuActions = {
         checkAllRoutes: routeListActions.checkAllRoutes,
-        removeAllCheckedRoutesAndSteps: routeListActions.removeAllCheckedRoutesAndSteps
-     }
+        removeAllCheckedRoutesAndSteps:
+            routeListActions.removeAllCheckedRoutesAndSteps,
+    };
 
     /** @type {HookTypes.RouteListValidationActions} */
     const routeListValidationActions = {
-        updateRouteValidationStatusAt: routeListActions.updateRouteValidationStatusAt,
+        updateRouteValidationStatusAt:
+            routeListActions.updateRouteValidationStatusAt,
         updateStepValidationStatusAt: routeListActions.updateStepValidationStatusAt,
         updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
-    }
+    };
 
-    const validateRouteList = useRouteListValidation(routeList , routeListValidationActions);
+    /** @type {HookTypes.IsRouteListValidActions} */
+    const isRouteListValidActions = {
+        updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
+        makeStepDirty: routeListActions.makeStepDirty,
+    };
+
+    const validateRouteList = useRouteListValidation(
+        routeList,
+        routeListValidationActions
+    );
+
+    const { routeListRef: routeListRefForValidation, isRouteListValid } =
+        useIsRouteListValid(isRouteListValidActions);
 
     const saveAndContinue = useCallback(() => {
-        if(!validateRouteList()) return false;
-        else{
-            appOptions.setAppData({...appOptions.appData , routeList : routeList});
+        if (!isRouteListValid()) return false;
+        else {
+            appOptions.setAppData({
+                ...appOptions.appData,
+                routeList: routeList,
+            });
             return true;
         }
-    } , [appOptions , routeList]);
-
+    }, [appOptions, routeList]);
 
     return (
         <>
             <main className="container route-manager">
-                <ControllerMenu actions={controllerMenuActions}/>
+                <ControllerMenu actions={controllerMenuActions} />
                 <section className="route-manager__routes">
-                    <ul className="route-manager__route-list">
+                    <ul
+                        className="route-manager__route-list"
+                        ref={routeListRefForValidation}
+                    >
                         {routeList.map((route, routeIndex) => (
-                            <li
-                                className="route-manager__route-item"
-                                key={route.id}
-                            >
+                            <li className="route-manager__route-item" key={route.id}>
                                 <Route
                                     route={route}
                                     index={routeIndex}
                                     actions={routeActions}
                                 >
-                                    <ul>
-                                        {route.isExpanded &&
-                                            route.steps.map((step, stepIndex) => (
-                                                <li key={step.id}>
-                                                    <Step
-                                                        step={step}
-                                                        stepIndex={stepIndex}
-                                                        routeIndex={routeIndex}
-                                                        actions={stepListActions}
-                                                    />
-                                                </li>
-                                            ))}
+                                    <ul
+                                        style={{
+                                            display: route.isExpanded
+                                                ? 'block'
+                                                : 'none',
+                                        }}
+                                    >
+                                        {route.steps.map((step, stepIndex) => (
+                                            <li key={step.id}>
+                                                <Step
+                                                    step={step}
+                                                    stepIndex={stepIndex}
+                                                    routeIndex={routeIndex}
+                                                    actions={stepListActions}
+                                                />
+                                            </li>
+                                        ))}
                                     </ul>
                                     <AddButton
                                         add="step"
@@ -116,7 +137,10 @@ export default function RouteManager() {
                     />
                 </section>
             </main>
-            <NavigateBar text="To next phase" beforeContinuingAction={() => saveAndContinue()}/>
+            <NavigateBar
+                text="To next phase"
+                beforeContinuingAction={() => saveAndContinue()}
+            />
         </>
     );
 }

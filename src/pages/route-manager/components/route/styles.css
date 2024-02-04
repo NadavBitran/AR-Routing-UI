@@ -14,6 +14,8 @@
 
     font-size: 1.125rem;
     color: var(--clr-white);
+
+    position: relative;
 }
 
 .route__text > label {
@@ -56,11 +58,35 @@
 }
 
 .route-input--error {
-    border: 2px solid var(--clr-red);
+    outline: 2px solid var(--clr-red);
+    background-color: var(--clr-light-red) !important;
 }
 
-.route-input:invalid {
-    outline: 2px solid var(--clr-red);
+.route-input__error-message {
+    /* visibility: hidden; */
+    background-color: var(--clr-red);
+    color: var(--clr-white);
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 130%;
+    left: 83%;
+    margin-left: -60px;
+    font-size: 0.9rem;
+}
+
+/* error message arrow */
+.route-input__error-message::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--clr-red) transparent transparent transparent;
 }
 
 /* mobile-md */
@@ -86,6 +112,17 @@
 
     .route__menu-button-icon {
         width: 2.5rem;
+    }
+
+    .route-input__error-message {
+        left: 80%;
+        font-size: 1rem;
+    }
+
+    /* error message arrow */
+    .route-input__error-message::after {
+        margin-left: -9px;
+        border-width: 10px;
     }
 }
 
@@ -117,12 +154,23 @@
     .route__menu-button-icon {
         width: 3rem;
     }
+
+    .route-input__error-message {
+        padding-top: 0;
+        bottom: 110%;
+        left: 65%;
+        font-size: 1.2rem;
+    }
 }
 
 /* tablet-md */
 @media (min-width: 768px) {
     .route {
         min-height: 85px;
+    }
+
+    .route-input__error-message {
+        font-size: 1.25rem;
     }
 }
 
@@ -154,12 +202,21 @@
     .route__menu-button-icon {
         width: 3.5rem;
     }
+
+    .route-input__error-message {
+        left: 60%;
+        font-size: 1.5rem;
+    }
 }
 
 /* pc-sm */
 @media (min-width: 1280px) {
     .route__text > input {
         width: 25rem;
+    }
+
+    .route-input__error-message {
+        left: 58%;
     }
 }
 
@@ -172,5 +229,7 @@
 
 /* pc-lg */
 @media (min-width: 1680px) {
-    /* nothing... */
+    .route-input__error-message {
+        left: 56%;
+    }
 }

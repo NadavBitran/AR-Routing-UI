@@ -1,3 +1,6 @@
+import { useFlag } from '../../../../common/hooks';
+import useRouteValidityStatus from '../../hooks/useRouteValidityStatus';
+
 import Checkbox from '../../../../common/components/checkbox';
 
 import trashBinPNG from '../../assets/remove-selected-trash-bin.png';
@@ -27,15 +30,27 @@ import './styles.css';
  * @author Maor Bezalel
  */
 export default function Route({ route, index, actions, children }) {
+    const { flag: isNameInputDirty, enable: setNameInputToDirty } = useFlag();
+    const {
+        routeRef,
+        routeValidityStatus: { isRouteValid, errorMessage },
+    } = useRouteValidityStatus();
+
+    /**
+     * @description Takes the value of the name input upon change and calls an action to update the route's name.
+     * @param {string} newName - The new name of the route.
+     */
+    const handleNameInputChange = (newName) => {
+        actions.updateRouteNameAt(index, newName);
+        setNameInputToDirty();
+    };
+
     return (
         <>
-            <div className="route-manager__full-bar route">
+            <div className="route-manager__full-bar route" id={`route-${index + 1}`}>
                 <Checkbox
                     onButtonClick={() =>
-                        actions.updateRoutesCheckStatusAt(
-                            !route.isChecked,
-                            index
-                        )
+                        actions.updateRoutesCheckStatusAt(!route.isChecked, index)
                     }
                     isChecked={route.isChecked}
                 />
@@ -45,16 +60,29 @@ export default function Route({ route, index, actions, children }) {
                     </label>
                     <input
                         id={`route-${index + 1}-name`}
-                        name={`route #${index + 1} name`}
-                        className={`route-input ${route.isValid.isNameValid ? '' : 'route-input--error'}`}
+                        name={`route name`}
+                        className={`route-input ${isNameInputDirty && !isRouteValid ? 'route-input--error' : ''}`}
                         type="text"
                         placeholder="e.g. Restroom"
                         pattern="^[a-zA-Z\s]+(?:-[a-zA-Z\s]+)*$"
                         required
-                        onChange={(event) =>
-                            actions.updateRouteNameAt(index, event.target.value)
+                        onChange={({ target: { value } }) =>
+                            handleNameInputChange(value)
                         }
+                        onBlur={() => setNameInputToDirty()}
+                        ref={routeRef}
                     />
+                    <span
+                        className="route-input__error-message"
+                        style={{
+                            visibility:
+                                isNameInputDirty && !isRouteValid
+                                    ? 'visible'
+                                    : 'hidden',
+                        }}
+                    >
+                        {errorMessage}
+                    </span>
                 </span>
                 <menu className="route__menu">
                     <button

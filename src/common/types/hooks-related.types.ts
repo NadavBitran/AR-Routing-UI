@@ -5,7 +5,13 @@
  * @author Maor Bezalel
  */
 
-import { LatLngExpression, Direction, Route , RouteValidation , StepValidation } from './data.types';
+import {
+    LatLngExpression,
+    Direction,
+    Route,
+    RouteValidation,
+    StepValidation,
+} from './data.types';
 
 /**
  * @description the type of the function that sets state returned by React's `useState` hook.
@@ -23,10 +29,7 @@ export type UseMarkerLocationResults = {
     markerLocation: LatLngExpression;
 
     /** @description a function that updates the location of the marker. */
-    updateMarkerLocation: (
-        latlng: LatLngExpression,
-        updatedFrom: string
-    ) => void;
+    updateMarkerLocation: (latlng: LatLngExpression, updatedFrom: string) => void;
 
     /** @description a value which saves the user's latest marker update operation. */
     latestMarkerUpdateOperation: string;
@@ -130,10 +133,7 @@ export type RouteListActions = {
      * @param routeIndex - The index of the route.
      * @param stepIndices - The indices of the steps to be removed.
      */
-    removeStepsFromRouteAt: (
-        routeIndex: number,
-        ...stepIndices: number[]
-    ) => void;
+    removeStepsFromRouteAt: (routeIndex: number, ...stepIndices: number[]) => void;
 
     /** @description removes all checked routes and steps from the list. */
     removeAllCheckedRoutesAndSteps: () => void;
@@ -160,13 +160,10 @@ export type RouteListActions = {
      * @param index - The index of the route.
      * @param expansionStatus - The new expansion status.
      */
-    updateRouteExpansionStatusAt: (
-        index: number,
-        expansionStatus: boolean
-    ) => void;
+    updateRouteExpansionStatusAt: (index: number, expansionStatus: boolean) => void;
 
     /**
-     * 
+     *
      * @description updates the validation status of a route at the specified index
      * @param routeIndex      - The index of the route.
      * @param validationProp  - The property of the validation object to update.
@@ -217,9 +214,9 @@ export type RouteListActions = {
     ) => void;
 
     /**
-     * 
+     *
      * @description updates the validation status of a step in a route.
-     * @param routeIndex - The index of the route   
+     * @param routeIndex - The index of the route
      * @param stepIndex  - The index of the step
      * @param validationProp  - The property of the validation object to update.
      * @param validationStatus - The new validation status.
@@ -232,6 +229,13 @@ export type RouteListActions = {
         validationStatus: boolean,
         errorMessage: string | undefined
     ) => void;
+
+    /**
+     * @description indicates that a step has been modified and is now dirty.
+     * @param routeIndex - The index of the route.
+     * @param stepIndex - The index of the step.
+     */
+    makeStepDirty: (routeIndex: number, stepIndex: number) => void;
 
     /** @description checks all routes. */
     checkAllRoutes: () => void;
@@ -265,15 +269,18 @@ export type StepActions = Pick<
     | 'updateStepLengthAt'
     | 'updateStepsCheckStatusAt'
     | 'removeStepsFromRouteAt'
+    | 'makeStepDirty'
 >;
-
 
 export type ControllerActions = Pick<
     RouteListActions,
-    | 'checkAllRoutes'
-    | 'removeAllCheckedRoutesAndSteps'
+    'checkAllRoutes' | 'removeAllCheckedRoutesAndSteps'
 >;
 
+export type IsRouteListValidActions = {
+    updateRouteExpansionStatusAt: RouteActions['updateRouteExpansionStatusAt'];
+    makeStepDirty: StepActions['makeStepDirty'];
+};
 
 export type RouteListValidationActions = Pick<
     RouteListActions,

@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useFlag } from '../../../../common/hooks';
+import useStepValidityStatus from '../../hooks/useStepValidityStatus';
 
 import { validationHelpers } from '../../../../common/utils/validationHelpers';
 
@@ -27,27 +28,26 @@ import './styles.css';
  * @author Maor Bezalel
  */
 export default function Step({ step, stepIndex, routeIndex, actions }) {
-    const stepLengthInput = useRef(null);
+    const {
+        stepRef,
+        stepValidityStatus: { isStepValid, errorMessage },
+    } = useStepValidityStatus();
 
     /**
-     *
-     * @param {number} length - The length of the step.
-     */
-    const handleLengthUpdate = (length) => {
-        if (!validationHelpers.isInputPositiveNumber(length))
-            stepLengthInput.current.value = stepLengthInput.current.value.slice(
-                0,
-                -1
-            );
-        else actions.updateStepLengthAt(routeIndex, stepIndex, length);
-    };
-
-    /**
-     *
-     * @param {any} direction
+     * @description Takes the value of the direction input upon change and calls an action to update the step's direction.
+     * @param {DataTypes.Direction} direction - The new direction of the step.
      */
     const handleDirectionUpdate = (direction) => {
         actions.updateStepDirectionAt(routeIndex, stepIndex, direction);
+    };
+
+    /**
+     * @description Takes the value of the length input upon change and calls an action to update the step's length.
+     * @param {number} length - The new length of the step.
+     * @returns {void}
+     */
+    const handleLengthUpdate = (length) => {
+        actions.updateStepLengthAt(routeIndex, stepIndex, length);
     };
 
     return (
@@ -62,47 +62,57 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                 }
                 isChecked={step.isChecked}
             />
-            <p className="step__text">Step #{stepIndex}</p>
+            <p className="step__text">Step #{stepIndex + 1}</p>
             <div className="step__inputs">
                 <span className="step__inputs-group">
                     <label
                         className="step__inputs-group-label"
-                        htmlFor={`step-${stepIndex}-length`}
+                        htmlFor={`step-${stepIndex + 1}-length`}
                     >
                         {/* &nbsp; is a non-breaking space */}
                         Length:&nbsp;&nbsp;&nbsp;&nbsp;
                     </label>
                     <input
-                        id={`step-${stepIndex}-length`}
-                        className={`step__inputs-group-input ${step.isValid.isLengthValid ? '' : 'step__inputs-group-input--error'}`}
-                        name={`step #${stepIndex} length`}
-                        ref={stepLengthInput}
-                        defaultValue={step.length === 0 ? null : step.length}
-                        type="number"
+                        id={`step-${stepIndex + 1}-length`}
+                        className={`step__inputs-group-input ${step.isDirty && !isStepValid ? 'step__inputs-group-input--error' : ''}`}
+                        name={`step length`}
+                        type="text"
                         inputMode="numeric"
-                        pattern="[0-9]*"
+                        pattern="[1-9]+[0-9]*"
                         placeholder='e.g. "10"'
                         required
-                        onChange={(event) =>
-                            handleLengthUpdate(Number(event.target.value))
-                        }
+                        onChange={({ target: { value } }) => {
+                            handleLengthUpdate(Number(value) ?? 0);
+                        }}
+                        ref={stepRef}
+                        aria-invalid={!isStepValid}
                     />
+                    <span
+                        className="step__inputs-group-input__error-message"
+                        style={{
+                            visibility:
+                                step.isDirty && !isStepValid ? 'visible' : 'hidden',
+                        }}
+                    >
+                        {errorMessage}
+                    </span>
                 </span>
                 <span className="step__inputs-group">
                     <label
-                        htmlFor={`step-${stepIndex}-direction`}
+                        htmlFor={`step-${stepIndex + 1}-direction`}
                         className="step__inputs-group-label"
                     >
                         Direction:{' '}
                     </label>
                     <select
-                        id={`step-${stepIndex}-direction`}
+                        id={`step-${stepIndex + 1}-direction`}
                         className="step__inputs-group-input"
-                        name={`step #${stepIndex} direction`}
+                        name={`step direction`}
                         required
                         defaultValue={step.direction}
-                        onChange={(event) =>
-                            handleDirectionUpdate(event.target.value)
+                        onChange={({ target: { value } }) =>
+                            // @ts-ignore
+                            handleDirectionUpdate(value)
                         }
                     >
                         <option value="Forward">Forward</option>
@@ -118,9 +128,7 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
             </div>
             <button
                 className="step__remove-button"
-                onClick={() =>
-                    actions.removeStepsFromRouteAt(routeIndex, stepIndex)
-                }
+                onClick={() => actions.removeStepsFromRouteAt(routeIndex, stepIndex)}
             >
                 <img
                     className="step__remove-button-icon"
