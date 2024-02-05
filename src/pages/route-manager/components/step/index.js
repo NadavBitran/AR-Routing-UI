@@ -1,6 +1,7 @@
 import useStepValidityStatus from '../../hooks/useStepValidityStatus';
 
 import Checkbox from '../../../../common/components/checkbox';
+import InvalidInputMessage from '../invalid-input-message';
 
 import trashBinPNG from '../../assets/remove-selected-trash-bin.png';
 import * as DataTypes from '../../../../common/types/data.types';
@@ -88,15 +89,11 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         ref={stepRef}
                         aria-invalid={!isStepValid}
                     />
-                    <span
-                        className="step__inputs-group-input__error-message"
-                        style={{
-                            visibility:
-                                step.isDirty && !isStepValid ? 'visible' : 'hidden',
-                        }}
-                    >
-                        {errorMessage}
-                    </span>
+                    <InvalidInputMessage
+                        forWho="step"
+                        isVisible={step.isDirty && !isStepValid}
+                        message={errorMessage}
+                    />
                 </span>
                 <span className="step__inputs-group">
                     <label

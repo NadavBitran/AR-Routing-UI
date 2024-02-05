@@ -1,6 +1,7 @@
 import useRouteValidityStatus from '../../hooks/useRouteValidityStatus';
 
 import Checkbox from '../../../../common/components/checkbox';
+import InvalidInputMessage from '../invalid-input-message';
 
 import trashBinPNG from '../../assets/remove-selected-trash-bin.png';
 import expandArrowActiveSVG from '../../assets/expand-arrow-active.svg';
@@ -51,7 +52,7 @@ export default function Route({ route, index, actions, children }) {
                     }
                     isChecked={route.isChecked}
                 />
-                <span className="route__text">
+                <div className="route__text">
                     <label htmlFor={`route-${index + 1}-name`}>
                         Route #{index + 1}:{' '}
                     </label>
@@ -69,18 +70,12 @@ export default function Route({ route, index, actions, children }) {
                         onBlur={() => actions.markRouteAsDirtyAt(index)}
                         ref={routeRef}
                     />
-                    <span
-                        className="route-input__error-message"
-                        style={{
-                            visibility:
-                                route.isDirty && !isRouteValid
-                                    ? 'visible'
-                                    : 'hidden',
-                        }}
-                    >
-                        {errorMessage}
-                    </span>
-                </span>
+                    <InvalidInputMessage
+                        forWho="route"
+                        isVisible={route.isDirty && !isRouteValid}
+                        message={errorMessage}
+                    />
+                </div>
                 <menu className="route__menu">
                     <button
                         className="route__menu-button"

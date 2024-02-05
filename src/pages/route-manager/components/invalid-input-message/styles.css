@@ -1,0 +1,134 @@
+.route-invalid-input-message {
+    background-color: var(--clr-red);
+    color: var(--clr-white);
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 130%;
+    left: 83%;
+    margin-left: -60px;
+    font-size: 0.9rem;
+}
+
+/* route error message arrow */
+.route-invalid-input-message::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--clr-red) transparent transparent transparent;
+}
+
+.step-invalid-input-message {
+    background-color: var(--clr-red);
+    color: var(--clr-white);
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 83%;
+    margin-left: -60px;
+    font-size: 0.7rem;
+}
+
+/* step error message arrow */
+.step-invalid-input-message::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--clr-red) transparent transparent transparent;
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .route-invalid-input-message {
+        left: 80%;
+        font-size: 1rem;
+    }
+
+    /* route error message arrow */
+    .route-invalid-input-message::after {
+        margin-left: -9px;
+        border-width: 10px;
+    }
+
+    .step-invalid-input-message {
+        margin-left: -70px;
+        font-size: 0.75rem;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .route-invalid-input-message {
+        padding-top: 0;
+        bottom: 110%;
+        left: 65%;
+        font-size: 1.2rem;
+    }
+
+    .step-invalid-input-message {
+        margin-left: -110px;
+        font-size: 1rem;
+    }
+
+    /* step error message arrow */
+    .step-invalid-input-message::after {
+        margin-left: -8px;
+        border-width: 10px;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    .route-invalid-input-message {
+        font-size: 1.25rem;
+    }
+
+    .step-invalid-input-message {
+        margin-left: -120px;
+        font-size: 1rem;
+    }
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .route-invalid-input-message {
+        left: 60%;
+        font-size: 1.5rem;
+    }
+
+    .step-invalid-input-message {
+        margin-left: -130px;
+        font-size: 1.2rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+    .route-invalid-input-message {
+        left: 58%;
+    }
+
+    .step-invalid-input-message {
+        margin-left: -140px;
+    }
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+    .route-invalid-input-message {
+        left: 56%;
+    }
+}
