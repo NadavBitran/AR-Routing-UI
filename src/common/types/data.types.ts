@@ -36,8 +36,8 @@ export type Route = {
     /** @description the name of the route. given by the user. */
     name: string;
 
-    /** @description whether the route is currently valid. */
-    isValid: RouteValidation;
+    /** @description whether the route has been modified by the user. */
+    isDirty: boolean;
 
     /** @description whether the route is currently selected (via a checkbox). */
     isChecked: boolean;
@@ -60,14 +60,11 @@ export type Step = {
     /** @description the direction of the step. */
     direction: Direction;
 
-    /** @description whether the step is currently valid */
-    isValid: StepValidation;
+    /** @description whether the step has been modified by the user. */
+    isDirty: boolean;
 
     /** @description whether the step is currently selected (via a checkbox). */
     isChecked: boolean;
-
-    /** @description whether the step is currently dirty (has been modified). */
-    isDirty: boolean;
 };
 
 /** @description an object representing the validation status of specific route*/

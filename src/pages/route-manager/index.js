@@ -1,5 +1,4 @@
 import useRouteList from './hooks/useRouteList';
-import useRouteListValidation from './hooks/useRouteListValidation';
 import useIsRouteListValid from './hooks/useIsRouteListValid';
 
 import ControllerMenu from './components/controller-menu';
@@ -12,7 +11,7 @@ import NavigateBar from '../../common/components/navigate-bar/navigate-bar';
 
 import { ENDPOINT } from '../../common/constants/endpoints';
 import { useAppContext } from '../../common/hooks';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 
 import * as HookTypes from '../../common/types/hooks-related.types';
 
@@ -21,13 +20,14 @@ import './styles.css';
 export default function RouteManager() {
     const [routeList, routeListActions] = useRouteList([]);
     const appOptions = useAppContext();
-    const routeListRef = useRef(null);
 
     /** @type {HookTypes.RouteActions} */
     const routeActions = {
         updateRouteNameAt: routeListActions.updateRouteNameAt,
         updateRoutesCheckStatusAt: routeListActions.updateRoutesCheckStatusAt,
-        updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
+        updateRoutesExpansionStatusAt:
+            routeListActions.updateRoutesExpansionStatusAt,
+        markRouteAsDirtyAt: routeListActions.markRouteAsDirtyAt,
         removeRoutesAt: routeListActions.removeRoutesAt,
     };
 
@@ -36,35 +36,26 @@ export default function RouteManager() {
         updateStepLengthAt: routeListActions.updateStepLengthAt,
         updateStepDirectionAt: routeListActions.updateStepDirectionAt,
         updateStepsCheckStatusAt: routeListActions.updateStepsCheckStatusAt,
+        markStepAsDirtyAt: routeListActions.markStepAsDirtyAt,
         removeStepsFromRouteAt: routeListActions.removeStepsFromRouteAt,
-        makeStepDirty: routeListActions.makeStepDirty,
     };
 
-    /** @type {HookTypes.ControllerActions} */
+    /** @type {HookTypes.ControllerMenuActions} */
     const controllerMenuActions = {
-        checkAllRoutes: routeListActions.checkAllRoutes,
+        checkAll: routeListActions.checkAll,
+        uncheckAll: routeListActions.uncheckAll,
         removeAllCheckedRoutesAndSteps:
             routeListActions.removeAllCheckedRoutesAndSteps,
-    };
-
-    /** @type {HookTypes.RouteListValidationActions} */
-    const routeListValidationActions = {
-        updateRouteValidationStatusAt:
-            routeListActions.updateRouteValidationStatusAt,
-        updateStepValidationStatusAt: routeListActions.updateStepValidationStatusAt,
-        updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
+        areAllRoutesAndStepsChecked: routeListActions.areAllRoutesAndStepsChecked,
+        clear: routeListActions.clear,
     };
 
     /** @type {HookTypes.IsRouteListValidActions} */
     const isRouteListValidActions = {
-        updateRouteExpansionStatusAt: routeListActions.updateRouteExpansionStatusAt,
-        makeStepDirty: routeListActions.makeStepDirty,
+        updateRoutesExpansionStatusAt:
+            routeListActions.updateRoutesExpansionStatusAt,
+        markAllAsDirty: routeListActions.markAllAsDirty,
     };
-
-    const validateRouteList = useRouteListValidation(
-        routeList,
-        routeListValidationActions
-    );
 
     const { routeListRef: routeListRefForValidation, isRouteListValid } =
         useIsRouteListValid(isRouteListValidActions);
@@ -116,16 +107,12 @@ export default function RouteManager() {
                                     </ul>
                                     <AddButton
                                         add="step"
-                                        action={() => {
+                                        action={() =>
                                             routeListActions.addStepsToRouteAt(
                                                 routeIndex,
                                                 1
-                                            );
-                                            routeListActions.updateRouteExpansionStatusAt(
-                                                routeIndex,
-                                                true
-                                            );
-                                        }}
+                                            )
+                                        }
                                     />
                                 </Route>
                             </li>

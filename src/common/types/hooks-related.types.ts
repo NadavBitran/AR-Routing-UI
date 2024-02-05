@@ -78,7 +78,7 @@ export type ListActions<TItem> = {
      * @template TProp - The type of the property to update.
      * @param prop - The property to update.
      * @param newValue - The new value of the property.
-     * @param indices - The indices of the items to be removed.
+     * @param indices - The indices of the items to be updated.
      * @remarks This is relevant only for items in the list that are objects.
      */
     updatePropAt: <TProp extends keyof TItem>(
@@ -146,7 +146,7 @@ export type RouteListActions = {
     updateRouteNameAt: (index: number, name: string) => void;
 
     /**
-     * @description updates the check status of routes at the specified indices.
+     * @description updates the check status of all the routes at the specified indices.
      * @param checkStatus - The new check status.
      * @param routeIndices - The indices of the routes to be updated.
      */
@@ -156,26 +156,20 @@ export type RouteListActions = {
     ) => void;
 
     /**
-     * @description updates the expansion status of a route at the specified index.
-     * @param index - The index of the route.
+     * @description updates the expansion status of all the routes at the specified indices.
      * @param expansionStatus - The new expansion status.
+     * @param routeIndices - The indices of the routes to be updated.
      */
-    updateRouteExpansionStatusAt: (index: number, expansionStatus: boolean) => void;
+    updateRoutesExpansionStatusAt: (
+        expansionStatus: boolean,
+        ...routeIndices: number[]
+    ) => void;
 
     /**
-     *
-     * @description updates the validation status of a route at the specified index
-     * @param routeIndex      - The index of the route.
-     * @param validationProp  - The property of the validation object to update.
-     * @param validationStatus- The new validation status.
-     * @param errorMessage    - The new error message.
+     * @description set `true` the dirtyness status of a route at the specified index.
+     * @param routeIndex - The index of the route.
      */
-    updateRouteValidationStatusAt: (
-        routeIndex: number,
-        validationProp: keyof RouteValidation,
-        validationStatus: boolean,
-        errorMessage: string | undefined
-    ) => void;
+    markRouteAsDirtyAt: (routeIndex: number) => void;
 
     /**
      * @description updates the direction of a step in a route.
@@ -214,34 +208,26 @@ export type RouteListActions = {
     ) => void;
 
     /**
-     *
-     * @description updates the validation status of a step in a route.
-     * @param routeIndex - The index of the route
-     * @param stepIndex  - The index of the step
-     * @param validationProp  - The property of the validation object to update.
-     * @param validationStatus - The new validation status.
-     * @param errorMessage - The new error message.
-     */
-    updateStepValidationStatusAt: (
-        routeIndex: number,
-        stepIndex: number,
-        validationProp: keyof StepValidation,
-        validationStatus: boolean,
-        errorMessage: string | undefined
-    ) => void;
-
-    /**
-     * @description indicates that a step has been modified and is now dirty.
+     * @description set `true` the dirtyness status of a step in a route.
      * @param routeIndex - The index of the route.
      * @param stepIndex - The index of the step.
      */
-    makeStepDirty: (routeIndex: number, stepIndex: number) => void;
+    markStepAsDirtyAt: (routeIndex: number, stepIndex: number) => void;
 
-    /** @description checks all routes. */
-    checkAllRoutes: () => void;
+    /**
+     * @description update the dirty status of all the steps in the specified routes indices.
+     * @param routeIndices - The indices of the routes to be updated.
+     */
+    markAllAsDirty: () => void;
 
-    /** @description unchecks all routes. */
-    uncheckAllRoutes: () => void;
+    /** @description checks all routes and steps in the list. */
+    checkAll: () => void;
+
+    /** @description unchecks all routes and steps in the list. */
+    uncheckAll: () => void;
+
+    /** @description checks whether all routes and steps in the list are currently checked. */
+    areAllRoutesAndStepsChecked: () => boolean;
 
     /** @description Removes all routes and steps from the list. */
     clear: () => void;
@@ -249,42 +235,48 @@ export type RouteListActions = {
 
 /**
  * @description Represents a set of actions related to a single route that  will be given to the `Route` component.
- * @see {@link Route}
+ * @see [Route](../../pages/route-manager/components/route/index.js)
  */
 export type RouteActions = Pick<
     RouteListActions,
     | 'updateRouteNameAt'
-    | 'updateRouteExpansionStatusAt'
+    | 'updateRoutesExpansionStatusAt'
     | 'updateRoutesCheckStatusAt'
+    | 'markRouteAsDirtyAt'
     | 'removeRoutesAt'
 >;
 
 /**
  * @description Represents a set of actions related to a single step that will be given to the `Step` component.
- * @see {@link Step}
+ * @see [Step](../../pages/route-manager/components/step/index.js)
  */
 export type StepActions = Pick<
     RouteListActions,
     | 'updateStepDirectionAt'
     | 'updateStepLengthAt'
     | 'updateStepsCheckStatusAt'
+    | 'markStepAsDirtyAt'
     | 'removeStepsFromRouteAt'
-    | 'makeStepDirty'
 >;
 
-export type ControllerActions = Pick<
+/**
+ * @description Represents a set of actions related to routes and steps in the route list that will be given to the `ControllerMenu` component.
+ * @see [ControlerMenu](../../pages/route-manager/components/controller-menu/index.js)
+ */
+export type ControllerMenuActions = Pick<
     RouteListActions,
-    'checkAllRoutes' | 'removeAllCheckedRoutesAndSteps'
+    | 'checkAll'
+    | 'uncheckAll'
+    | 'removeAllCheckedRoutesAndSteps'
+    | 'areAllRoutesAndStepsChecked'
+    | 'clear'
 >;
 
-export type IsRouteListValidActions = {
-    updateRouteExpansionStatusAt: RouteActions['updateRouteExpansionStatusAt'];
-    makeStepDirty: StepActions['makeStepDirty'];
-};
-
-export type RouteListValidationActions = Pick<
+/**
+ * @description Represents a set of actions that can be performed on a list of route validations.
+ * @see [useIsRouteListValid](../../pages/route-manager/hooks/useIsRouteListValid.js)
+ */
+export type IsRouteListValidActions = Pick<
     RouteListActions,
-    | 'updateRouteValidationStatusAt'
-    | 'updateStepValidationStatusAt'
-    | 'updateRouteExpansionStatusAt'
+    'updateRoutesExpansionStatusAt' | 'markAllAsDirty'
 >;

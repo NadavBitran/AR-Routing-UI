@@ -1,4 +1,3 @@
-import { useFlag } from '../../../../common/hooks';
 import useRouteValidityStatus from '../../hooks/useRouteValidityStatus';
 
 import Checkbox from '../../../../common/components/checkbox';
@@ -30,7 +29,6 @@ import './styles.css';
  * @author Maor Bezalel
  */
 export default function Route({ route, index, actions, children }) {
-    const { flag: isNameInputDirty, enable: setNameInputToDirty } = useFlag();
     const {
         routeRef,
         routeValidityStatus: { isRouteValid, errorMessage },
@@ -42,7 +40,6 @@ export default function Route({ route, index, actions, children }) {
      */
     const handleNameInputChange = (newName) => {
         actions.updateRouteNameAt(index, newName);
-        setNameInputToDirty();
     };
 
     return (
@@ -61,7 +58,7 @@ export default function Route({ route, index, actions, children }) {
                     <input
                         id={`route-${index + 1}-name`}
                         name={`route name`}
-                        className={`route-input ${isNameInputDirty && !isRouteValid ? 'route-input--error' : ''}`}
+                        className={`route-input ${route.isDirty && !isRouteValid ? 'route-input--error' : ''}`}
                         type="text"
                         placeholder="e.g. Restroom"
                         pattern="^[a-zA-Z\s]+(?:-[a-zA-Z\s]+)*$"
@@ -69,14 +66,14 @@ export default function Route({ route, index, actions, children }) {
                         onChange={({ target: { value } }) =>
                             handleNameInputChange(value)
                         }
-                        onBlur={() => setNameInputToDirty()}
+                        onBlur={() => actions.markRouteAsDirtyAt(index)}
                         ref={routeRef}
                     />
                     <span
                         className="route-input__error-message"
                         style={{
                             visibility:
-                                isNameInputDirty && !isRouteValid
+                                route.isDirty && !isRouteValid
                                     ? 'visible'
                                     : 'hidden',
                         }}
@@ -99,9 +96,9 @@ export default function Route({ route, index, actions, children }) {
                         className="route__menu-button"
                         disabled={route.steps.length === 0}
                         onClick={() =>
-                            actions.updateRouteExpansionStatusAt(
-                                index,
-                                !route.isExpanded
+                            actions.updateRoutesExpansionStatusAt(
+                                !route.isExpanded,
+                                index
                             )
                         }
                     >

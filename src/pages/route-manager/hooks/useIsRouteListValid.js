@@ -13,8 +13,8 @@ import * as HookTypes from '../../../common/types/hooks-related.types';
  * @returns {{routeListRef: MutableRefHTMLUListElement, isRouteListValid: () => boolean}} An object containing a reference to the route list and a function for checking if all the routes and steps in the route list contain valid input data.
  */
 export default function useIsRouteListValid({
-    updateRouteExpansionStatusAt,
-    makeStepDirty,
+    updateRoutesExpansionStatusAt,
+    markAllAsDirty: markAllAsDirty,
 }) {
     /**@type {MutableRefHTMLUListElement} */
     const routeListRef = useRef();
@@ -26,43 +26,61 @@ export default function useIsRouteListValid({
      */
     const isRouteListValid = () => {
         let isRouteListValid = true;
-        const routeListElement = routeListRef.current;
-        /** @type {NodeListOf<HTMLInputElement>} */
-        const routeListRoutesNameInputElements = routeListElement.querySelectorAll(
-            'input[name="route name"]'
-        );
+        const indicesOfRoutesWithInvalidSteps = [];
 
-        routeListRoutesNameInputElements.forEach(
-            (routeNameInputElement, routeIndex) => {
-                /** @type {NodeListOf<HTMLInputElement>} */
-                const routeListStepsLengthInputElements =
-                    routeListElement.querySelectorAll(
-                        `#route-${routeIndex + 1} ~ ul input[name="step length"]`
-                    );
-                const isRouteValid = routeNameInputElement.validity.valid;
-                let hasAllStepsWithValidLength = true;
+        const routesNameInputElements = getAllRoutesNameInputElements();
+        routesNameInputElements.forEach((routeNameInputElement, index) => {
+            const stepsLengthInputElements =
+                getAllStepsLengthInputElementsOfRouteAt(index);
+            const isRouteValid = routeNameInputElement.validity.valid;
+            let hasAllStepsWithValidLength = true;
 
-                routeListStepsLengthInputElements.forEach(
-                    (stepLengthInputElement, stepIndex) => {
-                        hasAllStepsWithValidLength &&=
-                            stepLengthInputElement.validity.valid;
-                        makeStepDirty(routeIndex, stepIndex);
-                    }
-                );
+            stepsLengthInputElements.forEach((stepLengthInputElement, stepIndex) => {
+                const isStepValid =
+                    stepLengthInputElement.validity.valid &&
+                    Number(stepLengthInputElement.value) <= 10_000;
+                hasAllStepsWithValidLength &&= isStepValid;
+            });
 
-                if (!hasAllStepsWithValidLength) {
-                    updateRouteExpansionStatusAt(routeIndex, true);
-                }
-
-                // Trigger input dirtyness to make it possible to show the error message
-                routeNameInputElement.focus();
-                routeNameInputElement.blur();
-
-                isRouteListValid &&= isRouteValid && hasAllStepsWithValidLength;
+            if (!hasAllStepsWithValidLength) {
+                indicesOfRoutesWithInvalidSteps.push(index);
             }
-        );
+
+            isRouteListValid &&= isRouteValid && hasAllStepsWithValidLength;
+        });
+
+        if (!isRouteListValid) {
+            if (indicesOfRoutesWithInvalidSteps.length > 0) {
+                updateRoutesExpansionStatusAt(
+                    true,
+                    ...indicesOfRoutesWithInvalidSteps
+                );
+            }
+            markAllAsDirty();
+        }
 
         return isRouteListValid;
+    };
+
+    /**
+     *
+     * @returns {NodeListOf<HTMLInputElement>}
+     */
+    const getAllRoutesNameInputElements = () => {
+        const routeListElement = routeListRef.current;
+        return routeListElement.querySelectorAll('input[name="route name"]');
+    };
+
+    /**
+     *
+     * @param {number} routeIndex - The index of the route.
+     * @returns {NodeListOf<HTMLInputElement>}
+     */
+    const getAllStepsLengthInputElementsOfRouteAt = (routeIndex) => {
+        const routeListElement = routeListRef.current;
+        return routeListElement.querySelectorAll(
+            `#route-${routeIndex + 1} ~ ul input[name="step length"]`
+        );
     };
 
     return {

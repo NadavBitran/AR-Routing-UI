@@ -1,4 +1,4 @@
-import useList from '../../../common/hooks/useList';
+import { useList, useStatelessCounter } from '../../../common/hooks';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,6 +15,8 @@ import * as DataTypes from '../../../common/types/data.types';
  */
 export default function useRouteList(initialRouteList) {
     const [routeList, routeListActions] = useList(initialRouteList);
+    const routesAndSteps = useStatelessCounter(0);
+    const checkedRoutesAndSteps = useStatelessCounter(0);
 
     /** @type {HookTypes.RouteListActions}*/
     const actions = {
@@ -27,11 +29,12 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
-                isValid: { isNameValid: true, errorMessage: undefined },
+                isDirty: false,
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
             }));
+            routesAndSteps.countUp(amount);
             routeListActions.add(...routes);
         },
         addRoutesAt: (index, amount) => {
@@ -39,61 +42,56 @@ export default function useRouteList(initialRouteList) {
             const routes = Array.from({ length: amount }, () => ({
                 id: uuidv4(),
                 name: '',
-                isValid: { isNameValid: true, errorMessage: undefined },
+                isDirty: false,
                 isChecked: false,
                 isExpanded: false,
                 steps: [],
             }));
+            routesAndSteps.countUp(amount);
             routeListActions.addAt(index, ...routes);
         },
         addStepsToRouteAt: (routeIndex, amount) => {
-            /** @type {DataTypes.Route} */
-            const route = routeList[routeIndex];
-            /** @type {DataTypes.Step[]} */
-            const steps = Array.from({ length: amount }, () => ({
-                id: uuidv4(),
-                length: 0,
-                direction: 'Forward',
-                isValid: {
-                    isLengthValid: true,
-                    isDirectionValid: true,
-                    errorMessage: undefined,
-                },
-                isChecked: false,
-                isDirty: false,
-            }));
-            routeListActions.updatePropAt(
-                'steps',
-                [...route.steps, ...steps],
-                routeIndex
+            const newRouteList = [...routeList];
+            /**@type {DataTypes.Step[]} */ const steps = Array.from(
+                { length: amount },
+                () => ({
+                    id: uuidv4(),
+                    length: 0,
+                    direction: 'Forward',
+                    isChecked: false,
+                    isDirty: false,
+                })
             );
+            newRouteList[routeIndex].steps.push(...steps);
+            newRouteList[routeIndex].isExpanded = true; // route automatically expands when adding steps
+            routesAndSteps.countUp(amount);
+            routeListActions.set(newRouteList);
         },
 
         updateRouteNameAt: (routeIndex, name) => {
-            routeListActions.updatePropAt('name', name, routeIndex);
+            const newRouteList = [...routeList];
+            newRouteList[routeIndex].name = name;
+            newRouteList[routeIndex].isDirty = true;
+            routeListActions.set(newRouteList);
         },
         updateRoutesCheckStatusAt: (checkStatus, ...routeIndices) => {
+            if (checkStatus) checkedRoutesAndSteps.countUp(routeIndices.length);
+            else checkedRoutesAndSteps.countDown(routeIndices.length);
             routeListActions.updatePropAt('isChecked', checkStatus, ...routeIndices);
         },
-        updateRouteExpansionStatusAt: (routeIndex, expansionStatus) => {
-            routeListActions.updatePropAt('isExpanded', expansionStatus, routeIndex);
-        },
-        updateRouteValidationStatusAt: (
-            routeIndex,
-            validationProp,
-            validationStatus,
-            errorMessage
-        ) => {
+        updateRoutesExpansionStatusAt: (expansionStatus, ...routeIndices) => {
             routeListActions.updatePropAt(
-                'isValid',
-                {
-                    ...routeList[routeIndex].isValid,
-                    [validationProp]: validationStatus,
-                    errorMessage: errorMessage,
-                },
-                routeIndex
+                'isExpanded',
+                expansionStatus,
+                ...routeIndices
             );
         },
+        markRouteAsDirtyAt: (routeIndex) => {
+            if (!routeList[routeIndex].isDirty) {
+                routeListActions.updatePropAt('isDirty', true, routeIndex);
+            }
+        },
+
         updateStepDirectionAt: (routeIndex, stepIndex, direction) => {
             const newRouteList = [...routeList];
             newRouteList[routeIndex].steps[stepIndex].direction = direction;
@@ -118,33 +116,29 @@ export default function useRouteList(initialRouteList) {
             stepIndices.forEach((stepIndex) => {
                 newRouteList[routeIndex].steps[stepIndex].isChecked = checkStatus;
             });
+            if (checkStatus) checkedRoutesAndSteps.countUp(stepIndices.length);
+            else checkedRoutesAndSteps.countDown(stepIndices.length);
             routeListActions.set(newRouteList);
         },
-        updateStepValidationStatusAt: (
-            routeIndex,
-            stepIndex,
-            validationProp,
-            validationStatus,
-            errorMessage
-        ) => {
-            const newRouteList = [...routeList];
-            newRouteList[routeIndex].steps[stepIndex].isValid = {
-                ...routeList[routeIndex].steps[stepIndex].isValid,
-                [validationProp]: validationStatus,
-                errorMessage: errorMessage,
-            };
-        },
-        makeStepDirty: (routeIndex, stepIndex) => {
-            const newRouteList = [...routeList];
-            newRouteList[routeIndex].steps[stepIndex].isDirty = true;
-            routeListActions.updatePropAt(
-                'steps',
-                newRouteList[routeIndex].steps,
-                routeIndex
-            );
+        markStepAsDirtyAt: (routeIndex, stepIndex) => {
+            if (!routeList[routeIndex].steps[stepIndex].isDirty) {
+                const newRouteList = [...routeList];
+                newRouteList[routeIndex].steps[stepIndex].isDirty = true;
+                routeListActions.set(newRouteList);
+            }
         },
 
-        checkAllRoutes: () => {
+        markAllAsDirty: () => {
+            const newRouteList = [...routeList];
+            newRouteList.forEach((route) => {
+                route.isDirty = true;
+                route.steps.forEach((step) => {
+                    step.isDirty = true;
+                });
+            });
+            routeListActions.set(newRouteList);
+        },
+        checkAll: () => {
             const newRouteList = [...routeList];
             newRouteList.forEach((route) => {
                 route.isChecked = true;
@@ -153,9 +147,10 @@ export default function useRouteList(initialRouteList) {
                     isChecked: true,
                 })); // checking a route checks all of its steps
             });
+            checkedRoutesAndSteps.setCountTo(routesAndSteps.count);
             routeListActions.set(newRouteList);
         },
-        uncheckAllRoutes: () => {
+        uncheckAll: () => {
             const newRouteList = [...routeList];
             newRouteList.forEach((route) => {
                 route.isChecked = false;
@@ -164,10 +159,15 @@ export default function useRouteList(initialRouteList) {
                     isChecked: false,
                 })); // unchecking a route unchecks all of its steps
             });
+            checkedRoutesAndSteps.setCountTo(0);
             routeListActions.set(newRouteList);
         },
 
         removeRoutesAt: (...routeIndices) => {
+            routesAndSteps.countDown(countAllRoutesAndTheirStepsAt(...routeIndices));
+            checkedRoutesAndSteps.countDown(
+                countAllTheCheckedRoutesAndStepsAt(...routeIndices)
+            );
             routeListActions.removeAt(...routeIndices);
         },
         removeStepsFromRouteAt: (routeIndex, ...stepIndices) => {
@@ -175,21 +175,72 @@ export default function useRouteList(initialRouteList) {
             stepIndices.forEach((stepIndex) => {
                 newRouteList[routeIndex].steps.splice(stepIndex, 1);
             });
+            routesAndSteps.countDown(stepIndices.length);
+            checkedRoutesAndSteps.countDown(
+                countAllCheckedStepsAt(routeIndex, ...stepIndices)
+            );
             routeListActions.set(newRouteList);
         },
         removeAllCheckedRoutesAndSteps: () => {
+            if (checkedRoutesAndSteps.count === 0) return;
             const uncheckedRoutes = routeList.filter((route) => !route.isChecked);
-            const uncheckedRoutesWithUncheckedSteps = uncheckedRoutes.map(
-                (route) => ({
-                    ...route,
-                    steps: route.steps.filter((step) => !step.isChecked),
-                })
+            const uncheckedStepsOfUncheckedRoutes = uncheckedRoutes.map((route) => ({
+                ...route,
+                steps: route.steps.filter((step) => !step.isChecked),
+            }));
+            routesAndSteps.countDown(
+                routesAndSteps.count - checkedRoutesAndSteps.count
             );
-            routeListActions.set(uncheckedRoutesWithUncheckedSteps);
+            checkedRoutesAndSteps.setCountTo(0);
+            routeListActions.set(uncheckedStepsOfUncheckedRoutes);
         },
         clear: () => {
+            if (routesAndSteps.count === 0) return;
+            routesAndSteps.setCountTo(0);
+            checkedRoutesAndSteps.setCountTo(0);
             routeListActions.clear();
         },
+
+        areAllRoutesAndStepsChecked: () => {
+            return routesAndSteps.count === checkedRoutesAndSteps.count;
+        },
+    };
+
+    /**
+     * @description Counts the total number of steps in the specified routes, including the routes themselves.
+     * @param {...number} routeIndices - The indices of the routes to count.
+     * @returns {number} - The total number of steps in the specified routes.
+     */
+    const countAllRoutesAndTheirStepsAt = (...routeIndices) => {
+        return routeIndices.reduce((count, routeIndex) => {
+            return count + routeList[routeIndex].steps.length + 1;
+        }, 0);
+    };
+
+    /**
+     * @description Counts all the checked routes and steps at the specified route indices.
+     * @param {...number} routeIndices - The indices of the routes to count.
+     * @returns {number} - The total count of checked steps.
+     */
+    const countAllTheCheckedRoutesAndStepsAt = (...routeIndices) => {
+        return routeIndices.reduce((count, routeIndex) => {
+            return (
+                count +
+                routeList[routeIndex].steps.filter((step) => step.isChecked).length
+            );
+        }, 0);
+    };
+
+    /**
+     * @description Counts the number of checked steps at the specified indices in a route.
+     * @param {number} routeIndex - The index of the route in the route list.
+     * @param {...number} stepIndices - The indices of the steps to count.
+     * @returns {number} - The number of checked steps.
+     */
+    const countAllCheckedStepsAt = (routeIndex, ...stepIndices) => {
+        return stepIndices.filter(
+            (stepIndex) => routeList[routeIndex].steps[stepIndex]?.isChecked
+        ).length;
     };
 
     return [routeList, actions];

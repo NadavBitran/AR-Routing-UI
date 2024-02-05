@@ -1,7 +1,4 @@
-import { useFlag } from '../../../../common/hooks';
 import useStepValidityStatus from '../../hooks/useStepValidityStatus';
-
-import { validationHelpers } from '../../../../common/utils/validationHelpers';
 
 import Checkbox from '../../../../common/components/checkbox';
 
@@ -78,12 +75,16 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         name={`step length`}
                         type="text"
                         inputMode="numeric"
-                        pattern="[1-9]+[0-9]*"
                         placeholder='e.g. "10"'
+                        pattern="([1-9]+.?[0-9]*)|(0.[0-9]*[1-9][0-9]*)" // positive float number
+                        maxLength={5}
                         required
                         onChange={({ target: { value } }) => {
                             handleLengthUpdate(Number(value) ?? 0);
                         }}
+                        onBlur={() =>
+                            actions.markStepAsDirtyAt(routeIndex, stepIndex)
+                        }
                         ref={stepRef}
                         aria-invalid={!isStepValid}
                     />

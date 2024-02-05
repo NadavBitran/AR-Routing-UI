@@ -27,6 +27,7 @@ export default function useStepValidityStatus() {
         const isLengthInputEmpty = stepRef.current.validity.valueMissing;
         const isLengthInputNotPositiveNumber =
             stepRef.current.validity.patternMismatch;
+        const isLengthInputAboveMax = Number(stepRef.current.value) > 10_000;
 
         /** @type {StepValidityStatus} */
         let stepValidityStatus;
@@ -40,6 +41,11 @@ export default function useStepValidityStatus() {
             stepValidityStatus = {
                 isStepValid: false,
                 errorMessage: 'Positive Number Only',
+            };
+        } else if (isLengthInputAboveMax) {
+            stepValidityStatus = {
+                isStepValid: false,
+                errorMessage: 'Max 10,000',
             };
         } else {
             stepValidityStatus = {
