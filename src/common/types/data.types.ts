@@ -150,8 +150,18 @@ export type TooltipCoordinates = {
 
 export type AppData = {
     /** @description the saved route list of the user */
-    routeList: Route[];
+    routeList: (Pick<Route, 'name'> & {
+        steps: Pick<Route['steps'][0], 'length' | 'direction'>[];
+    })[];
 
     /** @description the saved latlng of the user */
     latlng: LatLngExpression;
+};
+
+export type AppDataAndItsJson = {
+    data: AppData;
+    json: string;
+    set: (newAppData: AppData) => void;
+    setMapLatLngExpression: (newLatLng: LatLngExpression) => void;
+    setRouteListOfAppData: (newRouteList: Route[]) => void;
 };

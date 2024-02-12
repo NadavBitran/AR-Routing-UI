@@ -10,23 +10,26 @@ import Step from './components/step';
 import NavigateBar from '../../common/components/navigate-bar/navigate-bar';
 
 import { ENDPOINT } from '../../common/constants/endpoints';
-import { useAppContext } from '../../common/hooks';
-import { useCallback } from 'react';
 
+import * as DataTypes from '../../common/types/data.types';
 import * as HookTypes from '../../common/types/hooks-related.types';
 
 import './styles.css';
 
-export default function RouteManager() {
+/**
+ * Represents the RouteManager component.
+ * @param {object} props
+ * @param {DataTypes.AppDataAndItsJson['setRouteListOfAppData']} props.saveRouteList
+ * @returns {React.JSX.Element} The RouteManager component.
+ */
+export default function RouteManager({ saveRouteList }) {
     const [routeList, routeListActions] = useRouteList([]);
-    const appOptions = useAppContext();
 
     /** @type {HookTypes.RouteActions} */
     const routeActions = {
         updateRouteNameAt: routeListActions.updateRouteNameAt,
         updateRoutesCheckStatusAt: routeListActions.updateRoutesCheckStatusAt,
-        updateRoutesExpansionStatusAt:
-            routeListActions.updateRoutesExpansionStatusAt,
+        updateRoutesExpansionStatusAt: routeListActions.updateRoutesExpansionStatusAt,
         markRouteAsDirtyAt: routeListActions.markRouteAsDirtyAt,
         removeRoutesAt: routeListActions.removeRoutesAt,
     };
@@ -44,54 +47,40 @@ export default function RouteManager() {
     const controllerMenuActions = {
         checkAll: routeListActions.checkAll,
         uncheckAll: routeListActions.uncheckAll,
-        removeAllCheckedRoutesAndSteps:
-            routeListActions.removeAllCheckedRoutesAndSteps,
+        removeAllCheckedRoutesAndSteps: routeListActions.removeAllCheckedRoutesAndSteps,
         areAllRoutesAndStepsChecked: routeListActions.areAllRoutesAndStepsChecked,
         clear: routeListActions.clear,
     };
 
     /** @type {HookTypes.IsRouteListValidActions} */
     const isRouteListValidActions = {
-        updateRoutesExpansionStatusAt:
-            routeListActions.updateRoutesExpansionStatusAt,
+        updateRoutesExpansionStatusAt: routeListActions.updateRoutesExpansionStatusAt,
         markAllAsDirty: routeListActions.markAllAsDirty,
     };
 
     const { routeListRef: routeListRefForValidation, isRouteListValid } =
         useIsRouteListValid(isRouteListValidActions);
 
-    const saveAndContinue = useCallback(() => {
-        if (!isRouteListValid()) return false;
-        else {
-            appOptions.setAppData({
-                ...appOptions.appData,
-                routeList: routeList,
-            });
-            return true;
+    const saveAndContinue = () => {
+        if (!isRouteListValid()) {
+            return false;
         }
-    }, [appOptions, routeList]);
+        saveRouteList(routeList);
+        return true;
+    };
 
     return (
         <>
             <main className="container route-manager">
                 <ControllerMenu actions={controllerMenuActions} />
                 <section className="route-manager__routes">
-                    <ul
-                        className="route-manager__route-list"
-                        ref={routeListRefForValidation}
-                    >
+                    <ul className="route-manager__route-list" ref={routeListRefForValidation}>
                         {routeList.map((route, routeIndex) => (
                             <li className="route-manager__route-item" key={route.id}>
-                                <Route
-                                    route={route}
-                                    index={routeIndex}
-                                    actions={routeActions}
-                                >
+                                <Route route={route} index={routeIndex} actions={routeActions}>
                                     <ul
                                         style={{
-                                            display: route.isExpanded
-                                                ? 'block'
-                                                : 'none',
+                                            display: route.isExpanded ? 'block' : 'none',
                                         }}
                                     >
                                         {route.steps.map((step, stepIndex) => (
@@ -108,25 +97,20 @@ export default function RouteManager() {
                                     <AddButton
                                         add="step"
                                         action={() =>
-                                            routeListActions.addStepsToRouteAt(
-                                                routeIndex,
-                                                1
-                                            )
+                                            routeListActions.addStepsToRouteAt(routeIndex, 1)
                                         }
                                     />
                                 </Route>
                             </li>
                         ))}
                     </ul>
-                    <AddButton
-                        add="route"
-                        action={() => routeListActions.addRoutes(1)}
-                    />
+                    <AddButton add="route" action={() => routeListActions.addRoutes(1)} />
                 </section>
             </main>
             <NavigateBar
                 text="To next phase"
                 beforeContinuingAction={() => saveAndContinue()}
+                toPath={ENDPOINT.JSON_RESULT}
             />
         </>
     );

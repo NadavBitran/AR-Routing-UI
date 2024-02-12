@@ -1,26 +1,35 @@
-import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from './layouts/header';
 
-//import PopupWindow from './Components/PopupWindow';
-//import RouteManager from './Components/RouteManager';
-
 import RouteManager from './pages/route-manager';
 import Map from './pages/map';
+import JsonResult from './pages/json-result';
 
-import { AppContextProvider } from './common/contexts/AppContext';
+import { useAppDataJson } from './common/hooks';
+import { ENDPOINT } from './common/constants/endpoints';
 
 export default function App() {
+    const app = useAppDataJson({
+        routeList: [],
+        latlng: { lat: 0, lng: 0 },
+    });
+
     return (
-        <AppContextProvider>
-            <BrowserRouter>
-                <Header title={''} />
-                <Routes>
-                    <Route path="/"              element={<Navigate to="/map" replace />}/>
-                    <Route path="/map"           element={<Map />} />
-                    <Route path="/route-manager" element={<RouteManager />} />
-                </Routes>
-            </BrowserRouter>
-        </AppContextProvider>
+        <BrowserRouter>
+            <Header title={''} />
+            <Routes>
+                <Route path="/" element={<Navigate to={ENDPOINT.MAP} replace />} />
+                <Route
+                    path={ENDPOINT.MAP}
+                    element={<Map saveMarkerLocation={app.setMapLatLngExpression} />}
+                />
+                <Route
+                    path={ENDPOINT.ROUTE_MANAGER}
+                    element={<RouteManager saveRouteList={app.setRouteListOfAppData} />}
+                />
+                <Route path={ENDPOINT.JSON_RESULT} element={<JsonResult json={app.json} />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
