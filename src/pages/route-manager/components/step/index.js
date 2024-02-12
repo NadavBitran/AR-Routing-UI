@@ -52,11 +52,7 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
         <div className="route-manager__half-bar step">
             <Checkbox
                 onButtonClick={() =>
-                    actions.updateStepsCheckStatusAt(
-                        !step.isChecked,
-                        routeIndex,
-                        stepIndex
-                    )
+                    actions.updateStepsCheckStatusAt(!step.isChecked, routeIndex, stepIndex)
                 }
                 isChecked={step.isChecked}
             />
@@ -77,15 +73,13 @@ export default function Step({ step, stepIndex, routeIndex, actions }) {
                         type="text"
                         inputMode="numeric"
                         placeholder='e.g. "10"'
-                        pattern="([1-9]+.?[0-9]*)|(0.[0-9]*[1-9][0-9]*)" // positive float number
+                        pattern="([1-9]+[0-9]*.?[0-9]*)|(0.[0-9]*[1-9][0-9]*)" // positive float number
                         maxLength={5}
                         required
                         onChange={({ target: { value } }) => {
                             handleLengthUpdate(Number(value) ?? 0);
                         }}
-                        onBlur={() =>
-                            actions.markStepAsDirtyAt(routeIndex, stepIndex)
-                        }
+                        onBlur={() => actions.markStepAsDirtyAt(routeIndex, stepIndex)}
                         ref={stepRef}
                         aria-invalid={!isStepValid}
                     />
