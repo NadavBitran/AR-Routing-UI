@@ -1,0 +1,27 @@
+.navigate__bar {
+    display: flex;
+    padding-block: 0.4rem;
+
+    position: relative;
+}
+
+.navigate--button--container {
+    display: flex;
+    flex-direction: row-reverse;
+
+}
+
+.navigate--btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.5rem;
+    width: 7rem;
+
+    background-color: var(--clr-blue);
+    color: var(--clr-white);
+    border-radius: 15px;
+
+    text-decoration: none;
+}

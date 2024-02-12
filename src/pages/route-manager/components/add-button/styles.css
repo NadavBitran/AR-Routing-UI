@@ -1,0 +1,87 @@
+.add-button {
+    margin-top: 0.3rem;
+}
+
+.add-button--route {
+    background-color: var(--clr-dark-blue);
+    color: var(--clr-white);
+}
+
+.add-button--step {
+    background-color: var(--clr-dark-blue-80);
+    color: var(--clr-white);
+
+    width: 80%;
+    margin-left: auto;
+}
+
+.add-button__icon {
+    width: 1.5rem;
+}
+
+.add-button__text {
+    margin-left: auto;
+    margin-right: auto;
+
+    font-size: 1.125rem;
+}
+
+/* mobile-md */
+@media (min-width: 375px) {
+    /* nothing... */
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .add-button__text {
+        font-size: 1.25rem;
+    }
+
+    .add-button__icon {
+        width: 1.7rem;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .add-button__text {
+        font-size: 1.5rem;
+    }
+
+    .add-button__icon {
+        width: 2rem;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    .add-button {
+        margin-top: 0.5rem;
+    }
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .add-button__text {
+        font-size: 1.75rem;
+    }
+
+    .add-button__icon {
+        width: 2.5rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+    /* nothing... */
+}
+
+/* pc-md */
+@media (min-width: 1440px) {
+    /* nothing... */
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+    /* nothing... */
+}

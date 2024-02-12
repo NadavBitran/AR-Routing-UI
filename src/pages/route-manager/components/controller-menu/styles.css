@@ -1,0 +1,140 @@
+.controller-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 1rem;
+}
+
+.controller-menu__button {
+    width: 6rem;
+    height: 2.5rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.controller-menu__button--tutorial {
+    background-color: var(--clr-gray);
+    color: var(--clr-black);
+}
+
+.controller-menu__button--select-all {
+    background-color: var(--clr-dark-blue);
+    color: var(--clr-white);
+}
+
+.controller-menu__button--deselect-all {
+    background-color: var(--clr-dark-blue);
+    color: var(--clr-white);
+}
+
+.controller-menu__button--remove-selected {
+    background-color: var(--clr-red);
+    color: var(--clr-white);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+
+    padding-right: 1rem;
+}
+
+.controller-menu__button--remove-selected > img {
+    width: 2rem;
+}
+
+/* mobile-md */
+@media (min-width: 375px) {
+    .controller-menu__button {
+        width: 6.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .controller-menu__button--remove-selected {
+        gap: 0.3rem;
+        padding-right: 0.8rem;
+    }
+
+    .controller-menu__button--remove-selected > img {
+        width: 2.3rem;
+    }
+}
+
+/* mobile-lg */
+@media (min-width: 425px) {
+    .controller-menu__button {
+        width: 7rem;
+        height: 3rem;
+        border-radius: 0.8rem;
+    }
+
+    .controller-menu__button--remove-selected {
+        gap: 0.3rem;
+        padding-right: 1rem;
+    }
+
+    .controller-menu__button--remove-selected > img {
+        width: 2.3rem;
+    }
+}
+
+/* tablet-sm */
+@media (min-width: 640px) {
+    .controller-menu__button {
+        width: 9rem;
+        height: 3.5rem;
+        border-radius: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .controller-menu__button--remove-selected {
+        gap: 0.5rem;
+        padding-right: 1.3rem;
+    }
+
+    .controller-menu__button--remove-selected > img {
+        width: 2.7rem;
+    }
+}
+
+/* tablet-md */
+@media (min-width: 768px) {
+    /* nothing for the moment... */
+}
+
+/* tablet-lg */
+@media (min-width: 1024px) {
+    .controller-menu {
+        justify-content: space-evenly;
+    }
+    .controller-menu__button {
+        width: 10rem;
+        height: 3.5rem;
+        border-radius: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .controller-menu__button--remove-selected {
+        padding-right: 1.5rem;
+    }
+
+    .controller-menu__button--remove-selected > img {
+        width: 3rem;
+    }
+}
+
+/* pc-sm */
+@media (min-width: 1280px) {
+}
+
+/* pc-md */
+@media (min-width: 1440px) {
+}
+
+/* pc-lg */
+@media (min-width: 1680px) {
+}

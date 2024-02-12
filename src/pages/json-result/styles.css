@@ -1,0 +1,5 @@
+.json-result {
+    display: flex;
+    place-content: center;
+    flex: 1;
+}

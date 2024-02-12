@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "skipLibCheck": true,
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["./node_modules", "./src/Components"]
+}
