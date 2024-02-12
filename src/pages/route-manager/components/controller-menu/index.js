@@ -33,16 +33,11 @@ export default function ControllerMenu({ actions }) {
 
     return (
         <section className="section controller-menu">
-            <button className="controller-menu__button controller-menu__button--tutorial">
-                Tutorial
-            </button>
             <button
                 className="controller-menu__button controller-menu__button--select-all"
                 onClick={() => handleSelectAll()}
             >
-                {actions.areAllRoutesAndStepsChecked()
-                    ? 'Unselect All'
-                    : 'Select All'}
+                {actions.areAllRoutesAndStepsChecked() ? 'Unselect All' : 'Select All'}
             </button>
             <button
                 className="controller-menu__button controller-menu__button--remove-selected"

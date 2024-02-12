@@ -3,7 +3,6 @@ import useMarkerLocation from './hooks/useMarkerLocation';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MapEvent from './components/MapEvent';
 import MapSearchBar from './components/MapSearchBar';
-import MapTutorialBar from './components/MapTutorialBar';
 
 import { MAP_INITIAL_VALUES, MAP_TILES_PROPETIES } from './constants/mapConstants';
 
@@ -34,13 +33,13 @@ export default function Map({ saveMarkerLocation }) {
     return (
         <>
             <main className={'mapContainer'}>
-                <MapTutorialBar />
                 <section className={'mapOuter-container'}>
                     <MapSearchBar updateMarkerLocation={updateMarkerLocation} />
                     <MapContainer
                         center={MAP_INITIAL_VALUES.INITIAL_POSITION}
                         zoom={MAP_INITIAL_VALUES.INITIAL_ZOOM}
                         scrollWheelZoom={MAP_INITIAL_VALUES.INITIAL_SCROLL_WHEEL_ZOOM}
+                        style={{ flex: '1' }}
                     >
                         <TileLayer
                             attribution={MAP_TILES_PROPETIES.ATTRIBUTION}
