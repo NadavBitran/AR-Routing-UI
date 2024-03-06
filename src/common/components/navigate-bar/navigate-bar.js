@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ENDPOINT } from '../../constants/endpoints';
 
 import './styles.css';
@@ -15,6 +15,7 @@ import '../../styles/color.css';
  */
 export default function NavigateBar({ text, beforeContinuingAction, toPath }) {
     const navigator = useNavigate();
+    const location = useLocation();
 
     const navigateTo = () => {
         if (!toPath) {
@@ -22,7 +23,7 @@ export default function NavigateBar({ text, beforeContinuingAction, toPath }) {
         }
 
         if (!beforeContinuingAction || beforeContinuingAction()) {
-            navigator(toPath);
+            navigator({ pathname: ENDPOINT.NAVIGATION + toPath });
         }
     };
 

@@ -19,16 +19,22 @@ export default function App() {
         <BrowserRouter>
             <Header title={''} />
             <Routes>
-                <Route path="/" element={<Navigate to={ENDPOINT.MAP} replace />} />
                 <Route
-                    path={ENDPOINT.MAP}
+                    path="/"
+                    element={<Navigate to={ENDPOINT.NAVIGATION + ENDPOINT.MAP} replace />}
+                />
+                <Route
+                    path={ENDPOINT.NAVIGATION + ENDPOINT.MAP}
                     element={<Map saveMarkerLocation={app.setMapLatLngExpression} />}
                 />
                 <Route
-                    path={ENDPOINT.ROUTE_MANAGER}
+                    path={ENDPOINT.NAVIGATION + ENDPOINT.ROUTE_MANAGER}
                     element={<RouteManager saveRouteList={app.setRouteListOfAppData} />}
                 />
-                <Route path={ENDPOINT.JSON_RESULT} element={<JsonResult json={app.json} />} />
+                <Route
+                    path={ENDPOINT.NAVIGATION + ENDPOINT.JSON_RESULT}
+                    element={<JsonResult json={app.json} />}
+                />
             </Routes>
         </BrowserRouter>
     );
