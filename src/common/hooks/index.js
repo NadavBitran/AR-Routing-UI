@@ -7,6 +7,7 @@ import useUpdateEffect from './useUpdateEffect';
 import useList from './useList';
 import useStatelessCounter from './useStatelessCounter';
 import useAppDataJson from './useAppDataJson';
+import {useEndpointLocation, useEndpointLocationContext}  from './useEndpointLocation';
 
 export {
     useFlag,
@@ -18,4 +19,6 @@ export {
     useList,
     useStatelessCounter,
     useAppDataJson,
+    useEndpointLocation,
+    useEndpointLocationContext
 };

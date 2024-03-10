@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import { useEndpointLocationContext } from '../../hooks';
 import { ENDPOINT } from '../../constants/endpoints';
 
 import './styles.css';
@@ -14,16 +15,11 @@ import '../../styles/color.css';
  * @returns {React.JSX.Element} The rendered NavigateBar component.
  */
 export default function NavigateBar({ text, beforeContinuingAction, toPath }) {
-    const navigator = useNavigate();
-    const location = useLocation();
+    const {setCurrEndpoint} = useEndpointLocationContext();
 
     const navigateTo = () => {
-        if (!toPath) {
-            toPath = ENDPOINT.ROUTE_MANAGER;
-        }
-
         if (!beforeContinuingAction || beforeContinuingAction()) {
-            navigator({ pathname: ENDPOINT.NAVIGATION + toPath });
+            setCurrEndpoint(toPath);
         }
     };
 
