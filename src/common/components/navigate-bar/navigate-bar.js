@@ -1,6 +1,5 @@
 
 import { useEndpointLocationContext } from '../../hooks';
-import { ENDPOINT } from '../../constants/endpoints';
 
 import './styles.css';
 import '../../styles/color.css';
