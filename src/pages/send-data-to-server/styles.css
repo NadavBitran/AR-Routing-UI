@@ -1,5 +1,25 @@
-.json-result {
-    display: flex;
+.sendDataToServer{
+    display: flex;    
     place-content: center;
     flex: 1;
+}
+
+.sendDataToServerForm {
+    margin-inline: auto;
+
+}
+.sendDataToServerButton{
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.5rem;
+    width: 10rem;
+
+    background-color: var(--clr-blue);
+    color: var(--clr-white);
+    border-radius: 15px;
+
+    text-decoration: none;
 }

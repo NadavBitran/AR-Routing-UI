@@ -25,16 +25,18 @@ export default function SendDataToServer({ json }) {
         });    
     }
 
-        return (        
-            <form onSubmit={submitData}>
-                {
-                    isDataSent ? (
-                        <p>Thank you for submitting your data</p>
-                    ) : (
-                        <button type="submit">Send Data To The Server!</button>
-                    )
-                }
-            </form>
+        return (  
+            <main className='container sendDataToServer'>      
+                <form onSubmit={submitData} className='sendDataToServerForm'>
+                    {
+                        isDataSent ? (
+                            <p>Thank you for submitting your data</p>
+                        ) : (
+                            <button type="submit" className='sendDataToServerButton'>Send Data To The Server!</button>
+                        )
+                    }
+                </form>
+            </main>
         );
 }
 
