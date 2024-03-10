@@ -100,42 +100,6 @@ input[type='number'] {
 /* tablet-md */
 @media (min-width: 768px) {
     .container {
-        max-width: 768px;
-    }
-}
-
-/* tablet-lg */
-@media (min-width: 1024px) {
-    .container {
-        max-width: 1024px;
-    }
-
-    .section {
-        margin-bottom: 2rem;
-    }
-}
-
-/* pc-sm */
-@media (min-width: 1280px) {
-    .container {
-        max-width: 1280px;
-    }
-
-    .section {
-        margin-bottom: 2.5rem;
-    }
-}
-
-/* pc-md */
-@media (min-width: 1440px) {
-    .container {
-        max-width: 1440px;
-    }
-}
-
-/* pc-lg */
-@media (min-width: 1680px) {
-    .container {
-        max-width: 1680px;
+        max-width: 700px;
     }
 }
